@@ -1,0 +1,596 @@
+﻿@model VehicleDashboard.Models.VehicleDataModel
+
+@{
+    ViewBag.Title = "Vehicles Options";
+}
+
+<style type="text/css">
+    .quick-search{
+        background-color: #f9f9f9;
+        margin: 10px 0 20px 0px;
+        padding: 10px;
+    }
+    .row-divider{
+        margin: 15px;
+    }
+</style>
+
+<h2>Vehicle Options</h2>
+
+@using (Html.BeginForm())
+{
+
+    <div class="row quick-search">
+@if (Model.VehicleData != null && Model.VehicleData.Condition == "USED")
+{
+        <div class="col-sm-3">
+            <h4>Certifications</h4>
+
+            @if (Model.VehicleData.Make.ToUpper() == "TOYOTA")
+            {
+                @:<input type="radio" name="rdoCertification" id="CPO" value="F911" @(Model.VehicleData.CertificationLevelCode.Trim() == "F911" ? "checked" : "")/> Toyota Certified Used
+                @:<br/>
+            }
+
+            @if (Model.VehicleData.Make.ToUpper() == "VOLKSWAGEN")
+            {
+                @:<input type="radio" name="rdoCertification" id="CPO" value="F924" @(Model.VehicleData.CertificationLevelCode.Trim() == "F924" ? "checked" : "")/> VW Certified Pre-Owned
+                @:<br />
+            }
+
+            @if (Model.VehicleData.Make.ToUpper() == "GENESIS")
+            {
+                @:<input type="radio" name="rdoCertification" id="CPO" value="F925" @(Model.VehicleData.CertificationLevelCode.Trim() == "F925" ? "checked" : "")/> Genesis Certified Pre-Owned
+                @:<br />
+            }
+
+            @if (Model.VehicleData.Make.ToUpper() == "CADILLAC")
+            {
+                @:<<input type="radio" name="rdoCertification" id="CPO" value="F922" @(Model.VehicleData.CertificationLevelCode.Trim() == "F922" ? "checked" : "")/> Cadillac Certified Pre-Owned
+                @:<br />
+            }
+
+            @if (Model.VehicleData.Make.ToUpper() == "HYUNDAI")
+            {
+                @:<input type="radio" name="rdoCertification" id="CPO" value="F908" @(Model.VehicleData.CertificationLevelCode.Trim() == "F908" ? "checked" : "")/> Hyundai Certified Pre-Owned
+                @:<br />
+            }
+
+            @if (Model.VehicleData.Make.ToUpper() == "SUBARU")
+            {
+                @:<input type="radio" name="rdoCertification" id="CPO" value="F912" @(Model.VehicleData.CertificationLevelCode.Trim() == "F912" ? "checked" : "")/> Subaru Certified Pre-Owned
+                @:<br />
+            }
+
+            @if (Model.VehicleData.Make.ToUpper() == "MAZDA")
+            {
+                @:<input type="radio" name="rdoCertification" id="CPO" value="F923" @(Model.VehicleData.CertificationLevelCode.Trim() == "F923" ? "checked" : "")/> Mazda Certified Pre-Owned
+                @:<br />
+            }
+
+            @if (Model.VehicleData.Make.ToUpper() == "CHEVROLET" || Model.VehicleData.Make.ToUpper() == "GMC" || Model.VehicleData.Make.ToUpper() == "BUICK")
+            {
+                @:<input type="radio" name="rdoCertification" id="CPO" value="F906" @(Model.VehicleData.CertificationLevelCode.Trim() == "F906" ? "checked" : "")/> GM Certified Pre-Owned
+                @:<br />
+            }
+
+            @if (Model.VehicleData.Make.ToUpper() == "CHRYSLER" || Model.VehicleData.Make.ToUpper() == "DODGE" || Model.VehicleData.Make.ToUpper() == "JEEP" || Model.VehicleData.Make.ToUpper() == "RAM")
+            {
+                @:<input type="radio" name="rdoCertification" id="CPO" value="F907" @(Model.VehicleData.CertificationLevelCode.Trim() == "F907" ? "checked" : "")/> Chrysler Certified Pre-Owned
+                @:<br />
+            }
+           
+            <input type="radio" name="rdoCertification" id="CPO" value="F910" @(Model.VehicleData.CertificationLevelCode.Trim() == "F910" ? "checked" : "")/> FitzWay Used<br/>
+            <input type="radio" name="rdoCertification" id="CPO" value="F915" @(Model.VehicleData.CertificationLevelCode.Trim() == "F915" ? "checked" : "")/> FitzWay Value Used<br />
+
+            <input type="radio" name="rdoCertification" id="CPO" value="F917" @(Model.VehicleData.CertificationLevelCode.Trim() == "F917" ? "checked" : "")/> FitzWay HandyMan Fixer-Upper Special (FL)<br/>
+            <input type="radio" name="rdoCertification" id="CPO" value="F918" @(Model.VehicleData.CertificationLevelCode.Trim() == "F918" ? "checked" : "")/> FitzWay HandyMan Fixer-Upper Special (PA)<br/>
+            <input type="radio" name="rdoCertification" id="CPO" value="F916" @(Model.VehicleData.CertificationLevelCode.Trim() == "F916" ? "checked" : "")/> FitzWay HandyMan Fixer-Upper Special (MD)<br/>
+
+
+        </div>
+}
+               <div class="col-sm-3">
+            <h4>Company Options</h4>
+            <input type="checkbox" name="chkInRecon" id="chkInRecon" @(Model.VehicleData.InReconditioning == 1 ? "checked" : "")/> In Reconditioning<br/>
+            <input type="checkbox" name="chkMgrSpecial" id="chkMgrSpecial" @(Model.VehicleData.ManagerSpecial == 1 ? "checked" : "")/> Manager Special<br />
+            <div class="row">
+                <div class="col-xs-6">
+                    <h5>Manager Special Start Date:</h5>
+                    <input type="text" name="startDate" id="startDate" value="@(Model.VehicleData.ManagerSpecialStartDate.ToShortDateString() != "1/1/0001" ? Model.VehicleData.ManagerSpecialStartDate.ToShortDateString() : "" )"/>
+                </div>
+                <div class="col-xs-6">
+                    <h5>Manager Special End Date:</h5>
+                    <input type="text" name="endDate" id="endDate" value="@(Model.VehicleData.ManagerSpecialEndDate.ToShortDateString() != "1/1/0001" ? Model.VehicleData.ManagerSpecialEndDate.ToShortDateString() : "" )"/>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+
+@if (Model.VehicleData != null && Model.VehicleData.Condition == "USED")
+{
+    <h4>Pricing</h4>
+            <input type="text" name="vehiclePrice" id="vehiclePrice" value="@Model.VehicleData.VehiclePrice"/><br />            
+}
+                       <div class="row" style="margin-top:20px;">
+                <div class="col-xs-6">
+                    <input type="submit" class="btn btn-primary" value="Approve Options"/>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <h4>Vehicle Updates</h4>
+            <h5 class="text-center">Vehicle Last Updated:</h5>
+            @if (Model.VehicleData != null)
+            {
+                <p class="text-center">@Model.VehicleData.DateUpdated</p>
+            }
+            <div class="row text-center">
+                <input type="submit" class="btn btn-primary" value="Update Chrome" />
+            </div>
+        </div>
+    </div>
+
+}
+
+@if (Model != null && Model.VehicleData != null)
+{
+
+    <div class="row">
+        <div class="col-sm-3">
+            <h4>Vehicle Photo</h4>
+            @if(Model.VehicleImages != null && Model.VehicleImages.Count > 0)
+            {
+                <img src="@Model.VehicleImages[0].ImagePath" class="img-responsive" />
+            }
+        </div>
+        <div class="col-sm-3">
+            <h4>Vehicle Information</h4>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-right">VIN:</td>
+                        <td class="text-left">@Model.VehicleData.VIN</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Stock Number:</td>
+                        <td class="text-left">@Model.VehicleData.StockNumber</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Year:</td>
+                        <td class="text-left">@Model.VehicleData.Year</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Make:</td>
+                        <td class="text-left">@Model.VehicleData.Make</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Model:</td>
+                        <td class="text-left">@Model.VehicleData.Model</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Model Id:</td>
+                        <td class="text-left">@Model.VehicleData.ModelId</td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+        <div class="col-sm-3">
+            <h4>Build Information</h4>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-right">Manufacturer:</td>
+                        <td class="text-left">@Model.VehicleData.Manufacturer</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Country:</td>
+                        <td class="text-left">@Model.VehicleData.Country</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Build Date:</td>
+                        <td class="text-left">@Model.VehicleData.BuildDate.ToShortDateString()</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Build MSRP:</td>
+                        <td class="text-left">@Model.VehicleData.BuildMSRP</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Build Source:</td>
+                        <td class="text-left">@Model.VehicleData.BuildSource</td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+
+        </div>        
+        <div class="col-sm-3">
+            <h4>Exterior Color</h4>
+            @if (Model.ExteriorColorData != null)
+            {
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-right">Exterior Color Code:</td>
+                            <td class="text-left">@Model.ExteriorColorData.ColorCode</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Exterior Color:</td>
+                            <td class="text-left">@Model.ExteriorColorData.Description</td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+            }
+
+            <h4>Interior Color</h4>
+            @if (Model.InteriorColorData != null)
+                {
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-right">Interior Color Code:</td>
+                            <td class="text-left">@Model.InteriorColorData.ColorCode</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Interior Color:</td>
+                            <td class="text-left">@Model.InteriorColorData.Description</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            }
+        </div>
+
+    </div>
+
+    <div class="row-divider">
+        <hr />
+    </div>
+
+        <h4>Style Information</h4>
+        if (Model.StyleData != null)
+        {
+        <div class="row">
+            <div class="col-sm-3">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-right">Style Id:</td>
+                            <td class="text-left">@Model.StyleData.StyleId</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Description:</td>
+                            <td class="text-left">@Model.StyleData.StyleDescription</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Trim:</td>
+                            <td class="text-left">@Model.StyleData.Trim</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Mfr Model Code:</td>
+                            <td class="text-left">@Model.StyleData.MFRModelCode</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Body Type:</td>
+                            <td class="text-left">@Model.StyleData.BodyType</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="col-sm-3">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-right">Drive Type:</td>
+                            <td class="text-left">@Model.StyleData.DriveType</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Segment:</td>
+                            <td class="text-left">@Model.StyleData.Segment</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Doors:</td>
+                            <td class="text-left">@Model.StyleData.Doors</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Base MSRP:</td>
+                            <td class="text-left">@Model.StyleData.BaseMSRP</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Destination Charge:</td>
+                            <td class="text-left">@Model.StyleData.DestinationCharge</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm-3">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-right">Standard Curb Weight:</td>
+                            <td class="text-left">@Model.StyleData.StandardCurbWeight</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Standard GVWR:</td>
+                            <td class="text-left">@Model.StyleData.StandardGVWR</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Standard Towing Capacity:</td>
+                            <td class="text-left">@Model.StyleData.StandardTowingCapacity</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Wheelbase:</td>
+                            <td class="text-left">@Model.StyleData.Wheelbase</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Country:</td>
+                            <td class="text-left">@Model.StyleData.Country</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+    <div class="row-divider">
+        <hr />
+    </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <h4>Installed Options</h4>
+                @if (Model.OptionData != null)
+                {
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Option Code</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var option in Model.OptionData)
+                            {
+                                <tr>
+                                    <td class="text-center">@option.OptionCode</td>
+                                    <td class="text-left">@option.OptionDescription</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                }
+            </div>
+            <div class="col-sm-6">
+                <h4>Installed Packages</h4>
+                @if (Model.PackageData != null)
+                {
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Option Code</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var package in Model.PackageData)
+                            {
+                                <tr>
+                                    <td class="text-center">@package.OptionCode</td>
+                                    <td class="text-left">@package.Name</td>
+                                    <td class="text-left">@package.Description</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                }
+            </div>
+
+        </div>
+
+        <div class="row-divider">
+            <hr />
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+
+                @if (Model.FeatureData != null)
+                {
+
+                    <h4>Top 15 Features</h4>
+                    var topFeatures = Model.FeatureData.OrderByDescending(x => x.RankingValue).Take(15);
+
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Section</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Ranking</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var feature in topFeatures)
+                            {
+                                <tr>
+
+                                    <td class="text-center">@feature.SectionName</td>
+                                    <td class="text-left">@feature.Name</td>
+                                    <td class="text-left">@feature.Description</td>
+                                    <td class="text-left">@feature.RankingValue</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <hr />
+
+                    <h4>All Features</h4>
+                    var sections = Model.FeatureData.Select(x => x.SectionId).Distinct().ToList();
+
+                    foreach (var sectionId in sections)
+                    {
+                        var sectionItems = Model.FeatureData.FindAll(x => x.SectionId == sectionId).OrderByDescending(x => x.RankingValue).ToList();
+
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Section</th>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>Ranking</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+
+                                @foreach (var feature in sectionItems)
+                                {
+                                <tr>
+
+                                    <td class="text-center">@feature.SectionName</td>
+                                    <td class="text-left">@feature.Name</td>
+                                    <td class="text-left">@feature.Description</td>
+                                    <td class="text-left">@feature.RankingValue</td>
+                                </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                    }
+
+
+                }
+
+            </div>
+            <div class="col-sm-6">
+
+    @if (Model.TechSpecData != null)
+    {
+        <h4>Top 15 Technical Specifications</h4>
+        var topTechSpecs = Model.TechSpecData.OrderByDescending(x => x.RankingValue).Take(15);
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Section</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Ranking</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var feature in topTechSpecs)
+                {
+                    <tr>
+
+                        <td class="text-center">@feature.SectionName</td>
+                        <td class="text-left">@feature.Name</td>
+                        <td class="text-left">@feature.Description</td>
+                        <td class="text-left">@feature.RankingValue</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <hr/>
+
+        <h4>All Technical Specifications</h4>
+
+        var sections = Model.TechSpecData.Select(x => x.SectionId).Distinct().ToList();
+
+        foreach (var sectionId in sections)
+        {
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Section</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Ranking</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @{
+                        var sectionItems = Model.TechSpecData.FindAll(x => x.SectionId == sectionId).OrderByDescending(x => x.RankingValue).ToList();
+                    }
+                    @foreach (var techspec in sectionItems)
+                    {
+                    <tr>
+
+                        <td class="text-center">@techspec.SectionName</td>
+                        <td class="text-left">@techspec.Name</td>
+                        <td class="text-left">@techspec.Description</td>
+                        <td class="text-left">@techspec.RankingValue</td>
+                    </tr>
+                    }
+  
+                </tbody>
+            </table>
+
+
+                            }
+                        }
+        </div>
+        </div>
+        }
+
+@section scripts
+{
+    <script type="text/javascript">
+          $(function() {
+            $("#startDate").datepicker();
+            $("#endDate").datepicker();
+          });    
+    </script>
+}

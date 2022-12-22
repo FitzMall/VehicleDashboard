@@ -1,0 +1,384 @@
+﻿@model VehicleDashboard.Models.UsedVehicleDashboard
+
+@{
+    ViewBag.Title = "Used Vehicle Dashboard";
+
+    var storeUsed = Model.AllUsedInventory.FindAll(x => x.loc == "LFT" && (x.status == 1 || x.status == 2 || x.status == 4));
+    var storeWebsiteUsed = Model.WebsiteUsedInventory.FindAll(x => x.V_loc == "LFT");
+
+    var storeHandyman = Model.WebsiteUsedInventory.FindAll(x => x.V_loc == "LFT" && (x.V_certified.TrimEnd() == "F916" || x.V_certified.TrimEnd() == "F917" || x.V_certified.TrimEnd() == "F918"));
+    var storeValue = Model.WebsiteUsedInventory.FindAll(x => x.V_loc == "LFT" && (x.V_certified.TrimEnd() == "F915"));
+    var storeFitzUsed = Model.WebsiteUsedInventory.FindAll(x => x.V_loc == "LFT" && (x.V_certified.TrimEnd() == "F910" || x.V_certified.TrimEnd() == "F914"));
+    var storeCertifiedUsed = Model.WebsiteUsedInventory.FindAll(x => x.V_loc == "LFT" && (x.V_certified.TrimEnd() != "F910" && x.V_certified.TrimEnd() != "F914" && x.V_certified.TrimEnd() != "F915" && x.V_certified.TrimEnd() != "F916" && x.V_certified.TrimEnd() != "F917" && x.V_certified.TrimEnd() != "F918"));
+    var storeInRecon = Model.AllUsedInventory.FindAll(x => x.loc == "LFT" && (x.tag == "R"));
+
+    var storeNextCarUsed = Model.WebsiteUsedInventory.FindAll(x => x.V_loc == "LFT" && (x.V_stock.Substring(1, 1) == "N" && !Char.IsLetter(x.V_stock.Substring(x.V_stock.Length - 1),0)  ));
+
+    var usedCount = storeUsed.Count();
+    var usedWebsiteCount = storeWebsiteUsed.Count();
+    var usedShouldBeCount = usedCount - usedWebsiteCount;
+    var usedHandymanCount = storeHandyman.Count();
+    var usedValueCount = storeValue.Count();
+    var usedFitzCount = storeFitzUsed.Count();
+    var usedCertifiedCount = storeCertifiedUsed.Count();
+    var usedInReconCount = storeInRecon.Count();
+    var usedNextCarCount = storeNextCarUsed.Count();
+
+}
+
+<div class="row" style="border-bottom:1px solid #eee; margin-bottom:20px;">
+    <div class="col-sm-12 col-md-10">
+        <h2>Used Vehicle Dashboard</h2>
+        <h3>Gaithersburg Toyota</h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+
+        <div class="row" style="border-bottom:1px solid #eee; margin-bottom:20px;">
+            <div class="col-sm-12 col-md-6 col-lg-2">
+                <h4 class="text-center">Used Vehicles</h4>
+                <div class="box text-center">
+                    <div id="usedCount" class="gauge"></div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-2">
+                <h4 class="text-center">On FitzMall</h4>
+                <div class="box text-center">
+                    <div id="usedWebsiteCount" class="gauge"></div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-2">
+                <h4 class="text-center">Should Be On FitzMall</h4>
+                <div class="box text-center">
+                    <div id="usedShouldBeCount" class="gauge"></div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-2">
+                <h4 class="text-center">Stock Variance</h4>
+                <div class="box text-center">
+                    <div id="usedShouldBeCount" class="gauge"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="border-bottom:1px solid #eee; margin-bottom:20px;">
+            <div class="col-sm-12 col-md-6 col-lg-2">
+                <h4 class="text-center">CPO Vehicles</h4>
+                <div class="box text-center">
+                    <div id="usedCertifiedCount" class="gauge"></div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-2">
+                <h4 class="text-center">FitzWay Used</h4>
+                <div class="box text-center">
+                    <div id="usedFitzCount" class="gauge"></div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-2">
+                <h4 class="text-center">FitzWay Value</h4>
+                <div class="box text-center">
+                    <div id="usedValueCount" class="gauge"></div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-2">
+                <h4 class="text-center">Handyman</h4>
+                <div class="box text-center">
+                    <div id="usedHandyManCount" class="gauge"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="border-bottom:1px solid #eee; margin-bottom:20px;">
+            <div class="col-sm-12 col-md-6 col-lg-2">
+                <h4 class="text-center">In Reconditioning</h4>
+                <div class="box text-center">
+                    <div id="usedInReconCount" class="gauge"></div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-2">
+                <h4 class="text-center">Missing Styles</h4>
+                <div class="box text-center">
+                    <div id="usedWebsiteCount" class="gauge"></div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-2">
+                <h4 class="text-center">Missing Pictures</h4>
+                <div class="box text-center">
+                    <div id="usedShouldBeCount" class="gauge"></div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-2">
+                <h4 class="text-center">NextCar</h4>
+                <div class="box text-center">
+                    <div id="usedNextCarCount" class="gauge"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section scripts
+{
+    <script src="~/Scripts/raphael-2.1.4.min.js"></script>
+    <script src="~/Scripts/justgage.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function(event) {
+
+
+            var chromedNew = new JustGage({
+                id: 'chromedNew',
+                value: 85,
+                min: 0,
+                max: 100,
+                symbol: '%',
+                pointer: true,
+                pointerOptions: {
+                    toplength: -15,
+                    bottomlength: 10,
+                    bottomwidth: 12,
+                    color: '#8e8e93',
+                    stroke: '#ffffff',
+                    stroke_width: 3,
+                    stroke_linecap: 'round'
+                },
+                levelColors: [
+                "#ff0000", "#f9c802", "#a9d70b"
+                ],
+                gaugeWidthScale: 0.6,
+                counter: true
+            });
+
+            var pricedNew = new JustGage({
+                id: 'pricedNew',
+                value: 92,
+                min: 0,
+                max: 100,
+                symbol: '%',
+                pointer: true,
+                pointerOptions: {
+                    toplength: -15,
+                    bottomlength: 10,
+                    bottomwidth: 12,
+                    color: '#8e8e93',
+                    stroke: '#ffffff',
+                    stroke_width: 3,
+                    stroke_linecap: 'round'
+                },
+                levelColors: [
+                "#ff0000", "#f9c802", "#a9d70b"
+                ],
+                gaugeWidthScale: 0.6,
+                counter: true
+            });
+
+
+            var imagesNew = new JustGage({
+                id: 'imagesNew',
+                value: 74,
+                min: 0,
+                max: 100,
+                symbol: '%',
+                pointer: true,
+                pointerOptions: {
+                    toplength: -15,
+                    bottomlength: 10,
+                    bottomwidth: 12,
+                    color: '#8e8e93',
+                    stroke: '#ffffff',
+                    stroke_width: 3,
+                    stroke_linecap: 'round'
+                },
+                levelColors: [
+                "#ff0000", "#f9c802", "#a9d70b"
+                ],
+                gaugeWidthScale: 0.6,
+                counter: true
+            });
+
+            var dayssupplyNew = new JustGage({
+                id: "dayssupplyNew",
+                value: 72,
+                min: 0,
+                max: 100,
+                donut: true,
+                gaugeWidthScale: 0.6,
+                counter: true,
+                hideInnerShadow: true
+            });
+
+
+            var chromedUsed = new JustGage({
+                id: 'chromedUsed',
+                value: 35,
+                min: 0,
+                max: 100,
+                symbol: '%',
+                pointer: true,
+                pointerOptions: {
+                    toplength: -15,
+                    bottomlength: 10,
+                    bottomwidth: 12,
+                    color: '#8e8e93',
+                    stroke: '#ffffff',
+                    stroke_width: 3,
+                    stroke_linecap: 'round'
+                },
+                levelColors: [
+                "#ff0000", "#f9c802", "#a9d70b"
+                ],
+                gaugeWidthScale: 0.6,
+                counter: true
+            });
+
+            var pricedUsed = new JustGage({
+                id: 'pricedUsed',
+                value: 95,
+                min: 0,
+                max: 100,
+                symbol: '%',
+                pointer: true,
+                pointerOptions: {
+                    toplength: -15,
+                    bottomlength: 10,
+                    bottomwidth: 12,
+                    color: '#8e8e93',
+                    stroke: '#ffffff',
+                    stroke_width: 3,
+                    stroke_linecap: 'round'
+                },
+                levelColors: [
+                "#ff0000", "#f9c802", "#a9d70b"
+                ],
+                gaugeWidthScale: 0.6,
+                counter: true
+            });
+
+
+            var imagesUsed = new JustGage({
+                id: 'imagesUsed',
+                value: 40,
+                min: 0,
+                max: 100,
+                symbol: '%',
+                pointer: true,
+                pointerOptions: {
+                    toplength: -15,
+                    bottomlength: 10,
+                    bottomwidth: 12,
+                    color: '#8e8e93',
+                    stroke: '#ffffff',
+                    stroke_width: 3,
+                    stroke_linecap: 'round'
+                },
+                levelColors: [
+                "#ff0000", "#f9c802", "#a9d70b"
+                ],
+                gaugeWidthScale: 0.6,
+                counter: true
+            });
+
+            var usedCount = new JustGage({
+                id: "usedCount",
+                value: @usedCount,
+                min: 0,
+                max: @usedCount,
+                donut: true,
+                gaugeWidthScale: 0.6,
+                counter: true,
+                hideInnerShadow: true
+            });
+
+            var usedHandyman = new JustGage({
+                id: "usedHandyManCount",
+                value: @usedHandymanCount,
+                min: 0,
+                max: @usedHandymanCount,
+                donut: true,
+                gaugeWidthScale: 0.6,
+                counter: true,
+                hideInnerShadow: true
+            });
+
+            var usedValue = new JustGage({
+                id: "usedValueCount",
+                value: @usedValueCount,
+                min: 0,
+                max: @usedValueCount,
+                donut: true,
+                gaugeWidthScale: 0.6,
+                counter: true,
+                hideInnerShadow: true
+            });
+
+            var usedFitz = new JustGage({
+                id: "usedFitzCount",
+                value: @usedFitzCount,
+                min: 0,
+                max: @usedFitzCount,
+                donut: true,
+                gaugeWidthScale: 0.6,
+                counter: true,
+                hideInnerShadow: true
+            });
+
+            var usedCertified = new JustGage({
+                id: "usedCertifiedCount",
+                value: @usedCertifiedCount,
+                min: 0,
+                max: @usedCertifiedCount,
+                donut: true,
+                gaugeWidthScale: 0.6,
+                counter: true,
+                hideInnerShadow: true
+            });
+
+            var usedWebsiteCount = new JustGage({
+                id: "usedWebsiteCount",
+                value: @usedWebsiteCount,
+                min: 0,
+                max: @usedCount,
+                donut: false,
+                gaugeWidthScale: 0.6,
+                counter: true,
+                hideInnerShadow: true
+            });
+
+            var usedInRecon = new JustGage({
+                id: "usedInReconCount",
+                value: @usedInReconCount,
+                min: 0,
+                max: @usedCount,
+                donut: false,
+                gaugeWidthScale: 0.6,
+                counter: true,
+                hideInnerShadow: true
+            });
+
+
+            var usedInRecon = new JustGage({
+                id: "usedNextCarCount",
+                value: @usedNextCarCount,
+                min: 0,
+                max: @usedCount,
+                donut: false,
+                gaugeWidthScale: 0.6,
+                counter: true,
+                hideInnerShadow: true
+            });
+
+            usedInReconCount
+            var usedShouldBeCount = new JustGage({
+                id: "usedShouldBeCount",
+                value: @usedShouldBeCount,
+                min: 0,
+                max: @usedCount,
+                donut: true,
+                gaugeWidthScale: 0.6,
+                counter: true,
+                hideInnerShadow: true
+            });
+        });
+    </script>
+
+}

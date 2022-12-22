@@ -1,0 +1,421 @@
+﻿@model VehicleDashboard.Models.VehicleDataModel
+
+@{
+    ViewBag.Title = "Vehicles Options";
+}
+
+<style type="text/css">
+    .quick-search{
+        background-color: #f9f9f9;
+        margin: 10px 0 20px 0px;
+        padding: 10px;
+    }
+    .row-divider{
+        margin: 15px;
+    }
+</style>
+
+<h2>Vehicle Options</h2>
+
+@using (Html.BeginForm())
+{
+
+    <div class="row quick-search">
+        <div class="col-xs-3">
+            <h4>Quick Search for Vehicle by VIN: </h4>
+        </div>
+        <div class="col-xs-3">
+            <input type="text" class="form-control form-inline" name="VIN" id="VIN" />
+        </div>
+        <div class="col-xs-2">
+            <input type="submit" class="btn btn-primary" name="search" id="search" value="Search" />
+        </div>
+    </div>
+
+}
+
+@if (Model != null && Model.VehicleData != null)
+{
+
+    <div class="row">
+        <div class="col-sm-3">
+            <h4>Vehicle Information</h4>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-right">VIN:</td>
+                        <td class="text-left">@Model.VehicleData.VIN</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Stock Number:</td>
+                        <td class="text-left">@Model.VehicleData.StockNumber</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Year:</td>
+                        <td class="text-left">@Model.VehicleData.Year</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Make:</td>
+                        <td class="text-left">@Model.VehicleData.Make</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Model:</td>
+                        <td class="text-left">@Model.VehicleData.Model</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Model Id:</td>
+                        <td class="text-left">@Model.VehicleData.ModelId</td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+        <div class="col-sm-3">
+            <h4>Build Information</h4>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-right">Manufacturer:</td>
+                        <td class="text-left">@Model.VehicleData.Manufacturer</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Country:</td>
+                        <td class="text-left">@Model.VehicleData.Country</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Build Date:</td>
+                        <td class="text-left">@Model.VehicleData.BuildDate.ToShortDateString()</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Build MSRP:</td>
+                        <td class="text-left">@Model.VehicleData.BuildMSRP</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Build Source:</td>
+                        <td class="text-left">@Model.VehicleData.BuildSource</td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+
+        </div>        
+        <div class="col-sm-3">
+            <h4>Exterior Color</h4>
+            @if (Model.ExteriorColorData != null)
+            {
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-right">Exterior Color Code:</td>
+                            <td class="text-left">@Model.ExteriorColorData.ColorCode</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Exterior Color:</td>
+                            <td class="text-left">@Model.ExteriorColorData.Description</td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+            }
+        </div>
+        <div class="col-sm-3">
+            <h4>Interior Color</h4>
+            @if (Model.InteriorColorData != null)
+                {
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-right">Interior Color Code:</td>
+                            <td class="text-left">@Model.InteriorColorData.ColorCode</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Interior Color:</td>
+                            <td class="text-left">@Model.InteriorColorData.Description</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            }
+        </div>
+    </div>
+
+    <div class="row-divider">
+        <hr />
+    </div>
+
+        <h4>Style Information</h4>
+        if (Model.StyleData != null)
+        {
+        <div class="row">
+            <div class="col-sm-3">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-right">Style Id:</td>
+                            <td class="text-left">@Model.StyleData.StyleId</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Description:</td>
+                            <td class="text-left">@Model.StyleData.StyleDescription</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Trim:</td>
+                            <td class="text-left">@Model.StyleData.Trim</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Mfr Model Code:</td>
+                            <td class="text-left">@Model.StyleData.MFRModelCode</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Body Type:</td>
+                            <td class="text-left">@Model.StyleData.BodyType</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="col-sm-3">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-right">Drive Type:</td>
+                            <td class="text-left">@Model.StyleData.DriveType</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Segment:</td>
+                            <td class="text-left">@Model.StyleData.Segment</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Doors:</td>
+                            <td class="text-left">@Model.StyleData.Doors</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Base MSRP:</td>
+                            <td class="text-left">@Model.StyleData.BaseMSRP</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Destination Charge:</td>
+                            <td class="text-left">@Model.StyleData.DestinationCharge</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm-3">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-right">Standard Curb Weight:</td>
+                            <td class="text-left">@Model.StyleData.StandardCurbWeight</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Standard GVWR:</td>
+                            <td class="text-left">@Model.StyleData.StandardGVWR</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Standard Towing Capacity:</td>
+                            <td class="text-left">@Model.StyleData.StandardTowingCapacity</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Wheelbase:</td>
+                            <td class="text-left">@Model.StyleData.Wheelbase</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Country:</td>
+                            <td class="text-left">@Model.StyleData.Country</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+    <div class="row-divider">
+        <hr />
+    </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <h4>Installed Options</h4>
+                @if (Model.OptionData != null)
+                {
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Option Code</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var option in Model.OptionData)
+                            {
+                                <tr>
+                                    <td class="text-center">@option.OptionCode</td>
+                                    <td class="text-left">@option.OptionDescription</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                }
+            </div>
+            <div class="col-sm-6">
+                <h4>Installed Packages</h4>
+                @if (Model.PackageData != null)
+                {
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Option Code</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var package in Model.PackageData)
+                            {
+                                <tr>
+                                    <td class="text-center">@package.OptionCode</td>
+                                    <td class="text-left">@package.Name</td>
+                                    <td class="text-left">@package.Description</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                }
+            </div>
+
+        </div>
+
+        <div class="row-divider">
+            <hr />
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <h4>Features</h4>
+                @if (Model.FeatureData != null)
+                {
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Section</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Ranking</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                var sections = Model.FeatureData.Select(x => x.SectionId).Distinct().ToList();
+
+                            }
+
+                            @foreach (var sectionId in sections)
+                            {
+                                var sectionItems = Model.FeatureData.FindAll(x => x.SectionId == sectionId).OrderByDescending(x => x.RankingValue).ToList();
+
+                                foreach (var feature in sectionItems)
+                                {
+                                    <tr>
+
+                                        <td class="text-center">@feature.SectionName</td>
+                                        <td class="text-left">@feature.Name</td>
+                                        <td class="text-left">@feature.Description</td>
+                                        <td class="text-left">@feature.RankingValue</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+
+                                }
+
+            </div>
+            <div class="col-sm-6">
+                <h4>Technical Specifications</h4>
+                @if (Model.TechSpecData != null)
+                {
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Section</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Ranking</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @{
+                                var sections = Model.TechSpecData.Select(x => x.SectionId).Distinct().ToList();
+
+                            }
+
+                            @foreach (var sectionId in sections)
+                            {
+                                var sectionItems = Model.TechSpecData.FindAll(x => x.SectionId == sectionId).OrderByDescending(x => x.RankingValue).ToList();
+                                foreach (var techspec in sectionItems)
+                                {
+                                    <tr>
+
+                                        <td class="text-center">@techspec.SectionName</td>
+                                        <td class="text-left">@techspec.Name</td>
+                                        <td class="text-left">@techspec.Description</td>
+                                        <td class="text-left">@techspec.RankingValue</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+
+
+                                }
+
+            </div>
+        </div>
+        }
+
+
