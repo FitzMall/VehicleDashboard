@@ -9,6 +9,7 @@ namespace VehicleDashboard.Models
     {
         public List<CSV_vehicleUSED> AllUsedInventory { get; set; }
         public List<AllInventory> WebsiteUsedInventory { get; set; }
+        public List<VehicleData> VehicleData { get; set; }
         public string Location { get; set; }
     }
 

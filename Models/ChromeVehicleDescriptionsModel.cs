@@ -17,6 +17,8 @@ namespace VehicleDashboard.Models
         public List<TechSpecData> TechSpecData { get; set; }
         public List<OptionData> OptionData { get; set; }
         public List<VehicleImages> VehicleImages { get; set; }
+        public List<Vehicle> PossibleStyleData { get; set; }
+        public ChromeData7c.VehicleDescription VehicleDescription { get; set; }
     }
 
     public class VehicleImages
@@ -55,6 +57,8 @@ namespace VehicleDashboard.Models
         public decimal VehiclePrice { get; set; }
         public string OptionsApprovedBy { get; set; }
         public DateTime OptionsApprovedDate { get; set; }
+        public string VehicleLocation { get; set; }
+        
     }
 
     public class StyleData
@@ -119,6 +123,7 @@ namespace VehicleDashboard.Models
         public string BenefitTitle { get; set; }
         public string BenefitDefinition { get; set; }
         public string BenefitStatement { get; set; }
+        public bool ShowOption { get; set; }
     }
 
     public class PackageData
@@ -139,6 +144,7 @@ namespace VehicleDashboard.Models
         public string OptionCode { get; set; }
         public decimal MSRP { get; set; }
         public string Content { get; set; }
+        public bool ShowOption { get; set; }
     }
 
     public class TechSpecData
@@ -159,6 +165,7 @@ namespace VehicleDashboard.Models
         public string BenefitTitle { get; set; }
         public string BenefitDefinition { get; set; }
         public string BenefitStatement { get; set; }
+        public bool ShowOption { get; set; }
     }
 
     public class OptionData
@@ -170,6 +177,7 @@ namespace VehicleDashboard.Models
         public string OptionDescription { get; set; }
         public string InstallCause { get; set; }
         public string Content { get; set; }
+        public bool ShowOption { get; set; }
     }
 
     public class InStockVehicle
@@ -177,6 +185,11 @@ namespace VehicleDashboard.Models
         public string VIN { get; set; }
         public string StockNumber { get; set; }
         public string XrefId { get; set; }
+        public string Condition { get; set; }
+        public string Year { get; set; }
+        public string Make { get; set; }
+        public string Model { get; set; }
+        public string Location { get; set; }
     }
 
     public class ChromeVehicleDescriptionModel

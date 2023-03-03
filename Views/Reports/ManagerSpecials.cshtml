@@ -1,7 +1,7 @@
-﻿@model VehicleDashboard.Models.UsedVehicleDashboard
+﻿@model VehicleDashboard.Models.VehicleOptionModel
 
 @{
-    ViewBag.Title = "Vehicles In Reconditioning";
+    ViewBag.Title = "ManagerSpecials";
 
     var applicationPath = Request.ApplicationPath;
 
@@ -15,20 +15,29 @@
     nfi.PercentDecimalDigits = 1;
     nfi.CurrencySymbol = "";
 
-    var locations = Model.WebsiteUsedInventory.Select(x => x.V_loc).Distinct().OrderBy(X => X).ToList();
+    var locations = Model.UsedVehicleDashboard.WebsiteUsedInventory.Select(x => x.V_loc).Distinct().OrderBy(X => X).ToList();
 
-    var inReconVehicles = Model.VehicleData.FindAll(x => x.InReconditioning == 1);
+    var managerSpecials = Model.VehicleData.FindAll(x => x.ManagerSpecial == 1);
 
     if (Model.Location != null && Model.Location != "ALL")
     {
         if (Model.Location == "FBC")
         {
-            inReconVehicles = inReconVehicles.FindAll(x => (x.VehicleLocation == "FBS" || x.VehicleLocation == "FBC"));
+            managerSpecials = managerSpecials.FindAll(x => (x.VehicleLocation == "FBS" || x.VehicleLocation == "FBC"));
         }
         else
         {
-            inReconVehicles = inReconVehicles.FindAll(x => x.VehicleLocation == Model.Location);
+            managerSpecials = managerSpecials.FindAll(x => x.VehicleLocation == Model.Location);
         }
+    }
+
+    if (Model.Condition != null && Model.Condition.ToUpper() == "USED")
+    {
+        managerSpecials = managerSpecials.FindAll(x => x.Condition == "USED");
+    }
+    else if (Model.Condition != null && Model.Condition.ToUpper() == "NEW")
+    {
+        managerSpecials = managerSpecials.FindAll(x => x.Condition == "NEW");
     }
 
 }
@@ -46,16 +55,16 @@
 
 <div class="row" style="border-bottom:1px solid #eee; margin-bottom:20px;">
     <div class="col-sm-12 col-md-10">
-        <h2>Vehicles In Reconditioning</h2>
+        <h2>Manager Specials</h2>
         <div class="row location-row">
             <div class="col-xs-12">
                 <h4>Locations:</h4>
-                <input class="form-inline" type="radio" name="locationValue" id="chk-ALL" onclick="window.location='@applicationPath/Reports/InRecon?Location=ALL';" value="ALL" @(Model.Location == "ALL" ? "checked" : "" )>
+                <input class="form-inline" type="radio" name="locationValue" id="chk-ALL" onclick="window.location='@applicationPath/Reports/ManagerSpecials?Location=ALL&Condition=@Model.Condition';" value="ALL" @(Model.Location == "ALL" ? "checked" : "" )>
                 <label class="form-inline" style="margin-right:15px;" for="chk-ALL">ALL</label>
 
                 @foreach (var location in locations)
                 {
-                    <input class="form-inline" type="radio" name="locationValue" id="chk-@location" onclick="window.location='@applicationPath/Reports/InRecon?Location=@location';" value="@location" @(Model.Location == location ? "checked" : "" )>
+                    <input class="form-inline" type="radio" name="locationValue" id="chk-@location" onclick="window.location='@applicationPath/Reports/ManagerSpecials?Location=@location&Condition=@Model.Condition';" value="@location" @(Model.Location == location ? "checked" : "" )>
                     <label class="form-inline" style="margin-right:15px;" for="chk-@location">@location</label>
                 }
             </div>
@@ -77,15 +86,30 @@
                     <th>Days</th>
                     <th>List Amt</th>
                     <th>Status</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
                     <th>Style Id</th>
-                    <th>Manager Special</th>
+                    <th>In Recon</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var vehicle in inReconVehicles)
+                @foreach (var vehicle in managerSpecials)
                 {
-                    var vehicleDetails = Model.AllUsedInventory.Find(x => x.vin == vehicle.VIN);
-
+                    var vehicleDetails = new VehicleDashboard.Models.CSV_vehicleUSED();
+                    if (Model.Condition != null && Model.Condition.ToUpper() == "USED")
+                    {
+                        vehicleDetails = Model.UsedVehicleDashboard.AllUsedInventory.Find(x => x.vin == vehicle.VIN);
+                    }
+                    else
+                    {
+                        var details = Model.NewVehicleDashboard.AllNewInventory.Find(x => x.vin == vehicle.VIN);
+                        if (details != null)
+                        {
+                            vehicleDetails.daysinv = Int32.Parse(details.days);
+                            vehicleDetails.list_amt = details.list_amt;
+                            vehicleDetails.status = details.status;
+                        }
+                    }
                     <tr>
                         <td>@vehicle.VehicleLocation</td>
                 
@@ -104,8 +128,10 @@
                         <td>@vehicleDetails.daysinv</td>
                         <td>@vehicleDetails.list_amt.ToString("C", nfi)</td>
                         <td>@vehicleDetails.status</td>
+                        <td>@vehicle.ManagerSpecialStartDate.ToShortDateString()</td>
+                        <td>@vehicle.ManagerSpecialEndDate.ToShortDateString()</td>
                         <td>@vehicle.StyleId</td>
-                        <td>@vehicle.ManagerSpecial</td>
+                        <td>@vehicle.InReconditioning</td>
                     </tr>
 
                 }
@@ -138,11 +164,11 @@
                             orientation: 'landscape'
                         }
                     ]
-                    //,
-                    //columnDefs: [
-                    //  { type: 'any-number', targets: [18, 19, 20, 21, 22, 23, 24,25,26] },
-                    //  { type: 'date-us', targets: [6] }
-                    //]
+                    ,
+                    columnDefs: [
+                      { type: 'any-number', targets: [2,5,6,7,10] },
+                      { type: 'date-us', targets: [8,9] }
+                    ]
 
                 });
 

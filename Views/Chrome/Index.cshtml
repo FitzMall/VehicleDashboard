@@ -12,21 +12,102 @@
     var usedVehicleCount = 0;
     var usedChromedCount = 0;
     var usedNeedsChromedCount = 0;
+    var usedNeedsStyledCount = 0;
+
+    var usedInReconCount = 0;
+    var usedManagerSpecialsCount = 0;
+    var usedShouldBeFMCount = 0;
 
     var newVehicleCount = 0;
     var newChromedCount = 0;
     var newNeedsChromedCount = 0;
+    var newNeedsStyledCount = 0;
+
+    var newManagerSpecialsCount = 0;
+    var newShouldBeFMCount = 0;
 
     var locations = Model.UsedVehicleDashboard.WebsiteUsedInventory.Select(x => x.V_loc).Distinct().OrderBy(X => X).ToList();
 
     if (Model.Location != null && Model.Location != "ALL" && Model.Location != "")
     {
-        Model.UsedVehicleDashboard.AllUsedInventory = Model.UsedVehicleDashboard.AllUsedInventory.FindAll(x => x.loc == Model.Location);
-        Model.UsedVehicleDashboard.WebsiteUsedInventory = Model.UsedVehicleDashboard.WebsiteUsedInventory.FindAll(x => x.V_loc == Model.Location);
 
-        Model.NewVehicleDashboard.AllNewInventory = Model.NewVehicleDashboard.AllNewInventory.FindAll(x => x.LOC == Model.Location);
-        Model.NewVehicleDashboard.WebsiteNewInventory = Model.NewVehicleDashboard.WebsiteNewInventory.FindAll(x => x.V_loc == Model.Location);
+        if (Model.Location == "FBC")
+        {
+            Model.UsedVehicleDashboard.AllUsedInventory = Model.UsedVehicleDashboard.AllUsedInventory.FindAll(x => x.location == "FBS" || x.loc.Contains("FBS"));
+            Model.UsedVehicleDashboard.WebsiteUsedInventory = Model.UsedVehicleDashboard.WebsiteUsedInventory.FindAll(x => x.V_loc == "FBC");
 
+        }
+        else
+        {
+            Model.UsedVehicleDashboard.AllUsedInventory = Model.UsedVehicleDashboard.AllUsedInventory.FindAll(x => x.location == Model.Location || x.loc.Contains(Model.Location));
+            Model.UsedVehicleDashboard.WebsiteUsedInventory = Model.UsedVehicleDashboard.WebsiteUsedInventory.FindAll(x => x.V_loc == Model.Location);
+
+        }
+
+
+        if (Model.Location == "CJE")
+        {
+            Model.NewVehicleDashboard.AllNewInventory = Model.NewVehicleDashboard.AllNewInventory.FindAll(x => x.LOC == "CJE" && (x.MAKE == "JEEP" || x.MAKE == "CHRYSLER"));
+            Model.NewVehicleDashboard.WebsiteNewInventory = Model.NewVehicleDashboard.WebsiteNewInventory.FindAll(x => x.V_loc == "CJE" && (x.V_MakeName == "Jeep" || x.V_MakeName == "Chrysler"));
+            //Model.VehicleData = Model.VehicleData.FindAll(x => x.VehicleLocation == "CJE");
+        }
+        else if (Model.Location == "CHY")
+        {
+            Model.NewVehicleDashboard.AllNewInventory = Model.NewVehicleDashboard.AllNewInventory.FindAll(x => x.LOC == "CJE" && (x.MAKE == "HYUNDAI" || x.MAKE == "GENESIS"));
+            Model.NewVehicleDashboard.WebsiteNewInventory = Model.NewVehicleDashboard.WebsiteNewInventory.FindAll(x => x.V_loc == "CJE" && (x.V_MakeName == "Hyundai" || x.V_MakeName == "Genesis"));
+            //Model.VehicleData = Model.VehicleData.FindAll(x => x.VehicleLocation == "CHY");
+        }
+        else if (Model.Location == "CSS")
+        {
+            Model.NewVehicleDashboard.AllNewInventory = Model.NewVehicleDashboard.AllNewInventory.FindAll(x => x.LOC == "CJE" && (x.MAKE == "SUBARU"));
+            Model.NewVehicleDashboard.WebsiteNewInventory = Model.NewVehicleDashboard.WebsiteNewInventory.FindAll(x => x.V_loc == "CJE" && (x.V_MakeName == "Subaru"));
+            //Model.VehicleData = Model.VehicleData.FindAll(x => x.VehicleLocation == "CSS");
+        }
+        else if (Model.Location == "FBC")
+        {
+            Model.NewVehicleDashboard.AllNewInventory = Model.NewVehicleDashboard.AllNewInventory.FindAll(x => x.LOC == "FBS" && (x.MAKE == "SUBARU"));
+            Model.NewVehicleDashboard.WebsiteNewInventory = Model.NewVehicleDashboard.WebsiteNewInventory.FindAll(x => x.V_loc == "FBS" && (x.V_MakeName == "Subaru"));
+            // Model.VehicleData = Model.VehicleData.FindAll(x => x.VehicleLocation == "FBC" || x.VehicleLocation == "FBS");
+        }
+        else if (Model.Location == "FBN")
+        {
+            Model.NewVehicleDashboard.AllNewInventory = Model.NewVehicleDashboard.AllNewInventory.FindAll(x => x.LOC == "FBS" && (x.MAKE == "BUICK" || x.MAKE == "GMC"));
+            Model.NewVehicleDashboard.WebsiteNewInventory = Model.NewVehicleDashboard.WebsiteNewInventory.FindAll(x => x.V_loc == "FBS" && (x.V_MakeName == "Buick" || x.V_MakeName == "GMC"));
+            //Model.VehicleData = Model.VehicleData.FindAll(x => x.VehicleLocation == "FBN");
+        }
+        else
+        {
+            Model.NewVehicleDashboard.AllNewInventory = Model.NewVehicleDashboard.AllNewInventory.FindAll(x => x.LOC == Model.Location);
+            Model.NewVehicleDashboard.WebsiteNewInventory = Model.NewVehicleDashboard.WebsiteNewInventory.FindAll(x => x.V_loc == Model.Location);
+            //Model.VehicleData = Model.VehicleData.FindAll(x => x.VehicleLocation == Model.Location);
+        }
+
+    }
+
+    if (Model.VehicleData != null)
+    {
+        if (Model.Location != null && Model.Location != "ALL" && Model.Location != "")
+        {
+            if (Model.Location == "FBC")
+            {
+                usedInReconCount = Model.VehicleData.Count(x => x.InReconditioning == 1 && x.Condition == "USED" && (x.VehicleLocation == "FBS" || x.VehicleLocation == "FBC"));
+                usedManagerSpecialsCount = Model.VehicleData.Count(x => x.ManagerSpecial == 1 && x.Condition == "USED" && (x.VehicleLocation == "FBS" || x.VehicleLocation == "FBC"));
+                newManagerSpecialsCount = Model.VehicleData.Count(x => x.ManagerSpecial == 1 && x.Condition == "NEW" && (x.VehicleLocation == "FBS" || x.VehicleLocation == "FBC"));
+            }
+            else
+            {
+                usedInReconCount = Model.VehicleData.Count(x => x.InReconditioning == 1 && x.Condition == "USED" && x.VehicleLocation == Model.Location);
+                usedManagerSpecialsCount = Model.VehicleData.Count(x => x.ManagerSpecial == 1 && x.Condition == "USED" && x.VehicleLocation == Model.Location);
+                newManagerSpecialsCount = Model.VehicleData.Count(x => x.ManagerSpecial == 1 && x.Condition == "NEW" && x.VehicleLocation == Model.Location);
+            }
+        }
+        else
+        {
+            usedInReconCount = Model.VehicleData.Count(x => x.InReconditioning == 1 && x.Condition == "USED");
+            usedManagerSpecialsCount = Model.VehicleData.Count(x => x.ManagerSpecial == 1 && x.Condition == "USED");
+            newManagerSpecialsCount = Model.VehicleData.Count(x => x.ManagerSpecial == 1 && x.Condition == "NEW");
+
+        }
     }
 }
 
@@ -86,36 +167,59 @@
             <h3>New Vehicle Summary</h3>
             @if (Model.NewVehicleDashboard != null)
             {
-                var companyNew = Model.NewVehicleDashboard.AllNewInventory.FindAll(x => (x.status != 26));//.FindAll(x => x.vin != null && x.vin != ""  && x.vin != "XX");
+                var companyNew = Model.NewVehicleDashboard.AllNewInventory.FindAll(x => (x.status != 26 && x.status != 7));//.FindAll(x => x.vin != null && x.vin != ""  && x.vin != "XX");
                 var companyWebsiteNew = Model.NewVehicleDashboard.WebsiteNewInventory;
 
                 newVehicleCount = companyNew.Count;
+                newShouldBeFMCount = newVehicleCount - companyWebsiteNew.Count;
 
                 foreach (var vehicle in companyNew)
                 {
                     newChromedCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin);
+                    newNeedsStyledCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.StyleId == 0 && x.Condition == "NEW");
                 }
                 newNeedsChromedCount = newVehicleCount - newChromedCount;
 
+
+
                 <div class="row">
-                    <div class="col-xs-4 text-center">
-                        <h4>Vehicles</h4>
+                    <div class="col-xs-2 text-center">
+                        <h4><br/><a href="@applicationPath/Reports/AllVehicles?Location=@Model.Location&Condition=NEW" target="_blank">Vehicles</a></h4>
                         <div class="box text-center">
-                            <div id="newCount" class="gauge"></div>
+                            <div id="newCount" class="gauge"  style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
                         </div>
                     </div>
-                    <div class="col-xs-4 text-center">
+                    @*<div class="col-xs-3 text-center">
                         <h4>Chromed</h4>
                         <div class="box text-center">
-                            <div id="newChromed" class="gauge"></div>
+                            <div id="newChromed" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
                         </div>
-                    </div>
-                    <div class="col-xs-4 text-center">
-                        <h4>Needs Chromed</h4>
+                    </div>*@
+                    <div class="col-xs-2 text-center">
+                        <h4><a href="@applicationPath/Reports/NotChromed?Location=@Model.Location&Condition=NEW" target="_blank">Needs Chromed</a></h4>
                         <div class="box text-center">
-                            <div id="newNotChromed" class="gauge"></div>
+                            <div id="newNotChromed" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
                         </div>
                     </div>
+                    <div class="col-xs-2 text-center">
+                        <h4><a href="@applicationPath/Reports/ManagerSpecials?Location=@Model.Location&Condition=NEW" target="_blank">Manager Specials</a></h4>
+                        <div class="box text-center">
+                            <div id="newManagerSpecials" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                        </div>
+                    </div>
+                    <div class="col-xs-2 text-center">
+                        <h4><a href="@applicationPath/Reports/ShouldBeonFitzMall?Location=@Model.Location&Condition=NEW" target="_blank">Should be on FitzMall</a></h4>
+                        <div class="box text-center">
+                            <div id="newShouldBeFM" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                        </div>
+                    </div>
+                    @*<div class="col-xs-4 text-center">
+                        <h4><a href="@applicationPath/Reports/NeedsStyle?Location=@Model.Location&Condition=NEW" target="_blank">Needs Style Selected</a></h4>
+                        <div class="box text-center">
+                            <div id="newNotStyled" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                        </div>
+                    </div>*@
+
                 </div>
 
             }
@@ -128,32 +232,59 @@
                 var companyWebsiteUsed = Model.UsedVehicleDashboard.WebsiteUsedInventory;
 
                 usedVehicleCount = companyUsed.Count;
+                usedShouldBeFMCount = usedVehicleCount - companyWebsiteUsed.Count;
 
                 foreach (var vehicle in companyUsed)
                 {
                     usedChromedCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin);
+                    usedNeedsStyledCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.StyleId == 0 && x.Condition == "USED");
                 }
                 usedNeedsChromedCount = usedVehicleCount - usedChromedCount;
+                
 
                 <div class="row">
-                    <div class="col-xs-4 text-center">
-                        <h4>Vehicles</h4>
+                    <div class="col-xs-2 text-center">
+                        <h4><br/><a href="@applicationPath/Reports/AllVehicles?Location=@Model.Location&Condition=USED" target="_blank">Vehicles</a></h4>
                         <div class="box text-center">
-                            <div id="usedCount" class="gauge"></div>
+                            <div id="usedCount" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
                         </div>
                     </div>
-                    <div class="col-xs-4 text-center">
+                    @*<div class="col-xs-3 text-center">
                         <h4>Chromed</h4>
                         <div class="box text-center">
-                            <div id="usedChromed" class="gauge"></div>
+                            <div id="usedChromed" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
                         </div>
-                    </div>
-                    <div class="col-xs-4 text-center">
-                        <h4>Needs Chromed</h4>
+                    </div>*@
+                    <div class="col-xs-2 text-center">
+                        <h4><a href="@applicationPath/Reports/NotChromed?Location=@Model.Location&Condition=USED" target="_blank">Needs Chromed</a></h4>
                         <div class="box text-center">
-                            <div id="usedNotChromed" class="gauge"></div>
+                            <div id="usedNotChromed" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
                         </div>
                     </div>
+                    <div class="col-xs-2 text-center">
+                        <h4><a href="@applicationPath/Reports/ManagerSpecials?Location=@Model.Location&Condition=USED" target="_blank">Manager Specials</a></h4>
+                        <div class="box text-center">
+                            <div id="usedManagerSpecials" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                        </div>
+                    </div>
+                    <div class="col-xs-2 text-center">
+                        <h4><a href="@applicationPath/Reports/InRecon?Location=@Model.Location&Condition=USED" target="_blank">In Reconditioning</a></h4>
+                        <div class="box text-center">
+                            <div id="usedInRecon" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                        </div>
+                    </div>
+                    <div class="col-xs-2 text-center">
+                        <h4><a href="@applicationPath/Reports/ShouldBeonFitzMall?Location=@Model.Location&Condition=USED" target="_blank">Should be on FitzMall</a></h4>
+                        <div class="box text-center">
+                            <div id="usedShouldBeFM" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                        </div>
+                    </div>
+                    @*<div class="col-xs-4 text-center">
+                        <h4><a href="@applicationPath/Reports/NeedsStyle?Location=@Model.Location&Condition=USED" target="_blank">Needs Style Selected</a></h4>
+                        <div class="box text-center">
+                            <div id="usedNotStyled" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                        </div>
+                    </div>*@
                 </div>
 
             }
@@ -178,13 +309,17 @@
                             <th>Model</th>
                             <th>Model Code</th>
                             <th>Status</th>
-                            <th>Has VIN</th>
+                            @*<th>Has VIN</th>*@
                             <th>Style</th>
-                            <th>Mgr Special</th>
+                            <th>Issue</th>
+                            @*<th>Mgr Special</th>*@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var vehicle in Model.NewVehicleDashboard.AllNewInventory.FindAll(x => (x.status != 26)))
+                        @{
+                            var newVehicles = Model.NewVehicleDashboard.AllNewInventory.FindAll(x => (x.status != 26 && x.status != 7));
+                        }
+                        @foreach (var vehicle in newVehicles)
                         {
                             var styledVehicle = Model.VehicleData.Find(x => x.VIN == vehicle.vin);
                             var year = vehicle.year;
@@ -221,24 +356,38 @@
                                 }
                             }
 
+                            if(styleId == "0" || styleId == "")
+                            {
+                                var issue = "";
+                                if(styleId == "")
+                                {
+                                    issue = "No Chrome Info";
+                                }
+                                else if(styleId == "0")
+                                {
+                                    issue = "No Style Selection";
+                                }
+
                             <tr>
                                 @if (hasVIN == "Y")
                                 {
-                                    <td><a href="@applicationPath/Chrome/Vehicle/?VIN=@vehicle.vin&Chromed=@isChromed" target="_blank">@vehicle.stk_no</a></td>
+                                    <td><a href="@applicationPath/Chrome/ChromeNoStyle/?VIN=@vehicle.vin" target="_blank">@vehicle.stk_no</a></td>
                                 }
                                 else
                                 {
-                                    <td>@vehicle.stk_no</td>
+                                    <td><a href="@applicationPath/Chrome/ChromeNoVIN/?stock=@vehicle.stk_no&year=@vehicle.year&make=@vehicle.MAKE&model=@vehicle.CARLINE" target="_blank">@vehicle.stk_no</a></td>
                                 }
                                 <td>@year</td>
                                 <td>@make</td>
                                 <td>@modelName</td>
                                 <td>@modelNumber</td>
                                 <td>@status</td>
-                                <td>@hasVIN</td>
+                                @*<td>@hasVIN</td>*@
                                 <td>@styleId</td>
-                                <td>@mgrSpecial</td>
+                                @*<td>@mgrSpecial</td>*@
+                                <td>@issue</td>
                             </tr>
+                            }
                         }
                     </tbody>
                     <tfoot>
@@ -260,8 +409,9 @@
                             <th>Model</th>
                             <th>Status</th>
                             <th>Style</th>
-                            <th>In Recon</th>
-                            <th>Mgr Special</th>
+                            <th>Issue</th>
+                            @*<th>In Recon</th>
+                            <th>Mgr Special</th>*@
                         </tr>
                     </thead>
                     <tbody>
@@ -303,16 +453,29 @@
                                 }
                             }
 
+                            if (styleId == "0" || styleId == "")
+                            {
+                                var issue = "";
+                                if (styleId == "")
+                                {
+                                    issue = "No Chrome Info";
+                                }
+                                else if (styleId == "0")
+                                {
+                                    issue = "No Style Selection";
+                                }
                             <tr>
-                                <td><a href="@applicationPath/Chrome/Vehicle/?VIN=@vehicle.vin&Chromed=@isChromed" target="_blank">@vehicle.stk</a></td>
+                                <td><a href="@applicationPath/Chrome/ChromeNoStyle/?VIN=@vehicle.vin" target="_blank">@vehicle.stk</a></td>
                                 <td>@year</td>
                                 <td>@make</td>
                                 <td>@modelName</td>
                                 <td>@status</td>
                                 <td>@styleId</td>
-                                <td>@inRecon</td>
-                                <td>@mgrSpecial</td>
+                                @*<td>@inRecon</td>
+                                <td>@mgrSpecial</td>*@
+                                <td>@issue</td>
                             </tr>
+                            }
                         }
                     </tbody>
                     <tfoot>
@@ -369,6 +532,75 @@
                     hideInnerShadow: true
                 });
 
+                var usedInRecon = new JustGage({
+                    id: "usedInRecon",
+                    value: @usedInReconCount,
+                    min: 0,
+                    max: @usedInReconCount,
+                    donut: true,
+                    gaugeWidthScale: 0.6,
+                    counter: true,
+                    levelColors: [
+                    "#a9d70b"
+                    ],
+                    hideInnerShadow: true
+                });
+
+                var usedShouldBeFM = new JustGage({
+                    id: "usedShouldBeFM",
+                    value: @usedShouldBeFMCount,
+                    min: 0,
+                    max: @usedShouldBeFMCount,
+                    donut: true,
+                    gaugeWidthScale: 0.6,
+                    counter: true,
+                    levelColors: [
+                    "#a9d70b"
+                    ],
+                    hideInnerShadow: true
+                });
+
+                var newShouldBeFM = new JustGage({
+                    id: "newShouldBeFM",
+                    value: @newShouldBeFMCount,
+                    min: 0,
+                    max: @newShouldBeFMCount,
+                    donut: true,
+                    gaugeWidthScale: 0.6,
+                    counter: true,
+                    levelColors: [
+                    "#a9d70b"
+                    ],
+                    hideInnerShadow: true
+                });
+
+                var usedManagerSpecials = new JustGage({
+                    id: "usedManagerSpecials",
+                    value: @usedManagerSpecialsCount,
+                    min: 0,
+                    max: @usedManagerSpecialsCount,
+                    donut: true,
+                    gaugeWidthScale: 0.6,
+                    counter: true,
+                    levelColors: [
+                    "#a9d70b"
+                    ],
+                    hideInnerShadow: true
+                });
+
+                var newManagerSpecials = new JustGage({
+                    id: "newManagerSpecials",
+                    value: @newManagerSpecialsCount,
+                    min: 0,
+                    max: @newManagerSpecialsCount,
+                    donut: true,
+                    gaugeWidthScale: 0.6,
+                    counter: true,
+                    levelColors: [
+                    "#a9d70b"
+                    ],
+                    hideInnerShadow: true
+                });
                 var usedChromed = new JustGage({
                     id: "usedChromed",
                     value: @usedChromedCount,
@@ -413,7 +645,7 @@
                         stroke_linecap: 'round'
                     },
                     levelColors: [
-                    "#a9d70b", "#f9c802","#ff0000" 
+                    "#a9d70b", "#f9c802","#ff0000"
                     ],
                 });
 
@@ -458,6 +690,52 @@
                 var newNotChromed = new JustGage({
                     id: "newNotChromed",
                     value: @newNeedsChromedCount,
+                    min: 0,
+                    max: @newVehicleCount,
+                    donut: false,
+                    gaugeWidthScale: 0.6,
+                    counter: true,
+                    hideInnerShadow: true,
+                    pointer: true,
+                    pointerOptions: {
+                        toplength: -15,
+                        bottomlength: 10,
+                        bottomwidth: 12,
+                        color: '#8e8e93',
+                        stroke: '#ffffff',
+                        stroke_width: 3,
+                        stroke_linecap: 'round'
+                    },
+                    levelColors: [
+                    "#a9d70b", "#f9c802","#ff0000"
+                    ],
+                });
+                var newNotStyled = new JustGage({
+                    id: "newNotStyled",
+                    value: @newNeedsStyledCount,
+                    min: 0,
+                    max: @newVehicleCount,
+                    donut: false,
+                    gaugeWidthScale: 0.6,
+                    counter: true,
+                    hideInnerShadow: true,
+                    pointer: true,
+                    pointerOptions: {
+                        toplength: -15,
+                        bottomlength: 10,
+                        bottomwidth: 12,
+                        color: '#8e8e93',
+                        stroke: '#ffffff',
+                        stroke_width: 3,
+                        stroke_linecap: 'round'
+                    },
+                    levelColors: [
+                    "#a9d70b", "#f9c802","#ff0000"
+                    ],
+                });
+                var usedNotStyled = new JustGage({
+                    id: "usedNotStyled",
+                    value: @usedNeedsStyledCount,
                     min: 0,
                     max: @newVehicleCount,
                     donut: false,

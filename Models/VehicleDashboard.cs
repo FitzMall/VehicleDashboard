@@ -14,6 +14,7 @@ namespace VehicleDashboard.Models
     public class VehicleOptionModel
     {
         public string Location { get; set; }
+        public string Condition { get; set; }
         public UsedVehicleDashboard UsedVehicleDashboard { get; set; }
         public NewVehicleDashboard NewVehicleDashboard { get; set; }
         public List<VehicleData> VehicleData { get; set; }

@@ -1,0 +1,58 @@
+﻿@model VehicleDashboard.Models.VehicleDataModel
+
+@{
+    ViewBag.Title = "Vehicles Options";
+    var applicationPath = Request.ApplicationPath;
+
+    if (applicationPath == "/")
+    {
+        applicationPath = "";
+    }
+
+}
+
+<style type="text/css">
+    .quick-search {
+        background-color: #f9f9f9;
+        margin: 10px 0 20px 0px;
+        padding: 10px;
+    }
+
+    .row-divider {
+        margin: 15px;
+    }
+</style>
+
+<h2>Select Vehicle Options</h2>
+
+<h4>@Model.VehicleData.Year @Model.VehicleData.Make @Model.VehicleData.Model</h4>
+<h5>Stock Number: @Model.VehicleData.StockNumber</h5>
+
+@if (Model.VehicleData.StyleId == 0 && Model.PossibleStyleData != null)
+{
+    <div class="row quick-search">
+        <div class="col-sm-12">
+            <h5>This vehicle's Style could not be determined, please select one below:</h5>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Style Id</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var style in Model.PossibleStyleData)
+                    {
+                        <tr>
+                            <td>@style.styleId</td>
+                            <td><a href="@applicationPath/Chrome/VehicleNoVIN?stock=@Model.VehicleData.StockNumber&year=@Model.VehicleData.Year&make=@Model.VehicleData.Make&modelId=@Model.VehicleData.ModelId&StyleId=@style.styleId">@style.styleDescription</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+}

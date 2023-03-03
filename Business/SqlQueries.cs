@@ -29,7 +29,7 @@ namespace VehicleDashboard.Business
 
         public static List<CSV_vehicleNew> GetAllNewInventory()
         {
-            var sqlGet = @"Select * from [JUNK].[dbo].[CSV_vehicleNew]";
+            var sqlGet = @"Select * from [JUNK].[dbo].[CSV_vehicleNew]  where [year] >= DATEADD(year,-2,GETDATE())";
 
             var vehicles = SqlMapperUtil.SqlWithParams<CSV_vehicleNew>(sqlGet, new { }, "JJFServer");
             return vehicles;
@@ -156,7 +156,7 @@ namespace VehicleDashboard.Business
         public static InStockVehicle GetInStockVehicle(string VIN)
         {
             var result = new InStockVehicle();
-            var results = SqlMapperUtil.SqlWithParams<InStockVehicle>("Select stk as StockNumber, vin as VIN, '' as XrefId from [JUNK].[dbo].[CSV_vehicleUsed] where vin = @VIN1 UNION Select stk_no as StockNumber, vin as VIN, '' as XrefId from [JUNK].[dbo].[CSV_vehicleNew] where vin = @VIN2", new { VIN1 = VIN, VIN2 = VIN}, "JJFServer");
+            var results = SqlMapperUtil.SqlWithParams<InStockVehicle>("Select stk as StockNumber, vin as VIN, '' as XrefId, 'USED' as Condition, yr as Year, make as Make, Carline as Model, location as Location from [JUNK].[dbo].[CSV_vehicleUsed] where vin = @VIN1 UNION Select stk_no as StockNumber, vin as VIN, '' as XrefId, 'NEW' as Condition, year as Year, make as Make, Carline as Model, LOC as Location from [JUNK].[dbo].[CSV_vehicleNew] where vin = @VIN2", new { VIN1 = VIN, VIN2 = VIN}, "JJFServer");
 
             if(results != null && results.Count > 0)
             {
@@ -378,10 +378,10 @@ namespace VehicleDashboard.Business
 
         }
 
-        public static void AddVehicleOptionMapping(int vehicleId, int optionId)
+        public static void AddVehicleOptionMapping(int vehicleId, int optionId, int showOption)
         {
 
-            var result = SqlMapperUtil.InsertUpdateOrDeleteStoredProc("sp_InsertVehicleOptionMapping", new { VehicleId = vehicleId, OptionId = optionId }, "ChromeData");
+            var result = SqlMapperUtil.InsertUpdateOrDeleteStoredProc("sp_InsertVehicleOptionMapping", new { VehicleId = vehicleId, OptionId = optionId, ShowOption = showOption }, "JJFServer");
 
         }
 
@@ -427,6 +427,150 @@ namespace VehicleDashboard.Business
 
             var images = SqlMapperUtil.SqlWithParams<VehicleImages>(sqlGet, new { VIN = VIN }, "Rackspace");
             return images;
+        }
+
+        public static int UpdateStyleId(string vin, string stock, int styleId)
+        {
+
+            var result = SqlMapperUtil.InsertUpdateOrDeleteSql("Update [ChromeDataCVD].[dbo].[Vehicle] set StyleId = @StyleId where VIN = @VIN and StockNumber = @StockNumber", new { VIN = vin, StockNumber = stock, StyleId = styleId }, "ChromeData");
+
+            return result;
+
+        }
+        public static int UpdateVehicleOptionCode(int optionCodeId, bool showOption)
+        {
+            var result = 0;
+
+            result = SqlMapperUtil.InsertUpdateOrDeleteSql(
+                "Update [ChromeDataCVD].[dbo].[vehicleOptions] set ShowOption = @Show where ID = @OptionID",
+                new { Show = showOption, OptionId = optionCodeId }, "ChromeData");
+            
+            // Now update on Production
+            result = SqlMapperUtil.InsertUpdateOrDeleteSql(
+                "Update [ChromeDataCVD].[dbo].[vehicleOptions] set ShowOption = @Show where ID = @OptionID",
+                new { Show = showOption, OptionId = optionCodeId }, "ChromeDataProd");
+
+
+            return result;
+
+        }
+
+        public static int UpdateVehiclePackages(int packageId, bool showOption)
+        {
+            var result = 0;
+
+            result = SqlMapperUtil.InsertUpdateOrDeleteSql(
+                "Update [ChromeDataCVD].[dbo].[vehiclePackages] set ShowOption = @Show where ID = @OptionID",
+                new { Show = showOption, OptionId = packageId }, "ChromeData");
+
+            // Now update on Production
+            result = SqlMapperUtil.InsertUpdateOrDeleteSql(
+                "Update [ChromeDataCVD].[dbo].[vehiclePackages] set ShowOption = @Show where ID = @OptionID",
+                new { Show = showOption, OptionId = packageId }, "ChromeDataProd");
+
+
+            return result;
+
+        }
+
+        public static int UpdateVehicleFeatures(int featureId, bool showOption)
+        {
+            var result = 0;
+
+            result = SqlMapperUtil.InsertUpdateOrDeleteSql(
+                "Update [ChromeDataCVD].[dbo].[vehicleFeatures] set ShowOption = @Show where ID = @OptionID",
+                new { Show = showOption, OptionId = featureId }, "ChromeData");
+
+            // Now update on Production
+            result = SqlMapperUtil.InsertUpdateOrDeleteSql(
+                "Update [ChromeDataCVD].[dbo].[vehicleFeatures] set ShowOption = @Show where ID = @OptionID",
+                new { Show = showOption, OptionId = featureId }, "ChromeDataProd");
+
+
+            return result;
+
+        }
+
+        public static int UpdateVehicleTechSpecs(int techSpecId, bool showOption)
+        {
+            var result = 0;
+
+            result = SqlMapperUtil.InsertUpdateOrDeleteSql(
+                "Update [ChromeDataCVD].[dbo].[vehicleTechSpecs] set ShowOption = @Show where ID = @OptionID",
+                new { Show = showOption, OptionId = techSpecId }, "ChromeData");
+
+            // Now update on Production
+            result = SqlMapperUtil.InsertUpdateOrDeleteSql(
+                "Update [ChromeDataCVD].[dbo].[vehicleTechSpecs] set ShowOption = @Show where ID = @OptionID",
+                new { Show = showOption, OptionId = techSpecId }, "ChromeDataProd");
+
+
+            return result;
+
+        }
+
+        public static int UpdateVehicleOptions(VehicleData vehicleInformation)
+        {
+
+            var inRecon = "N";
+            var mgrSpecial = "N";
+
+            if(vehicleInformation.ManagerSpecial == 1)
+            {
+                mgrSpecial = "Y";
+            }
+
+            if (vehicleInformation.InReconditioning == 1)
+            {
+                inRecon = "Y";
+            }
+
+            var result = 0;
+            if (vehicleInformation.ManagerSpecial == 0)
+            { 
+                result = SqlMapperUtil.InsertUpdateOrDeleteSql(
+                "Update [ChromeDataCVD].[dbo].[Vehicle] set InReconditioning = @InRecon, ManagerSpecial = @MgrSpecial, CertificationLevelCode = @Code where VIN = @VIN and StockNumber = @StockNumber",
+                new { InRecon = vehicleInformation.InReconditioning, MgrSpecial = vehicleInformation.ManagerSpecial, Code = vehicleInformation.CertificationLevelCode, VIN = vehicleInformation.VIN, StockNumber = vehicleInformation.StockNumber }, "ChromeData");
+                // Now update on Prod
+                result = SqlMapperUtil.InsertUpdateOrDeleteSql(
+                "Update [ChromeDataCVD].[dbo].[Vehicle] set InReconditioning = @InRecon, ManagerSpecial = @MgrSpecial, CertificationLevelCode = @Code where VIN = @VIN and StockNumber = @StockNumber",
+                new { InRecon = vehicleInformation.InReconditioning, MgrSpecial = vehicleInformation.ManagerSpecial, Code = vehicleInformation.CertificationLevelCode, VIN = vehicleInformation.VIN, StockNumber = vehicleInformation.StockNumber }, "ChromeDataProd");
+
+                // This may go away when we rewrite the nightly process, also need to pull these values from the Chrome tables
+                //if (vehicleInformation.VehiclePrice > 0)
+                //{
+                //    result = SqlMapperUtil.InsertUpdateOrDeleteSql(
+                //    "update [FITZWAY].[dbo].[FM_VehicleResults] set IRC = @InRecon, Certified = @Code, isMgrSpecial = @MgrSpecial, InternetPrice = @Price where StockNumber = @StockNumber and VIN = @VIN",
+                //    new { InRecon = vehicleInformation.InReconditioning, MgrSpecial = vehicleInformation.ManagerSpecial, Price = vehicleInformation.VehiclePrice, Code = vehicleInformation.CertificationLevelCode, VIN = vehicleInformation.VIN, StockNumber = vehicleInformation.StockNumber }, "Rackspace");
+                //}
+                //else
+                //{
+                    //Do not update the price
+                    result = SqlMapperUtil.InsertUpdateOrDeleteSql(
+                    "update [FITZWAY].[dbo].[FM_VehicleResults] set IRC = @InRecon, Certified = @Code, isMgrSpecial = @MgrSpecial where StockNumber = @StockNumber and VIN = @VIN",
+                    new { InRecon = inRecon, MgrSpecial = mgrSpecial, Code = vehicleInformation.CertificationLevelCode, VIN = vehicleInformation.VIN, StockNumber = vehicleInformation.StockNumber }, "Rackspace");
+
+                //}
+            }
+            else
+            {
+                result = SqlMapperUtil.InsertUpdateOrDeleteSql(
+                "Update [ChromeDataCVD].[dbo].[Vehicle] set InReconditioning = @InRecon, ManagerSpecial = @MgrSpecial,  CertificationLevelCode = @Code, ManagerSpecialStartDate = @StartDate, ManagerSpecialEndDate = @EndDate where VIN = @VIN and StockNumber = @StockNumber",
+                new { InRecon = vehicleInformation.InReconditioning, MgrSpecial = vehicleInformation.ManagerSpecial, StartDate = vehicleInformation.ManagerSpecialStartDate, EndDate = vehicleInformation.ManagerSpecialEndDate, Price = vehicleInformation.VehiclePrice, Code = vehicleInformation.CertificationLevelCode, VIN = vehicleInformation.VIN, StockNumber = vehicleInformation.StockNumber }, "ChromeData");
+                //Now update Production
+
+                result = SqlMapperUtil.InsertUpdateOrDeleteSql(
+                "Update [ChromeDataCVD].[dbo].[Vehicle] set InReconditioning = @InRecon, ManagerSpecial = @MgrSpecial, CertificationLevelCode = @Code, ManagerSpecialStartDate = @StartDate, ManagerSpecialEndDate = @EndDate where VIN = @VIN and StockNumber = @StockNumber",
+                new { InRecon = vehicleInformation.InReconditioning, MgrSpecial = vehicleInformation.ManagerSpecial, StartDate = vehicleInformation.ManagerSpecialStartDate, EndDate = vehicleInformation.ManagerSpecialEndDate, Price = vehicleInformation.VehiclePrice, Code = vehicleInformation.CertificationLevelCode, VIN = vehicleInformation.VIN, StockNumber = vehicleInformation.StockNumber }, "ChromeDataProd");
+
+                result = SqlMapperUtil.InsertUpdateOrDeleteSql(
+                "update [FITZWAY].[dbo].[FM_VehicleResults] set IRC = @InRecon, Certified = @Code, isMgrSpecial = @MgrSpecial where StockNumber = @StockNumber and VIN = @VIN",
+                new { InRecon = inRecon, MgrSpecial = mgrSpecial, Code = vehicleInformation.CertificationLevelCode, VIN = vehicleInformation.VIN, StockNumber = vehicleInformation.StockNumber }, "Rackspace");
+
+            }
+
+            return result;
+
         }
     }
 }

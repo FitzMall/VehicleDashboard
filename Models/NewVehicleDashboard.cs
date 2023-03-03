@@ -9,6 +9,7 @@ namespace VehicleDashboard.Models
     {
         public List<CSV_vehicleNew> AllNewInventory { get; set; }
         public List<AllInventory> WebsiteNewInventory { get; set; }
+        public List<VehicleData> VehicleData { get; set; }
         public string Location { get; set; }
     }
 
@@ -30,7 +31,7 @@ namespace VehicleDashboard.Models
         public string clr_desc { get; set; }
         public decimal memo1 { get; set; }
         public string pkg_code { get; set; }
-        public decimal status { get; set; }
+        public int status { get; set; }
         public string model_no { get; set; }
         public string vin { get; set; }
         public string DRdays { get; set; }
