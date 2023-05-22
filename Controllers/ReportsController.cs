@@ -33,6 +33,36 @@ namespace VehicleDashboard.Controllers
             return View(usedVehicleDashboard);
         }
 
+        public ActionResult FuelType(string Location, string Condition)
+        {
+            var vehicleOptionModel = new VehicleOptionModel();
+
+            if (Location == null)
+            {
+                Location = "ALL";
+            }
+
+            if (Condition == null || Condition == "")
+            {
+                Condition = "ALL";
+            }
+
+            vehicleOptionModel.UsedVehicleDashboard = new UsedVehicleDashboard();
+            vehicleOptionModel.UsedVehicleDashboard.AllUsedInventory = Business.SqlQueries.GetAllUsedInventory();
+            vehicleOptionModel.UsedVehicleDashboard.WebsiteUsedInventory = Business.SqlQueries.GetWebsiteUsedInventory();
+
+            vehicleOptionModel.NewVehicleDashboard = new NewVehicleDashboard();
+            vehicleOptionModel.NewVehicleDashboard.AllNewInventory = Business.SqlQueries.GetAllNewInventory();
+            vehicleOptionModel.NewVehicleDashboard.WebsiteNewInventory = Business.SqlQueries.GetWebsiteNewInventory();
+
+            vehicleOptionModel.Location = Location;
+            vehicleOptionModel.Condition = Condition;
+            vehicleOptionModel.VehicleData = Business.SqlQueries.GetAllChromedVehicles();
+
+
+            return View(vehicleOptionModel);
+        }
+
         public ActionResult ManagerSpecials(string Location, string Condition)
         {
             var vehicleOptionModel = new VehicleOptionModel();

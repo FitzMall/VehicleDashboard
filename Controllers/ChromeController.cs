@@ -73,6 +73,7 @@ namespace VehicleDashboard.Controllers
         {
             var vin = "";
             var stock = "";
+            var condition = "";
 
             if(Request.Form != null)
             {
@@ -89,7 +90,11 @@ namespace VehicleDashboard.Controllers
                     vehicleInformation.StockNumber = Request.Form["stock"];
                     stock = Request.Form["stock"];
                 }
-
+                if (Request.Form["condition"] != null)
+                {
+                    vehicleInformation.Condition = Request.Form["condition"];
+                    condition = Request.Form["condition"];
+                }
 
                 if (Request.Form["chkInRecon"] != null)
                 {
@@ -139,9 +144,23 @@ namespace VehicleDashboard.Controllers
                     vehicleInformation.CertificationLevelCode = Request.Form["rdoCertification"];
                 }
 
+                vehicleInformation.FuelType = "";
+                if (Request.Form["rdoFuelType"] != null)
+                {
+                    vehicleInformation.FuelType = Request.Form["rdoFuelType"];
+                }
+
                 vehicleInformation.DateUpdated = DateTime.Now;
-                
-                SqlQueries.UpdateVehicleOptions(vehicleInformation);
+
+                var oldVehicleData = SqlQueries.GetChromeVehicle(vin);
+
+                var bPrintYellowTag = false;
+                if(oldVehicleData.CertificationLevelCode != vehicleInformation.CertificationLevelCode)
+                {
+                    bPrintYellowTag = true;
+                }
+
+                SqlQueries.UpdateVehicleOptions(vehicleInformation, bPrintYellowTag);
 
                 
             }

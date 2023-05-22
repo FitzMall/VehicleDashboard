@@ -26,6 +26,11 @@
     var newManagerSpecialsCount = 0;
     var newShouldBeFMCount = 0;
 
+    var newFuelType = 0;
+    var usedFuelType = 0;
+
+    var usedInReconVehicles = new List<VehicleDashboard.Models.VehicleData>();
+
     var locations = Model.UsedVehicleDashboard.WebsiteUsedInventory.Select(x => x.V_loc).Distinct().OrderBy(X => X).ToList();
 
     if (Model.Location != null && Model.Location != "ALL" && Model.Location != "")
@@ -90,23 +95,39 @@
         {
             if (Model.Location == "FBC")
             {
-                usedInReconCount = Model.VehicleData.Count(x => x.InReconditioning == 1 && x.Condition == "USED" && (x.VehicleLocation == "FBS" || x.VehicleLocation == "FBC"));
+                //usedInReconCount = Model.VehicleData.Count(x => x.InReconditioning == 1 && x.Condition == "USED" && (x.VehicleLocation == "FBS" || x.VehicleLocation == "FBC"));
+                usedInReconVehicles = Model.VehicleData.FindAll(x => x.InReconditioning == 1 && x.Condition == "USED" && (x.VehicleLocation == "FBS" || x.VehicleLocation == "FBC"));
+
                 usedManagerSpecialsCount = Model.VehicleData.Count(x => x.ManagerSpecial == 1 && x.Condition == "USED" && (x.VehicleLocation == "FBS" || x.VehicleLocation == "FBC"));
                 newManagerSpecialsCount = Model.VehicleData.Count(x => x.ManagerSpecial == 1 && x.Condition == "NEW" && (x.VehicleLocation == "FBS" || x.VehicleLocation == "FBC"));
+
             }
             else
             {
-                usedInReconCount = Model.VehicleData.Count(x => x.InReconditioning == 1 && x.Condition == "USED" && x.VehicleLocation == Model.Location);
+                //usedInReconCount = Model.VehicleData.Count(x => x.InReconditioning == 1 && x.Condition == "USED" && x.VehicleLocation == Model.Location);
+                usedInReconVehicles = Model.VehicleData.FindAll(x => x.InReconditioning == 1 && x.Condition == "USED" && x.VehicleLocation == Model.Location);
                 usedManagerSpecialsCount = Model.VehicleData.Count(x => x.ManagerSpecial == 1 && x.Condition == "USED" && x.VehicleLocation == Model.Location);
                 newManagerSpecialsCount = Model.VehicleData.Count(x => x.ManagerSpecial == 1 && x.Condition == "NEW" && x.VehicleLocation == Model.Location);
+
             }
         }
         else
         {
-            usedInReconCount = Model.VehicleData.Count(x => x.InReconditioning == 1 && x.Condition == "USED");
+            //usedInReconCount = Model.VehicleData.Count(x => x.InReconditioning == 1 && x.Condition == "USED");
+            usedInReconVehicles = Model.VehicleData.FindAll(x => x.InReconditioning == 1 && x.Condition == "USED");
             usedManagerSpecialsCount = Model.VehicleData.Count(x => x.ManagerSpecial == 1 && x.Condition == "USED");
             newManagerSpecialsCount = Model.VehicleData.Count(x => x.ManagerSpecial == 1 && x.Condition == "NEW");
 
+        }
+        foreach (var vehicle in usedInReconVehicles)
+        {
+            var vehicleDetails = Model.UsedVehicleDashboard.AllUsedInventory.Find(x => x.vin == vehicle.VIN);
+
+
+            if (vehicleDetails != null && (vehicleDetails.status == 1 || vehicleDetails.status == 2))
+            {
+                usedInReconCount += 1;
+            }
         }
     }
 }
@@ -168,7 +189,7 @@
             @if (Model.NewVehicleDashboard != null)
             {
                 var companyNew = Model.NewVehicleDashboard.AllNewInventory.FindAll(x => (x.status != 26 && x.status != 7));//.FindAll(x => x.vin != null && x.vin != ""  && x.vin != "XX");
-                var companyWebsiteNew = Model.NewVehicleDashboard.WebsiteNewInventory;
+                var companyWebsiteNew = Model.NewVehicleDashboard.WebsiteNewInventory.FindAll(x => x.V_Status != 2); ;
 
                 newVehicleCount = companyNew.Count;
                 newShouldBeFMCount = newVehicleCount - companyWebsiteNew.Count;
@@ -177,6 +198,8 @@
                 {
                     newChromedCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin);
                     newNeedsStyledCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.StyleId == 0 && x.Condition == "NEW");
+
+                    newFuelType += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.FuelType == null && x.Condition == "NEW");
                 }
                 newNeedsChromedCount = newVehicleCount - newChromedCount;
 
@@ -213,6 +236,12 @@
                             <div id="newShouldBeFM" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
                         </div>
                     </div>
+                    <div class="col-xs-2 text-center">
+                        <h4><a href="@applicationPath/Reports/FuelType?Location=@Model.Location&Condition=NEW" target="_blank">Missing Fuel Type</a></h4>
+                        <div class="box text-center">
+                            <div id="newFuelType" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                        </div>
+                    </div>
                     @*<div class="col-xs-4 text-center">
                         <h4><a href="@applicationPath/Reports/NeedsStyle?Location=@Model.Location&Condition=NEW" target="_blank">Needs Style Selected</a></h4>
                         <div class="box text-center">
@@ -238,6 +267,8 @@
                 {
                     usedChromedCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin);
                     usedNeedsStyledCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.StyleId == 0 && x.Condition == "USED");
+
+                    usedFuelType += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.FuelType == null && x.Condition == "USED");
                 }
                 usedNeedsChromedCount = usedVehicleCount - usedChromedCount;
                 
@@ -277,6 +308,12 @@
                         <h4><a href="@applicationPath/Reports/ShouldBeonFitzMall?Location=@Model.Location&Condition=USED" target="_blank">Should be on FitzMall</a></h4>
                         <div class="box text-center">
                             <div id="usedShouldBeFM" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                        </div>
+                    </div>
+                    <div class="col-xs-2 text-center">
+                        <h4><a href="@applicationPath/Reports/FuelType?Location=@Model.Location&Condition=USED" target="_blank">Missing Fuel Type</a></h4>
+                        <div class="box text-center">
+                            <div id="usedFuelType" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
                         </div>
                     </div>
                     @*<div class="col-xs-4 text-center">
@@ -565,6 +602,34 @@
                     value: @newShouldBeFMCount,
                     min: 0,
                     max: @newShouldBeFMCount,
+                    donut: true,
+                    gaugeWidthScale: 0.6,
+                    counter: true,
+                    levelColors: [
+                    "#a9d70b"
+                    ],
+                    hideInnerShadow: true
+                });
+
+                var newFuelType = new JustGage({
+                    id: "newFuelType",
+                    value: @newFuelType,
+                    min: 0,
+                    max: @newFuelType,
+                    donut: true,
+                    gaugeWidthScale: 0.6,
+                    counter: true,
+                    levelColors: [
+                    "#a9d70b"
+                    ],
+                    hideInnerShadow: true
+                });
+
+                var usedFuelType = new JustGage({
+                    id: "usedFuelType",
+                    value: @usedFuelType,
+                    min: 0,
+                    max: @usedFuelType,
                     donut: true,
                     gaugeWidthScale: 0.6,
                     counter: true,

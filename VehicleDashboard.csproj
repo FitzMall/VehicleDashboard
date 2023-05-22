@@ -219,6 +219,7 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+    <Content Include="Views\Reports\AllVehicles.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -296,9 +297,9 @@
     <Content Include="Views\Reports\NeedsStyle.cshtml" />
     <Content Include="Views\Chrome\VehicleNoVIN.cshtml" />
     <Content Include="Views\Chrome\ChromeNoStyle.cshtml" />
-    <Content Include="Views\Reports\AllVehicles.cshtml" />
     <Content Include="Views\Reports\ManagerSpecials.cshtml" />
     <Content Include="Views\Reports\ShouldBeOnFitzMall.cshtml" />
+    <Content Include="Views\Reports\FuelType.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

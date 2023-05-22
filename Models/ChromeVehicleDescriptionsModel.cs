@@ -58,6 +58,7 @@ namespace VehicleDashboard.Models
         public string OptionsApprovedBy { get; set; }
         public DateTime OptionsApprovedDate { get; set; }
         public string VehicleLocation { get; set; }
+        public string FuelType { get; set; }
         
     }
 

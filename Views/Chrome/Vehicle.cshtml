@@ -14,7 +14,7 @@
 <style type="text/css">
     .quick-search {
         background-color: #f9f9f9;
-        margin: 10px 0 20px 0px;
+        margin: 0px 0 0px 0px;
         padding: 10px;
     }
 
@@ -28,70 +28,76 @@
 @using (Html.BeginForm("Vehicle", "Chrome", FormMethod.Post, new { id = "VehicleDetail" }))
 {
     <input type="hidden" name="vin" value="@Model.VehicleData.VIN" />
-            <input type="hidden" name="stock" value="@Model.VehicleData.StockNumber" />
+    <input type="hidden" name="stock" value="@Model.VehicleData.StockNumber" />
+    <input type="hidden" name="condition" value="@Model.VehicleData.Condition" />
+    <input type="hidden" name="rdoFuelType" id="FuelType" value="@Model.VehicleData.FuelType" />
 
     <div class="row quick-search">
         @if (Model.VehicleData != null && Model.VehicleData.Condition == "USED")
         {
-
+            if (Model.VehicleData.VehicleLocation != null && Model.VehicleData.VehicleLocation != "")
+            {
+                Model.VehicleData.VehicleLocation = Model.VehicleData.VehicleLocation.Substring(0, 3);
+            }
             <div class="col-sm-3">
                 <h4>Certifications</h4>
 
-                @if (Model.VehicleData.Make.ToUpper() == "TOYOTA" && (Model.VehicleData.VehicleLocation == "LFT" || Model.VehicleData.VehicleLocation == "FTO"))
+                @if (Model.VehicleData.Make.ToUpper() == "TOYOTA" && (Model.VehicleData.VehicleLocation == "LFT" || Model.VehicleData.VehicleLocation == "LFM" || Model.VehicleData.VehicleLocation == "FTO"))
                 {
                     @:<input type="radio" name="rdoCertification" id="CPO" value="F911" @(Model.VehicleData.CertificationLevelCode.Trim() == "F911" ? "checked" : "") /> Toyota Certified Used
                     @:<br />
             }
 
-                @if (Model.VehicleData.Make.ToUpper() == "VOLKSWAGEN" && (Model.VehicleData.VehicleLocation == "FOC" || Model.VehicleData.VehicleLocation == "FCG"))
+                @if (Model.VehicleData.Make.ToUpper() == "VOLKSWAGEN" && (Model.VehicleData.VehicleLocation == "FOC" || Model.VehicleData.VehicleLocation == "FCG" || Model.VehicleData.VehicleLocation == "FSS"))
                 {
                     @:<input type="radio" name="rdoCertification" id="CPO" value="F924" @(Model.VehicleData.CertificationLevelCode.Trim() == "F924" || Model.VehicleData.CertificationLevelCode.Trim() == "F909" ? "checked" : "") /> VW Certified Pre-Owned
                     @:<br />
             }
 
-                @if (Model.VehicleData.Make.ToUpper() == "GENESIS" && (Model.VehicleData.VehicleLocation == "LFO" || Model.VehicleData.VehicleLocation == "CDO" || Model.VehicleData.VehicleLocation == "CHY"))
+                @if (Model.VehicleData.Make.ToUpper() == "GENESIS" && (Model.VehicleData.VehicleLocation == "LFO" || Model.VehicleData.VehicleLocation == "CDO" || Model.VehicleData.VehicleLocation == "CHY" || Model.VehicleData.VehicleLocation == "COC"))
                 {
                     @:<input type="radio" name="rdoCertification" id="CPO" value="F925" @(Model.VehicleData.CertificationLevelCode.Trim() == "F925" ? "checked" : "") /> Genesis Certified Pre-Owned
                     @:<br />
             }
 
-                @if (Model.VehicleData.Make.ToUpper() == "CADILLAC" && (Model.VehicleData.VehicleLocation == "FHG" || Model.VehicleData.VehicleLocation == "FCG" || Model.VehicleData.VehicleLocation == "FOC"))
+                @if (Model.VehicleData.Make.ToUpper() == "CADILLAC" && (Model.VehicleData.VehicleLocation == "FHG" || Model.VehicleData.VehicleLocation == "FCG" || Model.VehicleData.VehicleLocation == "FOC" || Model.VehicleData.VehicleLocation == "FSS"))
                 {
                     @:<input type="radio" name="rdoCertification" id="CPO" value="F922" @(Model.VehicleData.CertificationLevelCode.Trim() == "F922" ? "checked" : "") /> Cadillac Certified Pre-Owned
                     @:<br />
             }
 
-                @if (Model.VehicleData.Make.ToUpper() == "HYUNDAI" && (Model.VehicleData.VehicleLocation == "LFO" || Model.VehicleData.VehicleLocation == "CDO" || Model.VehicleData.VehicleLocation == "CHY"))
+                @if (Model.VehicleData.Make.ToUpper() == "HYUNDAI" && (Model.VehicleData.VehicleLocation == "LFO" || Model.VehicleData.VehicleLocation == "CDO" || Model.VehicleData.VehicleLocation == "CHY" || Model.VehicleData.VehicleLocation == "COC"))
                 {
                     @:<input type="radio" name="rdoCertification" id="CPO" value="F908" @(Model.VehicleData.CertificationLevelCode.Trim() == "F908" ? "checked" : "") /> Hyundai Certified Pre-Owned
                     @:<br />
             }
 
-                @if (Model.VehicleData.Make.ToUpper() == "SUBARU" && (Model.VehicleData.VehicleLocation == "LFO" || Model.VehicleData.VehicleLocation == "FBC" || Model.VehicleData.VehicleLocation == "CSS"))
+                @if (Model.VehicleData.Make.ToUpper() == "SUBARU" && (Model.VehicleData.VehicleLocation == "LFO" || Model.VehicleData.VehicleLocation == "FBS" || Model.VehicleData.VehicleLocation == "FBC" || Model.VehicleData.VehicleLocation == "CSS" || Model.VehicleData.VehicleLocation == "COC"))
                 {
                     @:<input type="radio" name="rdoCertification" id="CPO" value="F912" @(Model.VehicleData.CertificationLevelCode.Trim() == "F912" ? "checked" : "") /> Subaru Certified Pre-Owned
                     @:<br />
             }
 
-                @if (Model.VehicleData.Make.ToUpper() == "MAZDA" && (Model.VehicleData.VehicleLocation == "FCG" || Model.VehicleData.VehicleLocation == "FMM"))
+                @if (Model.VehicleData.Make.ToUpper() == "MAZDA" && (Model.VehicleData.VehicleLocation == "FCG" || Model.VehicleData.VehicleLocation == "FMM" || Model.VehicleData.VehicleLocation == "FSS"))
                 {
                     @:<input type="radio" name="rdoCertification" id="CPO" value="F923" @(Model.VehicleData.CertificationLevelCode.Trim() == "F923" ? "checked" : "") /> Mazda Certified Pre-Owned
                     @:<br />
             }
 
-                @if ((Model.VehicleData.Make.ToUpper() == "CHEVROLET" || Model.VehicleData.Make.ToUpper() == "GMC" || Model.VehicleData.Make.ToUpper() == "BUICK") && (Model.VehicleData.VehicleLocation == "FCG" || Model.VehicleData.VehicleLocation == "FHG" || Model.VehicleData.VehicleLocation == "FBN"))
+                @if ((Model.VehicleData.Make.ToUpper() == "CHEVROLET" || Model.VehicleData.Make.ToUpper() == "GMC" || Model.VehicleData.Make.ToUpper() == "BUICK") && (Model.VehicleData.VehicleLocation == "FCG" || Model.VehicleData.VehicleLocation == "FHG" || Model.VehicleData.VehicleLocation == "FBN" || Model.VehicleData.VehicleLocation == "FSS"))
                 {
                     @:<input type="radio" name="rdoCertification" id="CPO" value="F906" @(Model.VehicleData.CertificationLevelCode.Trim() == "F906" ? "checked" : "") /> GM Certified Pre-Owned
                     @:<br />
             }
 
-                @if ((Model.VehicleData.Make.ToUpper() == "CHRYSLER" || Model.VehicleData.Make.ToUpper() == "DODGE" || Model.VehicleData.Make.ToUpper() == "JEEP" || Model.VehicleData.Make.ToUpper() == "RAM") && (Model.VehicleData.VehicleLocation == "FHT" || Model.VehicleData.VehicleLocation == "FLP" || Model.VehicleData.VehicleLocation == "CJE"))
+                @if ((Model.VehicleData.Make.ToUpper() == "CHRYSLER" || Model.VehicleData.Make.ToUpper() == "DODGE" || Model.VehicleData.Make.ToUpper() == "JEEP" || Model.VehicleData.Make.ToUpper() == "RAM") && (Model.VehicleData.VehicleLocation == "FHT" || Model.VehicleData.VehicleLocation.Substring(0,3) == "FLP" || Model.VehicleData.VehicleLocation == "CJE" || Model.VehicleData.VehicleLocation == "COC"))
                 {
                     @:<input type="radio" name="rdoCertification" id="CPO" value="F907" @(Model.VehicleData.CertificationLevelCode.Trim() == "F907" ? "checked" : "") /> Chrysler Certified Pre-Owned
                     @:<br />
             }
 
-                <input type="radio" name="rdoCertification" id="CPO" value="F910" @(Model.VehicleData.CertificationLevelCode.Trim() == "F910" ? "checked" : "") /> FitzWay Used<br />
+                <input type="radio" name="rdoCertification" id="CPO" value="F914" @(Model.VehicleData.CertificationLevelCode.Trim() == "F914" ? "checked" : "") /> FitzWay Premium Used<br />
+                <input type="radio" name="rdoCertification" id="CPO" value="F910" @(Model.VehicleData.CertificationLevelCode.Trim() == "F910" ? "checked" : "") /> FitzWay Select Used<br />
                 <input type="radio" name="rdoCertification" id="CPO" value="F915" @(Model.VehicleData.CertificationLevelCode.Trim() == "F915" ? "checked" : "") /> FitzWay Value Used<br />
 
                 <input type="radio" name="rdoCertification" id="CPO" value="F917" @(Model.VehicleData.CertificationLevelCode.Trim() == "F917" ? "checked" : "") /> FitzWay HandyMan Fixer-Upper Special (FL)<br />
@@ -131,31 +137,49 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-3">
-            @*@if (Model.VehicleData != null && Model.VehicleData.Condition == "USED")
-            {
-                <h4>Pricing</h4>
-                <input type="text" name="vehiclePrice" id="vehiclePrice" value="@Model.VehicleData.VehiclePrice" /><br />
-            }*@
-            <div class="row" style="margin-top:20px;">
-                <div class="col-xs-6">
-                    <input type="submit" class="btn btn-primary" value="Update Options" />
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-3">
-            <h4>Vehicle Updates</h4>
-            <h5 class="text-center">Vehicle Last Updated:</h5>
+        <div class="col-sm-2">
+        <h4>Fuel Type</h4>
+        <input type="radio" name="rdoFuelType" id="FuelType" value="Diesel" @(Model.VehicleData.FuelType == "Diesel" ? "checked" : "") /> Diesel<br />
+        <input type="radio" name="rdoFuelType" id="FuelType" value="Electric" @(Model.VehicleData.FuelType == "Electric" ? "checked" : "") /> Electric<br />
+        <input type="radio" name="rdoFuelType" id="FuelType" value="Gasoline" @(Model.VehicleData.FuelType == "Gasoline" ? "checked" : "") /> Gasoline<br />
+        <input type="radio" name="rdoFuelType" id="FuelType" value="Hybrid" @(Model.VehicleData.FuelType == "Hybrid" ? "checked" : "") /> Hybrid<br />
+        <input type="radio" name="rdoFuelType" id="FuelType" value="Plug-In Hybrid" @(Model.VehicleData.FuelType == "Plug-In Hybrid" ? "checked" : "") /> Plug-In Hybrid<br />
+    </div>
+    <div class="col-sm-4">
+        <h4>Dealer Installed Accessories</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="text" id="txtInstalledDesc-1" name="txtInstalledDesc-1" /></td>
+                    <td><input type="text" id="txtInstalledCost-1" name="txtInstalledCost-1" /></td>
+                </tr>
+
+            </tbody>
+        </table>
+
+
+    </div>
+
+    </div>
+<div class="row quick-search" style="margin-bottom:20px;">
+    <div class="col-sm-12">
+        <div class="row text-center" style="margin-top:10px;">
+            <input type="submit" class="btn btn-primary" value="Update Options" />
+
             @if (Model.VehicleData != null)
-            {
-                <p class="text-center">@Model.VehicleData.DateUpdated</p>
+                {
+                <h5 class="text-center">Last Update: @Model.VehicleData.DateUpdated</h5>
             }
-            <div class="row text-center">
-                <input type="submit" class="btn btn-primary" value="Update Chrome" />
-            </div>
         </div>
     </div>
 
+</div>
 }
 
 @if (Model != null && Model.VehicleData != null)
@@ -317,10 +341,11 @@
     </div>
 
     <h4>Style Information</h4>
-    if (Model.StyleData != null && Model.StyleData.StyleId != 0)
-    {
+                if (Model.StyleData != null && Model.StyleData.StyleId != 0)
+                {
         <div class="row">
             <div class="col-sm-3">
+
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -349,6 +374,7 @@
                             <td class="text-right">Body Type:</td>
                             <td class="text-left">@Model.StyleData.BodyType</td>
                         </tr>
+
                     </tbody>
                 </table>
 
@@ -382,7 +408,6 @@
                             <td class="text-right">Destination Charge:</td>
                             <td class="text-left">@Model.StyleData.DestinationCharge</td>
                         </tr>
-
                     </tbody>
                 </table>
             </div>
@@ -395,6 +420,8 @@
                         </tr>
                     </thead>
                     <tbody>
+
+
                         <tr>
                             <td class="text-right">Standard Curb Weight:</td>
                             <td class="text-left">@Model.StyleData.StandardCurbWeight</td>

@@ -219,6 +219,7 @@
                 {
                     var vehicleDetails = Model.VehicleData.Find(x => x.VIN == vehicle.vin);
                     var reason = "";
+                    var highlight = "";
 
                     if (Model.Condition == "USED")
                     {
@@ -234,7 +235,11 @@
                         {
                             reason += "Missing Style,";
                         }
-
+                        if(vehicleDetails != null && (vehicleDetails.CertificationLevelCode == null || vehicleDetails.CertificationLevelCode == ""))
+                        {
+                            reason += "No Used Certification Level,";
+                            highlight = "background-color:#ffff0094";
+                        }
                     }
                     else
                     {
@@ -256,7 +261,7 @@
                         reason += vehicle.MEMO1_CAT;
                     }
 
-                    reason.TrimEnd(',');
+                    reason = reason.TrimEnd(',');
 
                     <tr>
                         <td>@vehicle.loc</td>
@@ -289,7 +294,8 @@
                             <td></td>
                             <td></td>                            
                         }
-                        <td>@reason</td>
+                        
+                        <td style="@highlight">@reason</td>
                     </tr>
 
                 }

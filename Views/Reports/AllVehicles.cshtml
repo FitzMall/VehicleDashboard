@@ -67,7 +67,8 @@
         {
             Model.NewVehicleDashboard.AllNewInventory = Model.NewVehicleDashboard.AllNewInventory.FindAll(x => x.LOC == Model.Location);
             Model.NewVehicleDashboard.WebsiteNewInventory = Model.NewVehicleDashboard.WebsiteNewInventory.FindAll(x => x.V_loc == Model.Location);
-            Model.VehicleData = Model.VehicleData.FindAll(x => x.VehicleLocation == Model.Location);
+            Model.VehicleData = Model.VehicleData.FindAll(x => x.VehicleLocation != null && x.VehicleLocation != "" && x.VehicleLocation.Length == 3);
+            Model.VehicleData = Model.VehicleData.FindAll(x => x.VehicleLocation.Substring(0,3) == Model.Location.Substring(0, 3));
         }
 
 
@@ -116,14 +117,72 @@
             item.list_amt = vehicle.list_amt;
             item.status = vehicle.status;
 
+            var chromedVehicle = Model.VehicleData.Find(x => x.StockNumber.Trim() == vehicle.stk.Trim());
+            if(chromedVehicle != null)
+            {
+                item.MEMO1_CAT = chromedVehicle.CertificationLevelCode.Trim();
+                item.SALE_DATE = chromedVehicle.DateUpdated;
+
+                switch(item.MEMO1_CAT)
+                {
+                    case "F911":
+                        item.MEMO2_CAT = "Toyota Certified Used";
+                        break;
+                    case "F924":
+                        item.MEMO2_CAT = "Volkswagen Certified Used";
+                        break;
+                    case "F925":
+                        item.MEMO2_CAT = "Genesis Certified Used";
+                        break;
+                    case "F922":
+                        item.MEMO2_CAT = "Cadillac Certified Used";
+                        break;
+                    case "F908":
+                        item.MEMO2_CAT = "Hyundai Certified Used";
+                        break;
+                    case "F923":
+                        item.MEMO2_CAT = "Mazda Certified Used";
+                        break;
+                    case "F906":
+                        item.MEMO2_CAT = "GM Certifed Used";
+                        break;
+                    case "F907":
+                        item.MEMO2_CAT = "Chrysler Certified Used";
+                        break;
+                    case "F912":
+                        item.MEMO2_CAT = "Subaru Certified Used";
+                        break;
+                    case "F914":
+                        item.MEMO2_CAT = "FitzWay Premium Used";
+                        break;
+                    case "F910":
+                        item.MEMO2_CAT = "FitzWay Select Used";
+                        break;
+                    case "F915":
+                        item.MEMO2_CAT = "FitzWay Value Used";
+                        break;
+                    case "F917":
+                        item.MEMO2_CAT = "FitzWay HandyMan (FL)";
+                        break;
+                    case "F918":
+                        item.MEMO2_CAT = "FitzWay HandyMan (PA)";
+                        break;
+                    case "F916":
+                        item.MEMO2_CAT = "FitzWay HandyMan (MD)";
+                        break;
+
+                }
+
+            }
+
             vehicleList.Add(item);
         }
 
     }
-}
+    }
 
-@section CSS
-{
+    @section CSS
+    {
     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 
     <style type="text/css">
@@ -167,8 +226,11 @@
                     <th>List Amt</th>
                     <th>Status</th>
                     <th>Style Id</th>
+                    <th>Fuel Type</th>
                     <th>In Recon</th>
                     <th>Manager Special</th>
+                    <th></th>
+                    <th>Date Updated</th>
                 </tr>
             </thead>
             <tbody>
@@ -199,6 +261,7 @@
                         @if (vehicleDetails != null)
                         {
                             <td>@vehicleDetails.StyleId</td>
+                            <td>@vehicleDetails.FuelType</td>
                             <td>@vehicleDetails.InReconditioning</td>
                             <td>@vehicleDetails.ManagerSpecial</td>
                         }
@@ -207,7 +270,10 @@
                             <td></td>
                             <td></td>
                             <td></td>
+                            <td></td>
                         }
+                        <td>(@vehicle.MEMO1_CAT) @vehicle.MEMO2_CAT</td>
+                        <td>@vehicle.SALE_DATE.ToShortDateString()</td>
                     </tr>
 
                 }
@@ -240,11 +306,11 @@
                             orientation: 'landscape'
                         }
                     ]
-                    //,
-                    //columnDefs: [
-                    //  { type: 'any-number', targets: [18, 19, 20, 21, 22, 23, 24,25,26] },
-                    //  { type: 'date-us', targets: [6] }
-                    //]
+                    ,
+                    columnDefs: [
+                      { type: 'any-number', targets: [2,5,6,7,8] },
+                      { type: 'date', targets: [12] }
+                    ]
 
                 });
          

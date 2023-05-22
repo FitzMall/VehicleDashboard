@@ -21,7 +21,7 @@ namespace VehicleDashboard.Business
 
         public static List<AllInventory> GetWebsiteUsedInventory()
         {
-            var sqlGet = @"Select * from [FITZWAY].dbo.[AllInventory] where V_nu = 'USED'";
+            var sqlGet = @"Select * from [FITZWAY].dbo.[AllInventory] where V_nu = 'USED' and V_Certified <> ''";
 
             var vehicles = SqlMapperUtil.SqlWithParams<AllInventory>(sqlGet, new { }, "JJFServer");
             return vehicles;
@@ -509,11 +509,12 @@ namespace VehicleDashboard.Business
 
         }
 
-        public static int UpdateVehicleOptions(VehicleData vehicleInformation)
+        public static int UpdateVehicleOptions(VehicleData vehicleInformation, bool bPrintYellowTag)
         {
 
             var inRecon = "N";
             var mgrSpecial = "N";
+            var isSearchable = 0;
 
             if(vehicleInformation.ManagerSpecial == 1)
             {
@@ -525,16 +526,26 @@ namespace VehicleDashboard.Business
                 inRecon = "Y";
             }
 
+            if(vehicleInformation.CertificationLevelCode != null && vehicleInformation.CertificationLevelCode != "")
+            {
+                isSearchable = 1;
+            }
+
+            if (vehicleInformation.Condition == "NEW")
+            {
+                isSearchable = 1;
+            }
+
             var result = 0;
             if (vehicleInformation.ManagerSpecial == 0)
             { 
                 result = SqlMapperUtil.InsertUpdateOrDeleteSql(
-                "Update [ChromeDataCVD].[dbo].[Vehicle] set InReconditioning = @InRecon, ManagerSpecial = @MgrSpecial, CertificationLevelCode = @Code where VIN = @VIN and StockNumber = @StockNumber",
-                new { InRecon = vehicleInformation.InReconditioning, MgrSpecial = vehicleInformation.ManagerSpecial, Code = vehicleInformation.CertificationLevelCode, VIN = vehicleInformation.VIN, StockNumber = vehicleInformation.StockNumber }, "ChromeData");
+                "Update [ChromeDataCVD].[dbo].[Vehicle] set InReconditioning = @InRecon, ManagerSpecial = @MgrSpecial, CertificationLevelCode = @Code, FuelType = @Fuel, DateUpdated = GetDate() where VIN = @VIN and StockNumber = @StockNumber",
+                new { InRecon = vehicleInformation.InReconditioning, MgrSpecial = vehicleInformation.ManagerSpecial, Code = vehicleInformation.CertificationLevelCode, Fuel=vehicleInformation.FuelType, VIN = vehicleInformation.VIN, StockNumber = vehicleInformation.StockNumber }, "ChromeData");
                 // Now update on Prod
                 result = SqlMapperUtil.InsertUpdateOrDeleteSql(
-                "Update [ChromeDataCVD].[dbo].[Vehicle] set InReconditioning = @InRecon, ManagerSpecial = @MgrSpecial, CertificationLevelCode = @Code where VIN = @VIN and StockNumber = @StockNumber",
-                new { InRecon = vehicleInformation.InReconditioning, MgrSpecial = vehicleInformation.ManagerSpecial, Code = vehicleInformation.CertificationLevelCode, VIN = vehicleInformation.VIN, StockNumber = vehicleInformation.StockNumber }, "ChromeDataProd");
+                "Update [ChromeDataCVD].[dbo].[Vehicle] set InReconditioning = @InRecon, ManagerSpecial = @MgrSpecial, CertificationLevelCode = @Code, FuelType = @Fuel, DateUpdated = GetDate() where VIN = @VIN and StockNumber = @StockNumber",
+                new { InRecon = vehicleInformation.InReconditioning, MgrSpecial = vehicleInformation.ManagerSpecial, Code = vehicleInformation.CertificationLevelCode, Fuel = vehicleInformation.FuelType, VIN = vehicleInformation.VIN, StockNumber = vehicleInformation.StockNumber }, "ChromeDataProd");
 
                 // This may go away when we rewrite the nightly process, also need to pull these values from the Chrome tables
                 //if (vehicleInformation.VehiclePrice > 0)
@@ -547,25 +558,89 @@ namespace VehicleDashboard.Business
                 //{
                     //Do not update the price
                     result = SqlMapperUtil.InsertUpdateOrDeleteSql(
-                    "update [FITZWAY].[dbo].[FM_VehicleResults] set IRC = @InRecon, Certified = @Code, isMgrSpecial = @MgrSpecial where StockNumber = @StockNumber and VIN = @VIN",
-                    new { InRecon = inRecon, MgrSpecial = mgrSpecial, Code = vehicleInformation.CertificationLevelCode, VIN = vehicleInformation.VIN, StockNumber = vehicleInformation.StockNumber }, "Rackspace");
+                    "update [FITZWAY].[dbo].[FM_VehicleResults] set IRC = @InRecon, Certified = @Code, isMgrSpecial = @MgrSpecial, isSearchable = @Searchable, FuelType = @Fuel where StockNumber = @StockNumber and VIN = @VIN",
+                    new { InRecon = inRecon, MgrSpecial = mgrSpecial, Code = vehicleInformation.CertificationLevelCode,Searchable = isSearchable, VIN = vehicleInformation.VIN, Fuel = vehicleInformation.FuelType, StockNumber = vehicleInformation.StockNumber }, "Rackspace");
 
                 //}
             }
             else
             {
                 result = SqlMapperUtil.InsertUpdateOrDeleteSql(
-                "Update [ChromeDataCVD].[dbo].[Vehicle] set InReconditioning = @InRecon, ManagerSpecial = @MgrSpecial,  CertificationLevelCode = @Code, ManagerSpecialStartDate = @StartDate, ManagerSpecialEndDate = @EndDate where VIN = @VIN and StockNumber = @StockNumber",
-                new { InRecon = vehicleInformation.InReconditioning, MgrSpecial = vehicleInformation.ManagerSpecial, StartDate = vehicleInformation.ManagerSpecialStartDate, EndDate = vehicleInformation.ManagerSpecialEndDate, Price = vehicleInformation.VehiclePrice, Code = vehicleInformation.CertificationLevelCode, VIN = vehicleInformation.VIN, StockNumber = vehicleInformation.StockNumber }, "ChromeData");
+                "Update [ChromeDataCVD].[dbo].[Vehicle] set InReconditioning = @InRecon, ManagerSpecial = @MgrSpecial,  CertificationLevelCode = @Code, FuelType = @Fuel, ManagerSpecialStartDate = @StartDate, ManagerSpecialEndDate = @EndDate, DateUpdated = GetDate() where VIN = @VIN and StockNumber = @StockNumber",
+                new { InRecon = vehicleInformation.InReconditioning, MgrSpecial = vehicleInformation.ManagerSpecial, StartDate = vehicleInformation.ManagerSpecialStartDate, EndDate = vehicleInformation.ManagerSpecialEndDate, Price = vehicleInformation.VehiclePrice, Code = vehicleInformation.CertificationLevelCode, Fuel = vehicleInformation.FuelType, VIN = vehicleInformation.VIN, StockNumber = vehicleInformation.StockNumber }, "ChromeData");
                 //Now update Production
 
                 result = SqlMapperUtil.InsertUpdateOrDeleteSql(
-                "Update [ChromeDataCVD].[dbo].[Vehicle] set InReconditioning = @InRecon, ManagerSpecial = @MgrSpecial, CertificationLevelCode = @Code, ManagerSpecialStartDate = @StartDate, ManagerSpecialEndDate = @EndDate where VIN = @VIN and StockNumber = @StockNumber",
-                new { InRecon = vehicleInformation.InReconditioning, MgrSpecial = vehicleInformation.ManagerSpecial, StartDate = vehicleInformation.ManagerSpecialStartDate, EndDate = vehicleInformation.ManagerSpecialEndDate, Price = vehicleInformation.VehiclePrice, Code = vehicleInformation.CertificationLevelCode, VIN = vehicleInformation.VIN, StockNumber = vehicleInformation.StockNumber }, "ChromeDataProd");
+                "Update [ChromeDataCVD].[dbo].[Vehicle] set InReconditioning = @InRecon, ManagerSpecial = @MgrSpecial, CertificationLevelCode = @Code, FuelType = @Fuel, ManagerSpecialStartDate = @StartDate, ManagerSpecialEndDate = @EndDate, DateUpdated = GetDate() where VIN = @VIN and StockNumber = @StockNumber",
+                new { InRecon = vehicleInformation.InReconditioning, MgrSpecial = vehicleInformation.ManagerSpecial, StartDate = vehicleInformation.ManagerSpecialStartDate, EndDate = vehicleInformation.ManagerSpecialEndDate, Price = vehicleInformation.VehiclePrice, Code = vehicleInformation.CertificationLevelCode, Fuel = vehicleInformation.FuelType, VIN = vehicleInformation.VIN, StockNumber = vehicleInformation.StockNumber }, "ChromeDataProd");
 
                 result = SqlMapperUtil.InsertUpdateOrDeleteSql(
-                "update [FITZWAY].[dbo].[FM_VehicleResults] set IRC = @InRecon, Certified = @Code, isMgrSpecial = @MgrSpecial where StockNumber = @StockNumber and VIN = @VIN",
-                new { InRecon = inRecon, MgrSpecial = mgrSpecial, Code = vehicleInformation.CertificationLevelCode, VIN = vehicleInformation.VIN, StockNumber = vehicleInformation.StockNumber }, "Rackspace");
+                "update [FITZWAY].[dbo].[FM_VehicleResults] set IRC = @InRecon, Certified = @Code, isMgrSpecial = @MgrSpecial, isSearchable = @Searchable, FuelType = @Fuel where StockNumber = @StockNumber and VIN = @VIN",
+                new { InRecon = inRecon, MgrSpecial = mgrSpecial, Code = vehicleInformation.CertificationLevelCode, Searchable = isSearchable, VIN = vehicleInformation.VIN, Fuel = vehicleInformation.FuelType, StockNumber = vehicleInformation.StockNumber }, "Rackspace");
+
+            }
+
+            if(bPrintYellowTag)
+            {
+                var certificationFlag = "";
+
+                switch(vehicleInformation.CertificationLevelCode)
+                {
+                    case "F916":
+                        certificationFlag = "Y";
+                        break;
+                    case "F917":
+                        certificationFlag = "Y";
+                        break;
+                    case "F918":
+                        certificationFlag = "Y";
+                        break;
+                    case "F910":
+                        certificationFlag = "A";
+                        break;
+                    case "F914":
+                        certificationFlag = "C";
+                        break;
+                    case "F915":
+                        certificationFlag = "B";
+                        break;
+                    case "F911":
+                        certificationFlag = "T";
+                        break;
+                    case "F924":
+                        certificationFlag = "V";
+                        break;
+                    case "F925":
+                        certificationFlag = "X";
+                        break;
+                    case "F922":
+                        certificationFlag = "D";
+                        break;
+                    case "F908":
+                        certificationFlag = "H";
+                        break;
+                    case "F912":
+                        certificationFlag = "S";
+                        break;
+                    case "F923":
+                        certificationFlag = "M";
+                        break;
+                    case "F906":
+                        certificationFlag = "G";
+                        break;
+                    case "F907":
+                        certificationFlag = "R";
+                        break;
+                }
+
+                if (certificationFlag != "")
+                {
+                    result = SqlMapperUtil.InsertUpdateOrDeleteSql(
+                    "Update [FOXPROTABLES].[dbo].[LABELTMPUC] set print_it = 'Y', handyman = @HandymanFlag where stk = @StockNumber and vin = @VIN",
+                    new { HandymanFlag = certificationFlag, VIN = vehicleInformation.VIN, StockNumber = vehicleInformation.StockNumber }, "FDServer");
+
+                }
+
 
             }
 
