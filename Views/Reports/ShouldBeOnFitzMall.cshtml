@@ -86,7 +86,7 @@
     {
         foreach (var vehicle in companyNew)
         {
-            var foundVehicle = Model.NewVehicleDashboard.WebsiteNewInventory.Find(x => x.V_stock.Trim() == vehicle.stk_no.Trim());
+            var foundVehicle = Model.NewVehicleDashboard.WebsiteNewInventory.Find(x => x.V_stock.Trim() == vehicle.stk_no.Trim() && x.V_Status != 2);
 
             if (foundVehicle == null)
             {

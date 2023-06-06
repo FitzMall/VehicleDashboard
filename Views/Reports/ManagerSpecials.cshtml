@@ -110,6 +110,10 @@
                             vehicleDetails.status = details.status;
                         }
                     }
+
+                    if(vehicleDetails != null && (vehicleDetails.status == 1 || vehicleDetails.status == 2 || vehicleDetails.status == 4))
+                    {
+
                     <tr>
                         <td>@vehicle.VehicleLocation</td>
                 
@@ -134,6 +138,7 @@
                         <td>@vehicle.InReconditioning</td>
                     </tr>
 
+                    }
                 }
             </tbody>
         </table>

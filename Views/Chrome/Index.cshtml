@@ -29,6 +29,9 @@
     var newFuelType = 0;
     var usedFuelType = 0;
 
+    var newMgrSpcCount = 0;
+    var usedMgrSpcCount = 0;
+
     var usedInReconVehicles = new List<VehicleDashboard.Models.VehicleData>();
 
     var locations = Model.UsedVehicleDashboard.WebsiteUsedInventory.Select(x => x.V_loc).Distinct().OrderBy(X => X).ToList();
@@ -198,8 +201,10 @@
                 {
                     newChromedCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin);
                     newNeedsStyledCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.StyleId == 0 && x.Condition == "NEW");
-
                     newFuelType += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.FuelType == null && x.Condition == "NEW");
+
+
+                    newMgrSpcCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.ManagerSpecial == 1);
                 }
                 newNeedsChromedCount = newVehicleCount - newChromedCount;
 
@@ -269,9 +274,15 @@
                     usedNeedsStyledCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.StyleId == 0 && x.Condition == "USED");
 
                     usedFuelType += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.FuelType == null && x.Condition == "USED");
+
+                    if (vehicle.status == 1 || vehicle.status == 2 || vehicle.status == 4)
+                    {
+                        usedMgrSpcCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.ManagerSpecial == 1);
+                    }
+
                 }
                 usedNeedsChromedCount = usedVehicleCount - usedChromedCount;
-                
+
 
                 <div class="row">
                     <div class="col-xs-2 text-center">
@@ -641,9 +652,9 @@
 
                 var usedManagerSpecials = new JustGage({
                     id: "usedManagerSpecials",
-                    value: @usedManagerSpecialsCount,
+                    value: @usedMgrSpcCount,
                     min: 0,
-                    max: @usedManagerSpecialsCount,
+                    max: @usedMgrSpcCount,
                     donut: true,
                     gaugeWidthScale: 0.6,
                     counter: true,
@@ -655,9 +666,9 @@
 
                 var newManagerSpecials = new JustGage({
                     id: "newManagerSpecials",
-                    value: @newManagerSpecialsCount,
+                    value: @newMgrSpcCount,
                     min: 0,
-                    max: @newManagerSpecialsCount,
+                    max: @newMgrSpcCount,
                     donut: true,
                     gaugeWidthScale: 0.6,
                     counter: true,
