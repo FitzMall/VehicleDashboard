@@ -142,5 +142,8 @@ namespace VehicleDashboard.Models
         public DateTime v_fdend { get; set; }
         public DateTime v_crstart { get; set; }
         public DateTime v_crend { get; set; }
+
+        public int FitzWayCheckedOut { get; set; }
     }
+
 }

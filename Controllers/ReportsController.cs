@@ -14,8 +14,41 @@ namespace VehicleDashboard.Controllers
         {
             return View();
         }
+        public ActionResult Handyman(string Location)
+        {
+            var usedVehicleDashboard = new Models.UsedVehicleDashboard();
 
+            if (Location == null)
+            {
+                Location = "ALL";
+            }
+
+            usedVehicleDashboard.AllUsedInventory = Business.SqlQueries.GetAllUsedInventory();
+            usedVehicleDashboard.WebsiteUsedInventory = Business.SqlQueries.GetWebsiteUsedInventory();
+            usedVehicleDashboard.Location = Location;
+            usedVehicleDashboard.VehicleData = Business.SqlQueries.GetAllChromedVehicles();
+
+
+            return View(usedVehicleDashboard);
+        }
         public ActionResult InRecon(string Location)
+        {
+            var usedVehicleDashboard = new Models.UsedVehicleDashboard();
+
+            if (Location == null)
+            {
+                Location = "ALL";
+            }
+
+            usedVehicleDashboard.AllUsedInventory = Business.SqlQueries.GetAllUsedInventory();
+            usedVehicleDashboard.WebsiteUsedInventory = Business.SqlQueries.GetWebsiteUsedInventory();
+            usedVehicleDashboard.Location = Location;
+            usedVehicleDashboard.VehicleData = Business.SqlQueries.GetAllChromedVehicles();
+
+
+            return View(usedVehicleDashboard);
+        }
+        public ActionResult NotCheckedOut(string Location)
         {
             var usedVehicleDashboard = new Models.UsedVehicleDashboard();
 

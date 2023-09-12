@@ -32,6 +32,12 @@
     var newMgrSpcCount = 0;
     var usedMgrSpcCount = 0;
 
+    // DAB added variables below (remove this comment later)
+    var usedHandyman = 0;
+    var usedMissing1550 = 0;
+    var usedMissing1551 = 0;
+    var usedMissingCheckout = 0;
+
     var usedInReconVehicles = new List<VehicleDashboard.Models.VehicleData>();
 
     var locations = Model.UsedVehicleDashboard.WebsiteUsedInventory.Select(x => x.V_loc).Distinct().OrderBy(X => X).ToList();
@@ -267,6 +273,18 @@
 
                 usedVehicleCount = companyUsed.Count;
                 usedShouldBeFMCount = usedVehicleCount - companyWebsiteUsed.Count;
+                usedMissing1550 = 0;
+                usedMissing1551 = 0;
+                usedMissingCheckout = 0;
+                usedHandyman = 0;
+
+                foreach (var vehicle in companyWebsiteUsed)
+                {
+                    if (vehicle.FitzWayCheckedOut == 0)
+                    {
+                        usedMissingCheckout += 1;
+                    }
+                }
 
                 foreach (var vehicle in companyUsed)
                 {
@@ -280,60 +298,78 @@
                         usedMgrSpcCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.ManagerSpecial == 1);
                     }
 
+                    if (vehicle.slscode == "HDM")
+                    {
+                        usedHandyman += 1;
+                    }
+
+
                 }
                 usedNeedsChromedCount = usedVehicleCount - usedChromedCount;
 
 
-                <div class="row">
-                    <div class="col-xs-2 text-center">
-                        <h4><br/><a href="@applicationPath/Reports/AllVehicles?Location=@Model.Location&Condition=USED" target="_blank">Vehicles</a></h4>
-                        <div class="box text-center">
-                            <div id="usedCount" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
-                        </div>
-                    </div>
-                    @*<div class="col-xs-3 text-center">
-                        <h4>Chromed</h4>
-                        <div class="box text-center">
-                            <div id="usedChromed" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
-                        </div>
-                    </div>*@
-                    <div class="col-xs-2 text-center">
-                        <h4><a href="@applicationPath/Reports/NotChromed?Location=@Model.Location&Condition=USED" target="_blank">Needs Chromed</a></h4>
-                        <div class="box text-center">
-                            <div id="usedNotChromed" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
-                        </div>
-                    </div>
-                    <div class="col-xs-2 text-center">
-                        <h4><a href="@applicationPath/Reports/ManagerSpecials?Location=@Model.Location&Condition=USED" target="_blank">Manager Specials</a></h4>
-                        <div class="box text-center">
-                            <div id="usedManagerSpecials" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
-                        </div>
-                    </div>
-                    <div class="col-xs-2 text-center">
-                        <h4><a href="@applicationPath/Reports/InRecon?Location=@Model.Location&Condition=USED" target="_blank">In Reconditioning</a></h4>
-                        <div class="box text-center">
-                            <div id="usedInRecon" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
-                        </div>
-                    </div>
-                    <div class="col-xs-2 text-center">
-                        <h4><a href="@applicationPath/Reports/ShouldBeonFitzMall?Location=@Model.Location&Condition=USED" target="_blank">Should be on FitzMall</a></h4>
-                        <div class="box text-center">
-                            <div id="usedShouldBeFM" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
-                        </div>
-                    </div>
-                    <div class="col-xs-2 text-center">
-                        <h4><a href="@applicationPath/Reports/FuelType?Location=@Model.Location&Condition=USED" target="_blank">Missing Fuel Type</a></h4>
-                        <div class="box text-center">
-                            <div id="usedFuelType" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
-                        </div>
-                    </div>
-                    @*<div class="col-xs-4 text-center">
-                        <h4><a href="@applicationPath/Reports/NeedsStyle?Location=@Model.Location&Condition=USED" target="_blank">Needs Style Selected</a></h4>
-                        <div class="box text-center">
-                            <div id="usedNotStyled" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
-                        </div>
-                    </div>*@
+        <div class="row">
+            <div class="col-xs-2 text-center">
+                <h4><br /><a href="@applicationPath/Reports/AllVehicles?Location=@Model.Location&Condition=USED" target="_blank">Vehicles</a></h4>
+                <div class="box text-center">
+                    <div id="usedCount" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
                 </div>
+            </div>
+            @*<div class="col-xs-3 text-center">
+            <h4>Chromed</h4>
+            <div class="box text-center">
+                <div id="usedChromed" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+            </div>
+        </div>*@
+            <div class="col-xs-2 text-center">
+                <h4><a href="@applicationPath/Reports/NotChromed?Location=@Model.Location&Condition=USED" target="_blank">Needs Chromed</a></h4>
+                <div class="box text-center">
+                    <div id="usedNotChromed" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                </div>
+            </div>
+            <div class="col-xs-2 text-center">
+                <h4><a href="@applicationPath/Reports/ManagerSpecials?Location=@Model.Location&Condition=USED" target="_blank">Manager Specials</a></h4>
+                <div class="box text-center">
+                    <div id="usedManagerSpecials" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                </div>
+            </div>
+            <div class="col-xs-2 text-center">
+                <h4><a href="@applicationPath/Reports/InRecon?Location=@Model.Location&Condition=USED" target="_blank">In Reconditioning</a></h4>
+                <div class="box text-center">
+                    <div id="usedInRecon" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                </div>
+            </div>
+            <div class="col-xs-2 text-center">
+                <h4><a href="@applicationPath/Reports/ShouldBeonFitzMall?Location=@Model.Location&Condition=USED" target="_blank">Should be on FitzMall</a></h4>
+                <div class="box text-center">
+                    <div id="usedShouldBeFM" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                </div>
+            </div>
+            <div class="col-xs-2 text-center">
+                <h4><a href="@applicationPath/Reports/FuelType?Location=@Model.Location&Condition=USED" target="_blank">Missing Fuel Type</a></h4>
+                <div class="box text-center">
+                    <div id="usedFuelType" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                </div>
+            </div>
+            <div class="col-xs-2 text-center">
+                <h4><a href="@applicationPath/Reports/Handyman?Location=@Model.Location" target="_blank">Handyman</a></h4>
+                <div class="box text-center">
+                    <div id="usedHandyman" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                </div>
+            </div>
+            <div class="col-xs-2 text-center">
+                <h4><a href="@applicationPath/Reports/NotCheckedOut?Location=@Model.Location" target="_blank">Missing Checkout</a></h4>
+                <div class="box text-center">
+                    <div id="usedMissingCheckout" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                </div>
+            </div>
+            @*<div class="col-xs-4 text-center">
+            <h4><a href="@applicationPath/Reports/NeedsStyle?Location=@Model.Location&Condition=USED" target="_blank">Needs Style Selected</a></h4>
+            <div class="box text-center">
+                <div id="usedNotStyled" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+            </div>
+        </div>*@
+        </div>
 
             }
         </div>
@@ -452,6 +488,34 @@
                     value: @usedFuelType,
                     min: 0,
                     max: @usedFuelType,
+                    donut: true,
+                    gaugeWidthScale: 0.6,
+                    counter: true,
+                    levelColors: [
+                    "#a9d70b"
+                    ],
+                    hideInnerShadow: true
+                });
+
+                var usedHandyman = new JustGage({
+                    id: "usedHandyman",
+                    value: @usedHandyman,
+                    min: 0,
+                    max: @usedHandyman,
+                    donut: true,
+                    gaugeWidthScale: 0.6,
+                    counter: true,
+                    levelColors: [
+                    "#a9d70b"
+                    ],
+                    hideInnerShadow: true
+                });
+
+                var usedMissingCheckout = new JustGage({
+                    id: "usedMissingCheckout",
+                    value: @usedMissingCheckout,
+                    min: 0,
+                    max: @usedMissingCheckout,
                     donut: true,
                     gaugeWidthScale: 0.6,
                     counter: true,

@@ -21,11 +21,14 @@ namespace VehicleDashboard.Business
 
         public static List<AllInventory> GetWebsiteUsedInventory()
         {
-            var sqlGet = @"Select * from [FITZWAY].dbo.[AllInventory] where V_nu = 'USED' and V_Certified <> ''";
+            var sqlGet = "[FITZWAY].dbo.UsedInventory_VehicleDashboard";
 
-            var vehicles = SqlMapperUtil.SqlWithParams<AllInventory>(sqlGet, new { }, "JJFServer");
+            var vehicles = SqlMapperUtil.StoredProcWithParams<AllInventory>(sqlGet, new { }, "JJFServer");
             return vehicles;
+
         }
+
+        //UsedInventory_VehicleDashboard
 
         public static List<CSV_vehicleNew> GetAllNewInventory()
         {
@@ -153,6 +156,14 @@ namespace VehicleDashboard.Business
             var results = SqlMapperUtil.SqlWithParams<InStockVehicle>("Select V_Vin as VIN, v_Stock as StockNumber, V_xrefid as XrefId from fitzway.dbo.AllInventoryFM where v_vin <> 'XX' and v_vin not in (Select VIN from ChromeDataCVD.dbo.Vehicle)", "", "JJFServer");
             return results;
         }
+
+        public static List<InStockVehicle> HandymanVehicles()
+        {
+            var results = SqlMapperUtil.SqlWithParams<InStockVehicle>("Select [sl_VehicleVIN] as VIN, [sl_VehicleStockNumber] as StockNumber, [sl_VehicleDealNo] as XrefId from SalesCommission.dbo.saleslog where sl_Certificationlevel = 'hdm'", "", "SalesCommission");
+            return results;
+        }
+
+        
         public static InStockVehicle GetInStockVehicle(string VIN)
         {
             var result = new InStockVehicle();
