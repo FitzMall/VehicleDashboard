@@ -14,6 +14,13 @@
     var usedNeedsChromedCount = 0;
     var usedNeedsStyledCount = 0;
 
+    var newMissingPhotos = 0;
+    var newTenOrLessPhotos = 0;
+    var new10PlusPhotos = 0;
+    var usedMissingPhotos = 0;
+    var usedTenOrLessPhotos = 0;
+    var used10PlusPhotos = 0;
+
     var usedInReconCount = 0;
     var usedManagerSpecialsCount = 0;
     var usedShouldBeFMCount = 0;
@@ -216,51 +223,72 @@
 
 
 
-                <div class="row">
-                    <div class="col-xs-2 text-center">
-                        <h4><br/><a href="@applicationPath/Reports/AllVehicles?Location=@Model.Location&Condition=NEW" target="_blank">Vehicles</a></h4>
-                        <div class="box text-center">
-                            <div id="newCount" class="gauge"  style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
-                        </div>
-                    </div>
-                    @*<div class="col-xs-3 text-center">
-                        <h4>Chromed</h4>
-                        <div class="box text-center">
-                            <div id="newChromed" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
-                        </div>
-                    </div>*@
-                    <div class="col-xs-2 text-center">
-                        <h4><a href="@applicationPath/Reports/NotChromed?Location=@Model.Location&Condition=NEW" target="_blank">Needs Chromed</a></h4>
-                        <div class="box text-center">
-                            <div id="newNotChromed" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
-                        </div>
-                    </div>
-                    <div class="col-xs-2 text-center">
-                        <h4><a href="@applicationPath/Reports/ManagerSpecials?Location=@Model.Location&Condition=NEW" target="_blank">Manager Specials</a></h4>
-                        <div class="box text-center">
-                            <div id="newManagerSpecials" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
-                        </div>
-                    </div>
-                    <div class="col-xs-2 text-center">
-                        <h4><a href="@applicationPath/Reports/ShouldBeonFitzMall?Location=@Model.Location&Condition=NEW" target="_blank">Should be on FitzMall</a></h4>
-                        <div class="box text-center">
-                            <div id="newShouldBeFM" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
-                        </div>
-                    </div>
-                    <div class="col-xs-2 text-center">
-                        <h4><a href="@applicationPath/Reports/FuelType?Location=@Model.Location&Condition=NEW" target="_blank">Missing Fuel Type</a></h4>
-                        <div class="box text-center">
-                            <div id="newFuelType" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
-                        </div>
-                    </div>
-                    @*<div class="col-xs-4 text-center">
-                        <h4><a href="@applicationPath/Reports/NeedsStyle?Location=@Model.Location&Condition=NEW" target="_blank">Needs Style Selected</a></h4>
-                        <div class="box text-center">
-                            <div id="newNotStyled" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
-                        </div>
-                    </div>*@
-
+        <div class="row">
+            <div class="col-xs-2 text-center">
+                <h4><br /><a href="@applicationPath/Reports/AllVehicles?Location=@Model.Location&Condition=NEW" target="_blank">Vehicles</a></h4>
+                <div class="box text-center">
+                    <div id="newCount" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
                 </div>
+            </div>
+            @*<div class="col-xs-3 text-center">
+            <h4>Chromed</h4>
+            <div class="box text-center">
+                <div id="newChromed" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+            </div>
+        </div>*@
+            <div class="col-xs-2 text-center">
+                <h4><a href="@applicationPath/Reports/NotChromed?Location=@Model.Location&Condition=NEW" target="_blank">Needs Chromed</a></h4>
+                <div class="box text-center">
+                    <div id="newNotChromed" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                </div>
+            </div>
+            <div class="col-xs-2 text-center">
+                <h4><a href="@applicationPath/Reports/ManagerSpecials?Location=@Model.Location&Condition=NEW" target="_blank">Manager Specials</a></h4>
+                <div class="box text-center">
+                    <div id="newManagerSpecials" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                </div>
+            </div>
+            <div class="col-xs-2 text-center">
+                <h4><a href="@applicationPath/Reports/ShouldBeonFitzMall?Location=@Model.Location&Condition=NEW" target="_blank">Should be on FitzMall</a></h4>
+                <div class="box text-center">
+                    <div id="newShouldBeFM" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                </div>
+            </div>
+            <div class="col-xs-2 text-center">
+                <h4><a href="@applicationPath/Reports/FuelType?Location=@Model.Location&Condition=NEW" target="_blank">Missing Fuel Type</a></h4>
+                <div class="box text-center">
+                    <div id="newFuelType" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                </div>
+            </div>
+
+            <div class="col-xs-2 text-center">
+                <h4><a href="@applicationPath/Reports/NotCheckedOut?Location=@Model.Location" target="_blank">Missing Photos</a></h4>
+                <div class="box text-center">
+                    <div id="newMissingPhotos" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                </div>
+            </div>
+
+            <div class="col-xs-2 text-center">
+                <h4><a href="@applicationPath/Reports/NotCheckedOut?Location=@Model.Location" target="_blank">1-10 Photos</a></h4>
+                <div class="box text-center">
+                    <div id="newTenOrLessPhotos" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                </div>
+            </div>
+            <div class="col-xs-2 text-center">
+                <h4><a href="@applicationPath/Reports/NotCheckedOut?Location=@Model.Location" target="_blank">More Than 10 Photos</a></h4>
+                <div class="box text-center">
+                    <div id="new10PlusPhotos" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                </div>
+            </div>
+
+            @*<div class="col-xs-4 text-center">
+            <h4><a href="@applicationPath/Reports/NeedsStyle?Location=@Model.Location&Condition=NEW" target="_blank">Needs Style Selected</a></h4>
+            <div class="box text-center">
+                <div id="newNotStyled" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+            </div>
+        </div>*@
+
+        </div>
 
             }
         </div>
@@ -357,12 +385,51 @@
                     <div id="usedHandyman" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
                 </div>
             </div>
+
+            <div class="col-xs-2 text-center">
+                <h4><a href="@applicationPath/Reports/NotCheckedOut?Location=@Model.Location" target="_blank">Missing 1550</a></h4>
+                <div class="box text-center">
+                    <div id="usedMissing1550" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                </div>
+            </div>
+
+            <div class="col-xs-2 text-center">
+                <h4><a href="@applicationPath/Reports/NotCheckedOut?Location=@Model.Location" target="_blank">Missing 1551</a></h4>
+                <div class="box text-center">
+                    <div id="usedMissing1551" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                </div>
+            </div>
+
             <div class="col-xs-2 text-center">
                 <h4><a href="@applicationPath/Reports/NotCheckedOut?Location=@Model.Location" target="_blank">Missing Checkout</a></h4>
                 <div class="box text-center">
                     <div id="usedMissingCheckout" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
                 </div>
             </div>
+
+
+            <div class="col-xs-2 text-center">
+                <h4><a href="@applicationPath/Reports/NotCheckedOut?Location=@Model.Location" target="_blank">Missing Photos</a></h4>
+                <div class="box text-center">
+                    <div id="usedMissingPhotos" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                </div>
+            </div>
+
+            <div class="col-xs-2 text-center">
+                <h4><a href="@applicationPath/Reports/NotCheckedOut?Location=@Model.Location" target="_blank">1-10 Photos</a></h4>
+                <div class="box text-center">
+                    <div id="usedTenOrLessPhotos" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                </div>
+            </div>
+            <div class="col-xs-2 text-center">
+                <h4><a href="@applicationPath/Reports/NotCheckedOut?Location=@Model.Location" target="_blank">More Than 10 Photos</a></h4>
+                <div class="box text-center">
+                    <div id="used10PlusPhotos" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                </div>
+            </div>
+
+
+
             @*<div class="col-xs-4 text-center">
             <h4><a href="@applicationPath/Reports/NeedsStyle?Location=@Model.Location&Condition=USED" target="_blank">Needs Style Selected</a></h4>
             <div class="box text-center">
@@ -511,11 +578,62 @@
                     hideInnerShadow: true
                 });
 
-                var usedMissingCheckout = new JustGage({
-                    id: "usedMissingCheckout",
-                    value: @usedMissingCheckout,
+
+                var usedMissingPhotos = new JustGage({
+                   id: "usedMissingPhotos",
+                    value: @usedMissingPhotos,
                     min: 0,
-                    max: @usedMissingCheckout,
+                    max: @usedVehicleCount,
+                    donut: false,
+                    gaugeWidthScale: 0.6,
+                    counter: true,
+                    hideInnerShadow: true,
+                    pointer: true,
+                    pointerOptions: {
+                        toplength: -15,
+                        bottomlength: 10,
+                        bottomwidth: 12,
+                        color: '#8e8e93',
+                        stroke: '#ffffff',
+                        stroke_width: 3,
+                        stroke_linecap: 'round'
+                    },
+                    levelColors: [
+                    "#ff0000", "#f9c802", "#a9d70b"
+                    ],
+                });
+
+
+                var usedTenOrLessPhotos = new JustGage({
+                   id: "usedTenOrLessPhotos",
+                    value: @usedTenOrLessPhotos,
+                    min: 0,
+                    max: @usedVehicleCount,
+                    donut: false,
+                    gaugeWidthScale: 0.6,
+                    counter: true,
+                    hideInnerShadow: true,
+                    pointer: true,
+                    pointerOptions: {
+                        toplength: -15,
+                        bottomlength: 10,
+                        bottomwidth: 12,
+                        color: '#8e8e93',
+                        stroke: '#ffffff',
+                        stroke_width: 3,
+                        stroke_linecap: 'round'
+                    },
+                    levelColors: [
+                    "#ff0000", "#f9c802", "#a9d70b"
+                    ],
+                });
+
+
+                var used10PlusPhotos = new JustGage({
+                        id: "used10PlusPhotos",
+                    value: @used10PlusPhotos,
+                    min: 0,
+                    max: @usedVehicleCount,
                     donut: true,
                     gaugeWidthScale: 0.6,
                     counter: true,
@@ -524,6 +642,145 @@
                     ],
                     hideInnerShadow: true
                 });
+
+
+                var newMissingPhotos = new JustGage({
+                   id: "newMissingPhotos",
+                    value: @newMissingPhotos,
+                    min: 0,
+                    max: @newVehicleCount,
+                    donut: false,
+                    gaugeWidthScale: 0.6,
+                    counter: true,
+                    hideInnerShadow: true,
+                    pointer: true,
+                    pointerOptions: {
+                        toplength: -15,
+                        bottomlength: 10,
+                        bottomwidth: 12,
+                        color: '#8e8e93',
+                        stroke: '#ffffff',
+                        stroke_width: 3,
+                        stroke_linecap: 'round'
+                    },
+                    levelColors: [
+                    "#ff0000", "#f9c802", "#a9d70b"
+                    ],
+                });
+
+
+                var newTenOrLessPhotos = new JustGage({
+                   id: "newTenOrLessPhotos",
+                    value: @newTenOrLessPhotos,
+                    min: 0,
+                    max: @newVehicleCount,
+                    donut: false,
+                    gaugeWidthScale: 0.6,
+                    counter: true,
+                    hideInnerShadow: true,
+                    pointer: true,
+                    pointerOptions: {
+                        toplength: -15,
+                        bottomlength: 10,
+                        bottomwidth: 12,
+                        color: '#8e8e93',
+                        stroke: '#ffffff',
+                        stroke_width: 3,
+                        stroke_linecap: 'round'
+                    },
+                    levelColors: [
+                    "#ff0000", "#f9c802", "#a9d70b"
+                    ],
+                });
+
+              var new10PlusPhotos = new JustGage({
+                  id: "new10PlusPhotos",
+                    value: @new10PlusPhotos,
+                    min: 0,
+                    max: @usedVehicleCount,
+                    donut: true,
+                    gaugeWidthScale: 0.6,
+                    counter: true,
+                    levelColors: [
+                    "#a9d70b"
+                    ],
+                    hideInnerShadow: true
+                });
+
+
+                var usedMissing1550 = new JustGage({
+                   id: "usedMissing1550",
+                    value: @usedMissing1550,
+                    min: 0,
+                    max: @usedVehicleCount,
+                    donut: false,
+                    gaugeWidthScale: 0.6,
+                    counter: true,
+                    hideInnerShadow: true,
+                    pointer: true,
+                    pointerOptions: {
+                        toplength: -15,
+                        bottomlength: 10,
+                        bottomwidth: 12,
+                        color: '#8e8e93',
+                        stroke: '#ffffff',
+                        stroke_width: 3,
+                        stroke_linecap: 'round'
+                    },
+                    levelColors: [
+                    "#ff0000", "#f9c802", "#a9d70b"
+                    ],
+                });
+
+                var usedMissing1551 = new JustGage({
+                    id: "usedMissing1551",
+                    value: @usedMissing1551,
+                    min: 0,
+                    max: @usedVehicleCount,
+                    donut: false,
+                    gaugeWidthScale: 0.6,
+                    counter: true,
+                    hideInnerShadow: true,
+                    pointer: true,
+                    pointerOptions: {
+                        toplength: -15,
+                        bottomlength: 10,
+                        bottomwidth: 12,
+                        color: '#8e8e93',
+                        stroke: '#ffffff',
+                        stroke_width: 3,
+                        stroke_linecap: 'round'
+                    },
+                    levelColors: [
+                    "#ff0000", "#f9c802", "#a9d70b"
+                    ],
+                });
+
+
+   var usedMissingCheckout = new JustGage({
+       id: "usedMissingCheckout",
+                    value: @usedMissingCheckout,
+                    min: 0,
+                    max: @usedVehicleCount,
+                    donut: false,
+                    gaugeWidthScale: 0.6,
+                    counter: true,
+                    hideInnerShadow: true,
+                    pointer: true,
+                    pointerOptions: {
+                        toplength: -15,
+                        bottomlength: 10,
+                        bottomwidth: 12,
+                        color: '#8e8e93',
+                        stroke: '#ffffff',
+                        stroke_width: 3,
+                        stroke_linecap: 'round'
+                    },
+                    levelColors: [
+                    "#ff0000", "#f9c802", "#a9d70b"
+                    ],
+                });
+
 
                 var usedManagerSpecials = new JustGage({
                     id: "usedManagerSpecials",
