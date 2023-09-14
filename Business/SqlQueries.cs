@@ -46,14 +46,42 @@ namespace VehicleDashboard.Business
             return vehicles;
         }
 
-        public static List<VehicleData> GetAllChromedVehicles()
+        public static List<PhotosByVin> GetPhotoNumberByVIN()
         {
-            var results = SqlMapperUtil.StoredProcWithParams<VehicleData>("sp_GetChromedInventory", new {  }, "ChromeData");
 
+        //  =============================================
+        // Author:		DAVID BURROUGHS
+        // Create date: 9 / 13 / 2023
+        //  Description: Photos in Inventory for Vehicle Dashboard (Vehicle Options)
+        //  =============================================
+
+           var results = SqlMapperUtil.StoredProcWithParams<PhotosByVin>("GetPhotoNumberByVIN", new {  }, "Rackspace");
             return results;
 
         }
 
+
+        public static List<PhotosByVin> GetPhotoNumberByVIN_NEW()
+        {
+            var results = SqlMapperUtil.StoredProcWithParams<PhotosByVin>("GetPhotoNumberByVIN_NEW", new { }, "Rackspace");
+            return results;
+
+        }
+
+        public static List<PhotosByVin> GetPhotoNumberByVIN_USED()
+        {
+           var results = SqlMapperUtil.StoredProcWithParams<PhotosByVin>("GetPhotoNumberByVIN_USED", new { }, "Rackspace");
+            return results;
+
+        }
+
+        public static List<VehicleData> GetAllChromedVehicles()
+        {
+            var results = SqlMapperUtil.StoredProcWithParams<VehicleData>("sp_GetChromedInventory", new { }, "ChromeData");
+
+            return results;
+
+        }
 
         public static VehicleData GetChromeVehicle(string vin)
         {

@@ -46,21 +46,14 @@ namespace VehicleDashboard.Controllers
             vehicleOptionModel.UsedVehicleDashboard = new UsedVehicleDashboard();
             vehicleOptionModel.UsedVehicleDashboard.AllUsedInventory = Business.SqlQueries.GetAllUsedInventory();
             vehicleOptionModel.UsedVehicleDashboard.WebsiteUsedInventory = Business.SqlQueries.GetWebsiteUsedInventory();
+            vehicleOptionModel.UsedVehicleDashboard.Photos = Business.SqlQueries.GetPhotoNumberByVIN_USED();
 
             vehicleOptionModel.NewVehicleDashboard = new NewVehicleDashboard();
             vehicleOptionModel.NewVehicleDashboard.AllNewInventory = Business.SqlQueries.GetAllNewInventory();
             vehicleOptionModel.NewVehicleDashboard.WebsiteNewInventory = Business.SqlQueries.GetWebsiteNewInventory();
+            vehicleOptionModel.NewVehicleDashboard.Photos = Business.SqlQueries.GetPhotoNumberByVIN_NEW();
 
-            //if(Location != null && Location != "")
-            //{
-            //    vehicleOptionModel.UsedVehicleDashboard.AllUsedInventory = vehicleOptionModel.UsedVehicleDashboard.AllUsedInventory.FindAll(x => x.loc == Location);
-            //    vehicleOptionModel.UsedVehicleDashboard.WebsiteUsedInventory = vehicleOptionModel.UsedVehicleDashboard.WebsiteUsedInventory.FindAll(x => x.V_loc == Location);
-
-            //    vehicleOptionModel.NewVehicleDashboard.AllNewInventory = vehicleOptionModel.NewVehicleDashboard.AllNewInventory.FindAll(x => x.LOC == Location);
-            //    vehicleOptionModel.NewVehicleDashboard.WebsiteNewInventory = vehicleOptionModel.NewVehicleDashboard.WebsiteNewInventory.FindAll(x => x.V_loc == Location);
-
-                vehicleOptionModel.Location = Location;
-            //}
+            vehicleOptionModel.Location = Location;
 
             vehicleOptionModel.VehicleData = Business.SqlQueries.GetAllChromedVehicles();
 

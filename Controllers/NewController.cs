@@ -21,6 +21,7 @@ namespace VehicleDashboard.Controllers
             newVehicleDashboard.AllNewInventory = Business.SqlQueries.GetAllNewInventory();
             newVehicleDashboard.WebsiteNewInventory = Business.SqlQueries.GetWebsiteNewInventory();
             newVehicleDashboard.Location = Location;
+            newVehicleDashboard.Photos = Business.SqlQueries.GetPhotoNumberByVIN_NEW();
 
             return View(newVehicleDashboard);
         }

@@ -5,11 +5,20 @@ using System.Web;
 
 namespace VehicleDashboard.Models
 {
+
+    public class PhotosByVin
+    {
+        public int ImagesSum { get; set; }
+        public string VIN { get; set; }
+
+    }
+
     public class UsedVehicleDashboard
     {
         public List<CSV_vehicleUSED> AllUsedInventory { get; set; }
         public List<AllInventory> WebsiteUsedInventory { get; set; }
         public List<VehicleData> VehicleData { get; set; }
+        public List<PhotosByVin> Photos { get; set; }
         public string Location { get; set; }
     }
 

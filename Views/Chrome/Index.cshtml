@@ -204,18 +204,19 @@
             @if (Model.NewVehicleDashboard != null)
             {
                 var companyNew = Model.NewVehicleDashboard.AllNewInventory.FindAll(x => (x.status != 26 && x.status != 7));//.FindAll(x => x.vin != null && x.vin != ""  && x.vin != "XX");
-                var companyWebsiteNew = Model.NewVehicleDashboard.WebsiteNewInventory.FindAll(x => x.V_Status != 2); ;
+                var companyWebsiteNew = Model.NewVehicleDashboard.WebsiteNewInventory.FindAll(x => x.V_Status != 2); 
 
                 newVehicleCount = companyNew.Count;
                 newShouldBeFMCount = newVehicleCount - companyWebsiteNew.Count;
+                new10PlusPhotos = Model.NewVehicleDashboard.Photos.Count(x => x.ImagesSum > 10);
+                newTenOrLessPhotos = Model.NewVehicleDashboard.Photos.Count(x => x.ImagesSum <= 10);
+                newMissingPhotos = Model.NewVehicleDashboard.Photos.Count(x => x.ImagesSum == 0);
 
                 foreach (var vehicle in companyNew)
                 {
                     newChromedCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin);
                     newNeedsStyledCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.StyleId == 0 && x.Condition == "NEW");
                     newFuelType += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.FuelType == null && x.Condition == "NEW");
-
-
                     newMgrSpcCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.ManagerSpecial == 1);
                 }
                 newNeedsChromedCount = newVehicleCount - newChromedCount;
@@ -297,6 +298,9 @@
             {
                 var companyUsed = Model.UsedVehicleDashboard.AllUsedInventory.FindAll(x => (x.status == 1 || x.status == 2 || x.status == 4));
                 var companyWebsiteUsed = Model.UsedVehicleDashboard.WebsiteUsedInventory;
+                used10PlusPhotos = Model.UsedVehicleDashboard.Photos.Count(x => x.ImagesSum > 10);
+                usedTenOrLessPhotos = Model.UsedVehicleDashboard.Photos.Count(x => x.ImagesSum <= 10);
+                usedMissingPhotos = Model.UsedVehicleDashboard.Photos.Count(x => x.ImagesSum == 0);
 
                 usedVehicleCount = companyUsed.Count;
                 usedShouldBeFMCount = usedVehicleCount - companyWebsiteUsed.Count;
