@@ -124,7 +124,7 @@ namespace VehicleDashboard.Controllers
             return View(vehicleOptionModel);
         }
 
-        public ActionResult AllVehicles(string Location, string Condition)
+        public ActionResult AllVehicles(string Location, string Condition, string PhotoShow)
         {
             var vehicleOptionModel = new VehicleOptionModel();
 
@@ -148,6 +148,7 @@ namespace VehicleDashboard.Controllers
 
             vehicleOptionModel.Location = Location;
             vehicleOptionModel.Condition = Condition;
+            vehicleOptionModel.PhotoShow = PhotoShow;
             vehicleOptionModel.VehicleData = Business.SqlQueries.GetAllChromedVehicles();
 
             return View(vehicleOptionModel);

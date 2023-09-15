@@ -15,6 +15,7 @@ namespace VehicleDashboard.Models
     {
         public string Location { get; set; }
         public string Condition { get; set; }
+        public string PhotoShow { get; set; }
         public UsedVehicleDashboard UsedVehicleDashboard { get; set; }
         public NewVehicleDashboard NewVehicleDashboard { get; set; }
         public List<VehicleData> VehicleData { get; set; }

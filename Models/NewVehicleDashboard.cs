@@ -103,5 +103,7 @@ namespace VehicleDashboard.Models
 	    public string cincentiveend { get; set; }
 	    public string rimastKEY { get; set; }
         public DateTime lastupdate { get; set; }
+
+        public int Photos { get; set; }
     }
 }

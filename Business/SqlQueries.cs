@@ -16,6 +16,12 @@ namespace VehicleDashboard.Business
             var sqlGet = @"Select * from [JUNK].[dbo].[CSV_vehicleUSED]";
 
             var vehicles = SqlMapperUtil.SqlWithParams<CSV_vehicleUSED>(sqlGet, new { }, "JJFServer");
+            var photos = SqlMapperUtil.StoredProcWithParams<PhotosByVin>("GetPhotoNumberByVIN", new { }, "Rackspace");
+            foreach (var thisCar in vehicles)
+            {
+                var allThisCarPhotos = photos.FindAll(x => x.VIN == thisCar.vin);
+                thisCar.Photos = allThisCarPhotos.Sum(x => x.ImagesSum);
+            }
             return vehicles;
         }
 
@@ -24,6 +30,13 @@ namespace VehicleDashboard.Business
             var sqlGet = "[FITZWAY].dbo.UsedInventory_VehicleDashboard";
 
             var vehicles = SqlMapperUtil.StoredProcWithParams<AllInventory>(sqlGet, new { }, "JJFServer");
+            var photos = SqlMapperUtil.StoredProcWithParams<PhotosByVin>("GetPhotoNumberByVIN", new { }, "Rackspace");
+
+            foreach (var thisCar in vehicles)
+            {
+                var allThisCarPhotos = photos.FindAll(x => x.VIN == thisCar.V_Vin);
+                thisCar.Photos = allThisCarPhotos.Sum(x => x.ImagesSum);
+            }
             return vehicles;
 
         }
@@ -35,6 +48,12 @@ namespace VehicleDashboard.Business
             var sqlGet = @"Select * from [JUNK].[dbo].[CSV_vehicleNew]  where [year] >= DATEADD(year,-2,GETDATE())";
 
             var vehicles = SqlMapperUtil.SqlWithParams<CSV_vehicleNew>(sqlGet, new { }, "JJFServer");
+            var photos = SqlMapperUtil.StoredProcWithParams<PhotosByVin>("GetPhotoNumberByVIN", new { }, "Rackspace");
+            foreach (var thisCar in vehicles)
+            {
+                var allThisCarPhotos = photos.FindAll(x => x.VIN == thisCar.vin);
+                thisCar.Photos = allThisCarPhotos.Sum(x => x.ImagesSum);
+            }
             return vehicles;
         }
 
@@ -43,6 +62,13 @@ namespace VehicleDashboard.Business
             var sqlGet = @"Select * from [FITZWAY].dbo.[AllInventory] where V_nu = 'NEW'";
 
             var vehicles = SqlMapperUtil.SqlWithParams<AllInventory>(sqlGet, new { }, "JJFServer");
+            var photos = SqlMapperUtil.StoredProcWithParams<PhotosByVin>("GetPhotoNumberByVIN", new { }, "Rackspace");
+
+            foreach (var thisCar in vehicles)
+            {
+                var allThisCarPhotos = photos.FindAll(x => x.VIN == thisCar.V_Vin);
+                thisCar.Photos = allThisCarPhotos.Sum(x => x.ImagesSum);
+            }
             return vehicles;
         }
 

@@ -17,6 +17,13 @@
 
     var locations = Model.UsedVehicleDashboard.WebsiteUsedInventory.Select(x => x.V_loc).Distinct().OrderBy(X => X).ToList();
 
+    string sColHeader = "";
+    bool isPhotoCount = Model.PhotoShow != null;
+    if (isPhotoCount == true)
+    {
+        sColHeader = "# of Photos";
+    }
+
     if (Model.Location != null && Model.Location != "ALL" && Model.Location != "")
     {
 
@@ -95,6 +102,7 @@
             item.daysinv = Int32.Parse(vehicle.days);
             item.list_amt = vehicle.list_amt;
             item.status = vehicle.status;
+            item.Photos = vehicle.Photos;
 
             vehicleList.Add(item);
 
@@ -116,6 +124,7 @@
             item.daysinv = vehicle.daysinv;
             item.list_amt = vehicle.list_amt;
             item.status = vehicle.status;
+            item.Photos = vehicle.Photos;
 
             var chromedVehicle = Model.VehicleData.Find(x => x.StockNumber.Trim() == vehicle.stk.Trim());
             if(chromedVehicle != null)
@@ -229,7 +238,7 @@
                     <th>Fuel Type</th>
                     <th>In Recon</th>
                     <th>Manager Special</th>
-                    <th></th>
+                    <th>@sColHeader</th>
                     <th>Date Updated</th>
                 </tr>
             </thead>
@@ -238,43 +247,51 @@
                 {
                     var vehicleDetails = Model.VehicleData.Find(x => x.VIN == vehicle.vin);
 
-                    <tr>
-                        <td>@vehicle.loc</td>
-                        @if(vehicleDetails != null && vehicleDetails.StyleId > 0)
-                        {
-                            <td><a href="@applicationPath/Chrome/Vehicle/?VIN=@vehicle.vin&Chromed=true" target="_blank">@vehicle.stk</a></td>
-                        }
-                        else if (vehicleDetails == null && vehicle.vin != null)
-                        {
-                            <td><a href="@applicationPath/Chrome/ChromeNoStyle/?VIN=@vehicle.vin" target="_blank">@vehicle.stk</a></td>
-                        }
-                        else
-                        {
-                            <td><a href="@applicationPath/Chrome/ChromeNoVIN/?stock=@vehicle.stk&year=@vehicle.yr&make=@vehicle.make&model=@vehicle.carline" target="_blank">@vehicle.stk</a></td>
-                        }
-                        <td>@vehicle.yr</td>
-                        <td>@vehicle.make</td>
-                        <td>@vehicle.carline</td>
-                        <td>@vehicle.daysinv</td>
-                        <td>@vehicle.list_amt.ToString("C",nfi)</td>
-                        <td>@vehicle.status</td>
-                        @if (vehicleDetails != null)
-                        {
-                            <td>@vehicleDetails.StyleId</td>
-                            <td>@vehicleDetails.FuelType</td>
-                            <td>@vehicleDetails.InReconditioning</td>
-                            <td>@vehicleDetails.ManagerSpecial</td>
-                        }
-                        else
-                        {
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        }
+                <tr>
+                    <td>@vehicle.loc</td>
+                    @if (vehicleDetails != null && vehicleDetails.StyleId > 0)
+                    {
+                        <td><a href="@applicationPath/Chrome/Vehicle/?VIN=@vehicle.vin&Chromed=true" target="_blank">@vehicle.stk</a></td>
+                    }
+                    else if (vehicleDetails == null && vehicle.vin != null)
+                    {
+                        <td><a href="@applicationPath/Chrome/ChromeNoStyle/?VIN=@vehicle.vin" target="_blank">@vehicle.stk</a></td>
+                    }
+                    else
+                    {
+                        <td><a href="@applicationPath/Chrome/ChromeNoVIN/?stock=@vehicle.stk&year=@vehicle.yr&make=@vehicle.make&model=@vehicle.carline" target="_blank">@vehicle.stk</a></td>
+                    }
+                    <td>@vehicle.yr</td>
+                    <td>@vehicle.make</td>
+                    <td>@vehicle.carline</td>
+                    <td>@vehicle.daysinv</td>
+                    <td>@vehicle.list_amt.ToString("C", nfi)</td>
+                    <td>@vehicle.status</td>
+                    @if (vehicleDetails != null)
+                    {
+                        <td>@vehicleDetails.StyleId</td>
+                        <td>@vehicleDetails.FuelType</td>
+                        <td>@vehicleDetails.InReconditioning</td>
+                        <td>@vehicleDetails.ManagerSpecial</td>
+                    }
+                    else
+                    {
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    }
+
+                    @if (isPhotoCount != true)
+                    {
                         <td>(@vehicle.MEMO1_CAT) @vehicle.MEMO2_CAT</td>
-                        <td>@vehicle.SALE_DATE.ToShortDateString()</td>
-                    </tr>
+                    }
+                    else
+                    {
+                        <td>@vehicle.Photos</td>
+                    }
+                    <td>@vehicle.SALE_DATE.ToShortDateString()</td>
+                </tr>
 
                 }
             </tbody>

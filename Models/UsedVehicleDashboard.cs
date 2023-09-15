@@ -100,6 +100,8 @@ namespace VehicleDashboard.Models
         public string rb { get; set; }
         public DateTime csvupdate { get; set; }
 
+        public int Photos { get; set; }
+
     }
 
     public class AllInventory
@@ -153,6 +155,8 @@ namespace VehicleDashboard.Models
         public DateTime v_crend { get; set; }
 
         public int FitzWayCheckedOut { get; set; }
+
+        public int Photos { get; set; }
     }
 
 }
