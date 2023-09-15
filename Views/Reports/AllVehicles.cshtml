@@ -2,6 +2,22 @@
 
 @{
     ViewBag.Title = "All Vehicles";
+    bool isPhotoCount = Model.PhotoShow != null;
+    if (isPhotoCount == true)
+    {
+        switch (Model.PhotoShow)
+        {
+            case "10P":
+                ViewBag.Title = "Vehicles with More than 10 Photos";
+                break;
+            case "10L":
+                ViewBag.Title = "Vehicles with 10 or Less Photos";
+                break;
+            case "NONE":
+                ViewBag.Title = "Vehicles with NO Photos";
+                break;
+        }
+    }
 
     var applicationPath = Request.ApplicationPath;
 
@@ -18,7 +34,6 @@
     var locations = Model.UsedVehicleDashboard.WebsiteUsedInventory.Select(x => x.V_loc).Distinct().OrderBy(X => X).ToList();
 
     string sColHeader = "";
-    bool isPhotoCount = Model.PhotoShow != null;
     if (isPhotoCount == true)
     {
         sColHeader = "# of Photos";
@@ -203,7 +218,7 @@
 
 <div class="row" style="border-bottom:1px solid #eee; margin-bottom:20px;">
     <div class="col-sm-12 col-md-10">
-        <h2>All Vehicles</h2>
+        <h2>@ViewBag.Title</h2>
         <div class="row location-row">
             <div class="col-xs-12">
                 <h4>Locations:</h4>
