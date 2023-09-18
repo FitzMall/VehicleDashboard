@@ -185,7 +185,7 @@
 </div>
 
 <div class="row">
-    <div class="col-xs-6">
+    <div class="col-xs-5">
         <h3>New Vehicle Summary</h3>
         @if (Model.NewVehicleDashboard != null)
         {
@@ -264,22 +264,24 @@
 
         }
     </div>
-    <div class="col-xs-6">
+    <div class="col-xs-1">
+    </div>
+    <div class="col-xs-5">
         <h3>Used Vehicle Summary</h3>
         @if (Model.UsedVehicleDashboard != null)
         {
             var companyUsed = Model.UsedVehicleDashboard.AllUsedInventory.FindAll(x => (x.status == 1 || x.status == 2 || x.status == 4));
             var companyWebsiteUsed = Model.UsedVehicleDashboard.WebsiteUsedInventory;
-        
+
             used10PlusPhotos = companyUsed.Count(x => x.Photos > 10);
             usedTenOrLessPhotos = companyUsed.Count(x => x.Photos <= 10);
             usedMissingPhotos = companyUsed.Count(x => x.Photos == 0);
 
 
             usedVehicleCount = companyUsed.Count;
+            usedMissing1550 = usedVehicleCount - companyUsed.Sum(x => x.count1550);
+            usedMissing1551 = usedVehicleCount - companyUsed.Sum(x => x.count1551);
             usedShouldBeFMCount = usedVehicleCount - companyWebsiteUsed.Count;
-            usedMissing1550 = 0;
-            usedMissing1551 = 0;
             usedMissingCheckout = 0;
             usedHandyman = 0;
 
