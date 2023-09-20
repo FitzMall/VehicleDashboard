@@ -27,7 +27,8 @@ namespace VehicleDashboard.Controllers
             usedVehicleDashboard.WebsiteUsedInventory = Business.SqlQueries.GetWebsiteUsedInventory();
             usedVehicleDashboard.Location = Location;
             usedVehicleDashboard.VehicleData = Business.SqlQueries.GetAllChromedVehicles();
-          
+            string[] dddd = Business.SqlQueries.ALL_1551and1550_Files();
+
             return View(usedVehicleDashboard);
         }
         public ActionResult InRecon(string Location)

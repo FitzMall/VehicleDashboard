@@ -40,8 +40,8 @@
     var usedMgrSpcCount = 0;
 
     var usedHandyman = 0;
-    var usedMissing1550 = 20;
-    var usedMissing1551 = 200;
+    var usedMissing1550 = 0;
+    var usedMissing1551 = 0;
     var usedMissingCheckout = 0;
 
     var usedInReconVehicles = new List<VehicleDashboard.Models.VehicleData>();
@@ -269,53 +269,56 @@
     <div class="col-xs-5">
         <h3>Used Vehicle Summary</h3>
         @if (Model.UsedVehicleDashboard != null)
-        {
-            var companyUsed = Model.UsedVehicleDashboard.AllUsedInventory.FindAll(x => (x.status == 1 || x.status == 2 || x.status == 4));
-            var companyWebsiteUsed = Model.UsedVehicleDashboard.WebsiteUsedInventory;
-
-            used10PlusPhotos = companyUsed.Count(x => x.Photos > 10);
-            usedTenOrLessPhotos = companyUsed.Count(x => x.Photos <= 10);
-            usedMissingPhotos = companyUsed.Count(x => x.Photos == 0);
-
-
-            usedVehicleCount = companyUsed.Count;
-            usedMissing1550 = usedVehicleCount - companyUsed.Sum(x => x.count1550);
-            usedMissing1551 = usedVehicleCount - companyUsed.Sum(x => x.count1551);
-            usedShouldBeFMCount = usedVehicleCount - companyWebsiteUsed.Count;
-            usedMissingCheckout = 0;
-            usedHandyman = 0;
-
-            foreach (var vehicle in companyWebsiteUsed)
-            {
-                if (vehicle.FitzWayCheckedOut == 0)
                 {
-                    usedMissingCheckout += 1;
-                }
-            }
+                    var companyUsed = Model.UsedVehicleDashboard.AllUsedInventory.FindAll(x => (x.status == 1 || x.status == 2 || x.status == 4));
+                    var companyWebsiteUsed = Model.UsedVehicleDashboard.WebsiteUsedInventory;
 
-            foreach (var vehicle in companyUsed)
-            {
-                usedChromedCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin);
-                usedNeedsStyledCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.StyleId == 0 && x.Condition == "USED");
+                    used10PlusPhotos = companyUsed.Count(x => x.Photos > 10);
+                    usedTenOrLessPhotos = companyUsed.Count(x => x.Photos <= 10);
+                    usedMissingPhotos = companyUsed.Count(x => x.Photos == 0);
 
-                usedFuelType += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.FuelType == null && x.Condition == "USED");
-
-                if (vehicle.status == 1 || vehicle.status == 2 || vehicle.status == 4)
-                {
-                    usedMgrSpcCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.ManagerSpecial == 1);
-                }
-
-                if (vehicle.slscode == "HDM")
-                {
-                    usedHandyman += 1;
-                }
+                    usedVehicleCount = companyUsed.Count;
 
 
-            }
-            usedNeedsChromedCount = usedVehicleCount - usedChromedCount;
+                    usedShouldBeFMCount = usedVehicleCount - companyWebsiteUsed.Count;
+                    usedMissingCheckout = 0;
+                    usedHandyman = 0;
+
+                    foreach (var vehicle in companyWebsiteUsed)
+                    {
+                        if (vehicle.FitzWayCheckedOut == 0)
+                        {
+                            usedMissingCheckout += 1;
+                        }
+                    }
+
+                    foreach (var vehicle in companyUsed)
+                    {
+                        usedChromedCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin);
+                        usedNeedsStyledCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.StyleId == 0 && x.Condition == "USED");
+                        usedMissing1550 += Model.UsedVehicleDashboard.PDFs_1550_1551.Count(x => x.Contains("j:/inetpub/wwwroot/production/FITZWAY/Pictures/UCPDFS/FCO-" + vehicle.vin.Trim() + ".pdf"));
+                        usedMissing1551 += Model.UsedVehicleDashboard.PDFs_1550_1551.Count(x => x.Contains("j:/inetpub/wwwroot/production/FITZWAY/Pictures/UCPDFS/151-" + vehicle.vin.Trim() + ".pdf"));
 
 
-            <div class="row">
+                        usedFuelType += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.FuelType == null && x.Condition == "USED");
+
+                        if (vehicle.status == 1 || vehicle.status == 2 || vehicle.status == 4)
+                        {
+                            usedMgrSpcCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.ManagerSpecial == 1);
+                        }
+
+                        if (vehicle.slscode == "HDM")
+                        {
+                            usedHandyman += 1;
+                        }
+
+
+                    }
+                    usedNeedsChromedCount = usedVehicleCount - usedChromedCount;
+                    usedMissing1550 = (usedVehicleCount - usedMissing1550);
+                    usedMissing1551 = (usedVehicleCount - usedMissing1551);
+
+                    <div class="row">
                 <div class="col-xs-2 text-center">
                     <h4><br /><a href="@applicationPath/Reports/AllVehicles?Location=@Model.Location&Condition=USED" target="_blank">Vehicles</a></h4>
                     <div class="box text-center">

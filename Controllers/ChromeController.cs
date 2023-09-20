@@ -47,6 +47,7 @@ namespace VehicleDashboard.Controllers
             vehicleOptionModel.UsedVehicleDashboard.AllUsedInventory = Business.SqlQueries.GetAllUsedInventory();
             vehicleOptionModel.UsedVehicleDashboard.WebsiteUsedInventory = Business.SqlQueries.GetWebsiteUsedInventory();
             vehicleOptionModel.UsedVehicleDashboard.Photos = Business.SqlQueries.GetPhotoNumberByVIN_USED();
+            vehicleOptionModel.UsedVehicleDashboard.PDFs_1550_1551 = Business.SqlQueries.ALL_1551and1550_Files();
 
             vehicleOptionModel.NewVehicleDashboard = new NewVehicleDashboard();
             vehicleOptionModel.NewVehicleDashboard.AllNewInventory = Business.SqlQueries.GetAllNewInventory();

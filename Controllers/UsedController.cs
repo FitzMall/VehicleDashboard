@@ -22,6 +22,7 @@ namespace VehicleDashboard.Controllers
             usedVehicleDashboard.WebsiteUsedInventory = Business.SqlQueries.GetWebsiteUsedInventory();
             usedVehicleDashboard.Location = Location;
             usedVehicleDashboard.Photos = Business.SqlQueries.GetPhotoNumberByVIN_USED();
+
             return View(usedVehicleDashboard);
         }
     }

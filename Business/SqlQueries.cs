@@ -11,7 +11,17 @@ namespace VehicleDashboard.Business
 {
     public class SqlQueries
     {
-        
+
+
+
+        public static string[] ALL_1551and1550_Files()
+        {
+
+            string[] allfiles = Directory.GetFiles("j:/inetpub/wwwroot/production/FITZWAY/Pictures/UCPDFS/", "*.pdf", SearchOption.TopDirectoryOnly);
+
+            return allfiles;
+        }
+
         public static int Get_1551_Files(string vin)
         {
 
@@ -27,6 +37,7 @@ namespace VehicleDashboard.Business
             string[] allfiles = Directory.GetFiles("j:/inetpub/wwwroot/production/FITZWAY/Pictures/UCPDFS/", "FCO-" + vin.Trim() + ".pdf", SearchOption.TopDirectoryOnly);
             
             var retval = allfiles.Count();
+
             return retval;
         }
         public static List<CSV_vehicleUSED> GetAllUsedInventory()
@@ -39,8 +50,7 @@ namespace VehicleDashboard.Business
             {
                 var allThisCarPhotos = photos.FindAll(x => x.VIN == thisCar.vin);
                 thisCar.Photos = allThisCarPhotos.Sum(x => x.ImagesSum);
-                thisCar.count1550 = SqlQueries.Get_1550_Files(thisCar.vin);
-            }
+              }
             return vehicles;
         }
 
@@ -53,9 +63,8 @@ namespace VehicleDashboard.Business
 
             foreach (var thisCar in vehicles)
             {
-                var allThisCarPhotos = photos.FindAll(x => x.VIN == thisCar.V_Vin);
-                thisCar.Photos = allThisCarPhotos.Sum(x => x.ImagesSum);
-                thisCar.count1550 = SqlQueries.Get_1550_Files(thisCar.V_Vin);
+ //               var allThisCarPhotos = photos.FindAll(x => x.VIN == thisCar.V_Vin);
+ 
             }
             return vehicles;
 
