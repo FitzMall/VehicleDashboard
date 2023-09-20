@@ -17,7 +17,7 @@ namespace VehicleDashboard.Business
         public static string[] ALL_1551and1550_Files()
         {
 
-            string[] allfiles = Directory.GetFiles("j:/inetpub/wwwroot/production/FITZWAY/Pictures/UCPDFS/", "*.pdf", SearchOption.TopDirectoryOnly);
+            string[] allfiles = Directory.GetFiles("//192.168.100.16/c$/inetpub/wwwroot/production/FITZWAY/Pictures/UCPDFS/", "*.pdf", SearchOption.TopDirectoryOnly);
 
             return allfiles;
         }
@@ -34,7 +34,7 @@ namespace VehicleDashboard.Business
         public static int Get_1550_Files(string vin)
         {
             //101-
-            string[] allfiles = Directory.GetFiles("j:/inetpub/wwwroot/production/FITZWAY/Pictures/UCPDFS/", "FCO-" + vin.Trim() + ".pdf", SearchOption.TopDirectoryOnly);
+            string[] allfiles = Directory.GetFiles("//192.168.100.16/c$/inetpub/wwwroot/production/FITZWAY/Pictures/UCPDFS/", "FCO-" + vin.Trim() + ".pdf", SearchOption.TopDirectoryOnly);
             
             var retval = allfiles.Count();
 
@@ -91,12 +91,12 @@ namespace VehicleDashboard.Business
             var sqlGet = @"Select * from [FITZWAY].dbo.[AllInventory] where V_nu = 'NEW'";
 
             var vehicles = SqlMapperUtil.SqlWithParams<AllInventory>(sqlGet, new { }, "JJFServer");
-            var photos = SqlMapperUtil.StoredProcWithParams<PhotosByVin>("GetPhotoNumberByVIN", new { }, "Rackspace");
+      //      var photos = SqlMapperUtil.StoredProcWithParams<PhotosByVin>("GetPhotoNumberByVIN", new { }, "Rackspace");
 
             foreach (var thisCar in vehicles)
             {
-                var allThisCarPhotos = photos.FindAll(x => x.VIN == thisCar.V_Vin);
-                thisCar.Photos = allThisCarPhotos.Sum(x => x.ImagesSum);
+        //        var allThisCarPhotos = photos.FindAll(x => x.VIN == thisCar.V_Vin);
+        //        thisCar.Photos = allThisCarPhotos.Sum(x => x.ImagesSum);
             }
             return vehicles;
         }

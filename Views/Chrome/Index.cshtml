@@ -45,6 +45,7 @@
     var usedMissingCheckout = 0;
 
     var usedInReconVehicles = new List<VehicleDashboard.Models.VehicleData>();
+    var DABtest_value = 0;
 
     var locations = Model.UsedVehicleDashboard.WebsiteUsedInventory.Select(x => x.V_loc).Distinct().OrderBy(X => X).ToList();
 
@@ -269,143 +270,173 @@
     <div class="col-xs-5">
         <h3>Used Vehicle Summary</h3>
         @if (Model.UsedVehicleDashboard != null)
+        {
+            var companyUsed = Model.UsedVehicleDashboard.AllUsedInventory.FindAll(x => (x.status == 1 || x.status == 2 || x.status == 4));
+            var companyWebsiteUsed = Model.UsedVehicleDashboard.WebsiteUsedInventory;
+
+            used10PlusPhotos = companyUsed.Count(x => x.Photos > 10);
+            usedTenOrLessPhotos = companyUsed.Count(x => x.Photos <= 10);
+            usedMissingPhotos = companyUsed.Count(x => x.Photos == 0);
+
+            usedVehicleCount = companyUsed.Count;
+
+
+            usedShouldBeFMCount = usedVehicleCount - companyWebsiteUsed.Count;
+            usedMissingCheckout = 0;
+            usedHandyman = 0;
+
+            foreach (var vehicle in companyWebsiteUsed)
+            {
+                if (vehicle.FitzWayCheckedOut == 0)
                 {
-                    var companyUsed = Model.UsedVehicleDashboard.AllUsedInventory.FindAll(x => (x.status == 1 || x.status == 2 || x.status == 4));
-                    var companyWebsiteUsed = Model.UsedVehicleDashboard.WebsiteUsedInventory;
+                    usedMissingCheckout += 1;
+                }
+            }
 
-                    used10PlusPhotos = companyUsed.Count(x => x.Photos > 10);
-                    usedTenOrLessPhotos = companyUsed.Count(x => x.Photos <= 10);
-                    usedMissingPhotos = companyUsed.Count(x => x.Photos == 0);
+            foreach (var vehicle in companyUsed)
+            {
+                usedChromedCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin);
+                usedNeedsStyledCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.StyleId == 0 && x.Condition == "USED");
 
-                    usedVehicleCount = companyUsed.Count;
+                DABtest_value = Model.UsedVehicleDashboard.PDFs_1550_1551.Count(x => x.Contains("//192.168.100.16/c$/inetpub/wwwroot/production/FITZWAY/Pictures/UCPDFS/101-" + vehicle.vin.Trim() + ".pdf"));
+                usedMissing1550 += DABtest_value;
 
+                if (DABtest_value > 0)
+                {
+                  //  <p>1550 @vehicle.vin</p>
+                }
 
-                    usedShouldBeFMCount = usedVehicleCount - companyWebsiteUsed.Count;
-                    usedMissingCheckout = 0;
-                    usedHandyman = 0;
+                DABtest_value = Model.UsedVehicleDashboard.PDFs_1550_1551.Count(x => x.Contains("//192.168.100.16/c$/inetpub/wwwroot/production/FITZWAY/Pictures/UCPDFS/151-" + vehicle.vin.Trim() + ".pdf"));
+                usedMissing1551 += DABtest_value;
 
-                    foreach (var vehicle in companyWebsiteUsed)
-                    {
-                        if (vehicle.FitzWayCheckedOut == 0)
-                        {
-                            usedMissingCheckout += 1;
-                        }
-                    }
-
-                    foreach (var vehicle in companyUsed)
-                    {
-                        usedChromedCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin);
-                        usedNeedsStyledCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.StyleId == 0 && x.Condition == "USED");
-                        usedMissing1550 += Model.UsedVehicleDashboard.PDFs_1550_1551.Count(x => x.Contains("j:/inetpub/wwwroot/production/FITZWAY/Pictures/UCPDFS/FCO-" + vehicle.vin.Trim() + ".pdf"));
-                        usedMissing1551 += Model.UsedVehicleDashboard.PDFs_1550_1551.Count(x => x.Contains("j:/inetpub/wwwroot/production/FITZWAY/Pictures/UCPDFS/151-" + vehicle.vin.Trim() + ".pdf"));
+                if (DABtest_value > 0)
+                {
+                 //   <p>1551 @vehicle.vin</p>
+                }
 
 
-                        usedFuelType += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.FuelType == null && x.Condition == "USED");
+                usedFuelType += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.FuelType == null && x.Condition == "USED");
 
-                        if (vehicle.status == 1 || vehicle.status == 2 || vehicle.status == 4)
-                        {
-                            usedMgrSpcCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.ManagerSpecial == 1);
-                        }
+                if (vehicle.status == 1 || vehicle.status == 2 || vehicle.status == 4)
+                {
+                    usedMgrSpcCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.ManagerSpecial == 1);
+                }
 
-                        if (vehicle.slscode == "HDM")
-                        {
-                            usedHandyman += 1;
-                        }
-
-
-                    }
-                    usedNeedsChromedCount = usedVehicleCount - usedChromedCount;
-                    usedMissing1550 = (usedVehicleCount - usedMissing1550);
-                    usedMissing1551 = (usedVehicleCount - usedMissing1551);
-
-                    <div class="row">
-                <div class="col-xs-2 text-center">
-                    <h4><br /><a href="@applicationPath/Reports/AllVehicles?Location=@Model.Location&Condition=USED" target="_blank">Vehicles</a></h4>
-                    <div class="box text-center">
-                        <div id="usedCount" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
-                    </div>
-                </div>
-
-                <div class="col-xs-2 text-center">
-                    <h4><a href="@applicationPath/Reports/NotChromed?Location=@Model.Location&Condition=USED" target="_blank">Needs Chromed</a></h4>
-                    <div class="box text-center">
-                        <div id="usedNotChromed" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
-                    </div>
-                </div>
-                <div class="col-xs-2 text-center">
-                    <h4><a href="@applicationPath/Reports/ManagerSpecials?Location=@Model.Location&Condition=USED" target="_blank">Manager Specials</a></h4>
-                    <div class="box text-center">
-                        <div id="usedManagerSpecials" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
-                    </div>
-                </div>
-                <div class="col-xs-2 text-center">
-                    <h4><a href="@applicationPath/Reports/InRecon?Location=@Model.Location&Condition=USED" target="_blank">In Reconditioning</a></h4>
-                    <div class="box text-center">
-                        <div id="usedInRecon" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
-                    </div>
-                </div>
-                <div class="col-xs-2 text-center">
-                    <h4><a href="@applicationPath/Reports/ShouldBeonFitzMall?Location=@Model.Location&Condition=USED" target="_blank">Should be on FitzMall</a></h4>
-                    <div class="box text-center">
-                        <div id="usedShouldBeFM" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
-                    </div>
-                </div>
-                <div class="col-xs-2 text-center">
-                    <h4><a href="@applicationPath/Reports/FuelType?Location=@Model.Location&Condition=USED" target="_blank">Missing Fuel Type</a></h4>
-                    <div class="box text-center">
-                        <div id="usedFuelType" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
-                    </div>
-                </div>
-                <div class="col-xs-2 text-center">
-                    <h4><a href="@applicationPath/Reports/Handyman?Location=@Model.Location" target="_blank">Handyman</a></h4>
-                    <div class="box text-center">
-                        <div id="usedHandyman" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
-                    </div>
-                </div>
-
-                <div class="col-xs-2 text-center">
-                    <h4><a href="@applicationPath/Reports/NotCheckedOut?Location=@Model.Location" target="_blank">Missing 1550</a></h4>
-                    <div class="box text-center">
-                        <div id="usedMissing1550" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
-                    </div>
-                </div>
-
-                <div class="col-xs-2 text-center">
-                    <h4><a href="@applicationPath/Reports/NotCheckedOut?Location=@Model.Location" target="_blank">Missing 1551</a></h4>
-                    <div class="box text-center">
-                        <div id="usedMissing1551" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
-                    </div>
-                </div>
-
-                <div class="col-xs-2 text-center">
-                    <h4><a href="@applicationPath/Reports/NotCheckedOut?Location=@Model.Location" target="_blank">Missing Checkout</a></h4>
-                    <div class="box text-center">
-                        <div id="usedMissingCheckout" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
-                    </div>
-                </div>
+                if (vehicle.slscode == "HDM")
+                {
+                    usedHandyman += 1;
+                }
 
 
-                <div class="col-xs-2 text-center">
-                    <h4><a href="@applicationPath/Reports/AllVehicles?Location=@Model.Location&Condition=USED&PhotoShow=NONE" target="_blank">Missing Photos</a></h4>
-                    <div class="box text-center">
-                        <div id="usedMissingPhotos" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
-                    </div>
-                </div>
+            }
+            usedNeedsChromedCount = usedVehicleCount - usedChromedCount;
+            usedMissing1550 = (usedHandyman - usedMissing1550);
+            usedMissing1551 = (usedHandyman - usedMissing1551);
 
-                <div class="col-xs-2 text-center">
-                    <h4><a href="@applicationPath/Reports/AllVehicles?Location=@Model.Location&Condition=USED&PhotoShow=10L" target="_blank">1-10 Photos</a></h4>
-                    <div class="box text-center">
-                        <div id="usedTenOrLessPhotos" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
-                    </div>
-                </div>
-                <div class="col-xs-2 text-center">
-                    <h4><a href="@applicationPath/Reports/AllVehicles?Location=@Model.Location&Condition=USED&PhotoShow=10P" target="_blank">More Than 10 Photos</a></h4>
-                    <div class="box text-center">
-                        <div id="used10PlusPhotos" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
-                    </div>
-                </div>
-
+    <div class="row">
+        <div class="col-xs-2 text-center">
+            <h4><br /><a href="@applicationPath/Reports/AllVehicles?Location=@Model.Location&Condition=USED" target="_blank">Vehicles</a></h4>
+            <div class="box text-center">
+                <div id="usedCount" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
             </div>
+        </div>
+
+        <div class="col-xs-2 text-center">
+            <h4><a href="@applicationPath/Reports/NotChromed?Location=@Model.Location&Condition=USED" target="_blank">Needs Chromed</a></h4>
+            <div class="box text-center">
+                <div id="usedNotChromed" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+            </div>
+        </div>
+        <div class="col-xs-2 text-center">
+            <h4><a href="@applicationPath/Reports/ManagerSpecials?Location=@Model.Location&Condition=USED" target="_blank">Manager Specials</a></h4>
+            <div class="box text-center">
+                <div id="usedManagerSpecials" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+            </div>
+        </div>
+        <div class="col-xs-2 text-center">
+            <h4><a href="@applicationPath/Reports/InRecon?Location=@Model.Location&Condition=USED" target="_blank">In Reconditioning</a></h4>
+            <div class="box text-center">
+                <div id="usedInRecon" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+            </div>
+        </div>
+        <div class="col-xs-3 text-center">
+            <h4><a href="@applicationPath/Reports/ShouldBeonFitzMall?Location=@Model.Location&Condition=USED" target="_blank">Should be on FitzMall</a></h4>
+            <div class="box text-center">
+                <div id="usedShouldBeFM" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+            </div>
+        </div>
+        <div class="col-xs-2 text-center">
+            <h4><a href="@applicationPath/Reports/FuelType?Location=@Model.Location&Condition=USED" target="_blank">Missing Fuel Type</a></h4>
+            <div class="box text-center">
+                <div id="usedFuelType" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+            </div>
+        </div>
+
+        <div class="col-xs-2 text-center">
+        </div>
+        <div class="col-xs-2 text-center">
+        </div>
+        <div class="col-xs-2 text-center">
+        </div>
+        <div class="col-xs-2 text-center">
+        </div>
+        <div class="col-xs-2 text-center">
+        </div>
+        <div class="row">
+        </div>
+
+        <div class="row text-center">
+            <div class="col-xs-2 text-center">
+                <h4><br /><a href="@applicationPath/Reports/Handyman?Location=@Model.Location" target="_blank">Handyman</a></h4>
+                <div class="box text-center">
+                    <div id="usedHandyman" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                </div>
+            </div>
+
+            <div class="col-xs-2 text-center">
+                <h4><a href="@applicationPath/Reports/NotCheckedOut?Location=@Model.Location" target="_blank">Missing 1550</a></h4>
+                <div class="box text-center">
+                    <div id="usedMissing1550" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                </div>
+            </div>
+
+            <div class="col-xs-2 text-center">
+                <h4><a href="@applicationPath/Reports/NotCheckedOut?Location=@Model.Location" target="_blank">Missing 1551</a></h4>
+                <div class="box text-center">
+                    <div id="usedMissing1551" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                </div>
+            </div>
+
+            <div class="col-xs-2 text-center">
+                <h4><a href="@applicationPath/Reports/NotCheckedOut?Location=@Model.Location" target="_blank">Missing Checkout</a></h4>
+                <div class="box text-center">
+                    <div id="usedMissingCheckout" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-xs-2 text-center">
+            <h4><a href="@applicationPath/Reports/AllVehicles?Location=@Model.Location&Condition=USED&PhotoShow=NONE" target="_blank">Missing Photos</a></h4>
+            <div class="box text-center">
+                <div id="usedMissingPhotos" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+            </div>
+        </div>
+
+        <div class="col-xs-2 text-center">
+            <h4><a href="@applicationPath/Reports/AllVehicles?Location=@Model.Location&Condition=USED&PhotoShow=10L" target="_blank">1-10 Photos</a></h4>
+            <div class="box text-center">
+                <div id="usedTenOrLessPhotos" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+            </div>
+        </div>
+        <div class="col-xs-2 text-center">
+            <h4><a href="@applicationPath/Reports/AllVehicles?Location=@Model.Location&Condition=USED&PhotoShow=10P" target="_blank">More Than 10 Photos</a></h4>
+            <div class="box text-center">
+                <div id="used10PlusPhotos" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+            </div>
+        </div>
+
+    </div>
 
         }
     </div>
@@ -681,7 +712,7 @@
                    id: "usedMissing1550",
                     value: @usedMissing1550,
                     min: 0,
-                    max: @usedVehicleCount,
+                    max: @usedHandyman,
                     donut: false,
                     gaugeWidthScale: 0.6,
                     counter: true,
@@ -705,7 +736,7 @@
                     id: "usedMissing1551",
                     value: @usedMissing1551,
                     min: 0,
-                    max: @usedVehicleCount,
+                    max: @usedHandyman,
                     donut: false,
                     gaugeWidthScale: 0.6,
                     counter: true,
