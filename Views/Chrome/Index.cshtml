@@ -267,6 +267,7 @@
     </div>
     <div class="col-xs-1">
     </div>
+
     <div class="col-xs-5">
         <h3>Used Vehicle Summary</h3>
         @if (Model.UsedVehicleDashboard != null)
@@ -424,7 +425,7 @@
         </div>
 
         <div class="col-xs-2 text-center">
-            <h4><a href="@applicationPath/Reports/AllVehicles?Location=@Model.Location&Condition=USED&PhotoShow=10L" target="_blank">1-10 Photos</a></h4>
+            <h4><br /><a href="@applicationPath/Reports/AllVehicles?Location=@Model.Location&Condition=USED&PhotoShow=10L" target="_blank">1-10 Photos</a></h4>
             <div class="box text-center">
                 <div id="usedTenOrLessPhotos" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
             </div>
