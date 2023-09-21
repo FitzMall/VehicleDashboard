@@ -17,7 +17,7 @@
 
     var locations = Model.WebsiteUsedInventory.Select(x => x.V_loc).Distinct().OrderBy(X => X).ToList();
 
-    var HandymanVehicles = Model.AllUsedInventory.FindAll(x => x.slscode == "HDM")  ;
+    var HandymanVehicles = Model.AllUsedInventory.FindAll(x => x.slscode == "HDM");
 
     if (Model.Location != null && Model.Location != "ALL")
     {
@@ -31,6 +31,20 @@
         }
     }
 
+    if (Model.NoPDF == "1550")
+    {
+        ViewBag.Title = "Handyman Missing 1550 Form";
+    }
+
+    if (Model.NoPDF == "1551")
+    {
+        ViewBag.Title = "Handyman Missing 1551 Form";
+    }
+
+    if (Model.NoPDF == "BOTH")
+    {
+        ViewBag.Title = "Handyman Missing BOTH 1550 and 1551 Forms";
+    }
 }
 
 @section CSS
@@ -46,7 +60,7 @@
 
 <div class="row" style="border-bottom:1px solid #eee; margin-bottom:20px;">
     <div class="col-sm-12 col-md-10">
-        <h2>Handyman</h2>
+        <h2>@ViewBag.Title</h2>
         <div class="row location-row">
             <div class="col-xs-12">
                 <h4>Locations:</h4>
@@ -81,35 +95,91 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var vehicle in HandymanVehicles)
+                @if (Model.NoPDF == "")
                 {
-                    var vehicleDetails = Model.AllUsedInventory.Find(x => x.vin == vehicle.vin);
-                    if (vehicleDetails.slscode == "HDM")
+                    foreach (var vehicle in HandymanVehicles)
                     {
-                            if (vehicleDetails.slscode == "HDM") {
-                <tr>
-                    <td>@vehicle.slscode</td>
-                    <td>@vehicle.loc</td>
+                        var vehicleDetails = Model.AllUsedInventory.Find(x => x.vin == vehicle.vin);
+                        if (vehicleDetails.slscode == "HDM")
+                        {
+                            <tr>
+                                <td>@vehicle.slscode</td>
+                                <td>@vehicle.loc</td>
 
-                    <td>@vehicle.stk</td>
-                    <td>@vehicle.yr</td>
-                    <td>@vehicle.make</td>
-                    <td>@vehicle.carline</td>
-                    <td>@vehicleDetails.daysinv</td>
-                    <td>@vehicleDetails.list_amt.ToString("C", nfi)</td>
-                    <td>@vehicleDetails.status</td>
-                </tr>
+                                <td>@vehicle.stk</td>
+                                <td>@vehicle.yr</td>
+                                <td>@vehicle.make</td>
+                                <td>@vehicle.carline</td>
+                                <td>@vehicleDetails.daysinv</td>
+                                <td>@vehicleDetails.list_amt.ToString("C", nfi)</td>
+                                <td>@vehicleDetails.status</td>
+                            </tr>
                         }
                     }
                 }
-            </tbody>
-            </table>
-    </div>
-</div>
 
-@section scripts
+                @if (Model.NoPDF == "1550")
+                {
+                    foreach (var vehicle in HandymanVehicles)
+                    {
+                        var vehicleDetails = Model.AllUsedInventory.Find(x => x.vin == vehicle.vin);
+                        if (vehicleDetails.slscode == "HDM")
+                        {
+                            if (Model.PDFs_1550_1551.Contains("//192.168.100.16/c$/inetpub/wwwroot/production/FITZWAY/Pictures/UCPDFS/101-" + vehicleDetails.vin.Trim() + ".pdf"))
+                            {
+
+                                <tr>
+                                    <td>@vehicle.slscode</td>
+                                    <td>@vehicle.loc</td>
+
+                                    <td>@vehicle.stk</td>
+                                    <td>@vehicle.yr</td>
+                                    <td>@vehicle.make</td>
+                                    <td>@vehicle.carline</td>
+                                    <td>@vehicleDetails.daysinv</td>
+                                    <td>@vehicleDetails.list_amt.ToString("C", nfi)</td>
+                                    <td>@vehicleDetails.status</td>
+                                </tr>
+                            }
+                        }
+                    }
+                }
+
+                @if (Model.NoPDF == "1551")
+                {
+                    foreach (var vehicle in HandymanVehicles)
+                    {
+                        var vehicleDetails = Model.AllUsedInventory.Find(x => x.vin == vehicle.vin);
+                        if (vehicleDetails.slscode == "HDM")
+                        {
+                            if (Model.PDFs_1550_1551.Contains("//192.168.100.16/c$/inetpub/wwwroot/production/FITZWAY/Pictures/UCPDFS/151-" + vehicleDetails.vin.Trim() + ".pdf"))
+                            {
+                                {
+                                    <tr>
+                                        <td>@vehicle.slscode</td>
+                                        <td>@vehicle.loc</td>
+
+                                        <td>@vehicle.stk</td>
+                                        <td>@vehicle.yr</td>
+                                        <td>@vehicle.make</td>
+                                        <td>@vehicle.carline</td>
+                                        <td>@vehicleDetails.daysinv</td>
+                                        <td>@vehicleDetails.list_amt.ToString("C", nfi)</td>
+                                        <td>@vehicleDetails.status</td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    }
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    @section scripts
 {
-    <script type="text/javascript">
+        <script type="text/javascript">
             $(document).ready(function () {
                 $('#table-InRecon').DataTable({
                     searching: true,
@@ -141,5 +211,5 @@
 
             });
 
-    </script>
-}
+        </script>
+    }

@@ -45,7 +45,7 @@
     var usedMissingCheckout = 0;
 
     var usedInReconVehicles = new List<VehicleDashboard.Models.VehicleData>();
-    var DABtest_value = 0;
+    var test_val = 0;
 
     var locations = Model.UsedVehicleDashboard.WebsiteUsedInventory.Select(x => x.V_loc).Distinct().OrderBy(X => X).ToList();
 
@@ -292,6 +292,7 @@
                 {
                     usedMissingCheckout += 1;
                 }
+
             }
 
             foreach (var vehicle in companyUsed)
@@ -299,18 +300,18 @@
                 usedChromedCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin);
                 usedNeedsStyledCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.StyleId == 0 && x.Condition == "USED");
 
-                DABtest_value = Model.UsedVehicleDashboard.PDFs_1550_1551.Count(x => x.Contains("//192.168.100.16/c$/inetpub/wwwroot/production/FITZWAY/Pictures/UCPDFS/101-" + vehicle.vin.Trim() + ".pdf"));
-                usedMissing1550 += DABtest_value;
+                test_val = Model.UsedVehicleDashboard.PDFs_1550_1551.Count(x => x.Contains("//192.168.100.16/c$/inetpub/wwwroot/production/FITZWAY/Pictures/UCPDFS/101-" + vehicle.vin.Trim() + ".pdf"));
+                usedMissing1550 += test_val;
 
-                if (DABtest_value > 0)
+                if (test_val > 0)
                 {
                   //  <p>1550 @vehicle.vin</p>
                 }
 
-                DABtest_value = Model.UsedVehicleDashboard.PDFs_1550_1551.Count(x => x.Contains("//192.168.100.16/c$/inetpub/wwwroot/production/FITZWAY/Pictures/UCPDFS/151-" + vehicle.vin.Trim() + ".pdf"));
-                usedMissing1551 += DABtest_value;
+                test_val = Model.UsedVehicleDashboard.PDFs_1550_1551.Count(x => x.Contains("//192.168.100.16/c$/inetpub/wwwroot/production/FITZWAY/Pictures/UCPDFS/151-" + vehicle.vin.Trim() + ".pdf"));
+                usedMissing1551 += test_val;
 
-                if (DABtest_value > 0)
+                if (test_val > 0)
                 {
                  //   <p>1551 @vehicle.vin</p>
                 }
@@ -366,6 +367,9 @@
                 <div id="usedShouldBeFM" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
             </div>
         </div>
+
+
+
         <div class="col-xs-2 text-center">
             <h4><a href="@applicationPath/Reports/FuelType?Location=@Model.Location&Condition=USED" target="_blank">Missing Fuel Type</a></h4>
             <div class="box text-center">
@@ -373,16 +377,7 @@
             </div>
         </div>
 
-        <div class="col-xs-2 text-center">
-        </div>
-        <div class="col-xs-2 text-center">
-        </div>
-        <div class="col-xs-2 text-center">
-        </div>
-        <div class="col-xs-2 text-center">
-        </div>
-        <div class="col-xs-2 text-center">
-        </div>
+
         <div class="row">
         </div>
 
@@ -395,14 +390,14 @@
             </div>
 
             <div class="col-xs-2 text-center">
-                <h4><a href="@applicationPath/Reports/NotCheckedOut?Location=@Model.Location" target="_blank">Missing 1550</a></h4>
+                <h4><a href="@applicationPath/Reports/Handyman?Location=@Model.Location&NoPDF=1550" target="_blank">Missing 1550</a></h4>
                 <div class="box text-center">
                     <div id="usedMissing1550" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
                 </div>
             </div>
 
             <div class="col-xs-2 text-center">
-                <h4><a href="@applicationPath/Reports/NotCheckedOut?Location=@Model.Location" target="_blank">Missing 1551</a></h4>
+                <h4><a href="@applicationPath/Reports/Handyman?Location=@Model.Location&NoPDF=1551" target="_blank">Missing 1551</a></h4>
                 <div class="box text-center">
                     <div id="usedMissing1551" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
                 </div>

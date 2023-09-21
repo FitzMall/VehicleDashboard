@@ -61,12 +61,7 @@ namespace VehicleDashboard.Business
             var vehicles = SqlMapperUtil.StoredProcWithParams<AllInventory>(sqlGet, new { }, "JJFServer");
             var photos = SqlMapperUtil.StoredProcWithParams<PhotosByVin>("GetPhotoNumberByVIN", new { }, "Rackspace");
 
-            foreach (var thisCar in vehicles)
-            {
- //               var allThisCarPhotos = photos.FindAll(x => x.VIN == thisCar.V_Vin);
- 
-            }
-            return vehicles;
+              return vehicles;
 
         }
 
@@ -91,13 +86,7 @@ namespace VehicleDashboard.Business
             var sqlGet = @"Select * from [FITZWAY].dbo.[AllInventory] where V_nu = 'NEW'";
 
             var vehicles = SqlMapperUtil.SqlWithParams<AllInventory>(sqlGet, new { }, "JJFServer");
-      //      var photos = SqlMapperUtil.StoredProcWithParams<PhotosByVin>("GetPhotoNumberByVIN", new { }, "Rackspace");
-
-            foreach (var thisCar in vehicles)
-            {
-        //        var allThisCarPhotos = photos.FindAll(x => x.VIN == thisCar.V_Vin);
-        //        thisCar.Photos = allThisCarPhotos.Sum(x => x.ImagesSum);
-            }
+ 
             return vehicles;
         }
 

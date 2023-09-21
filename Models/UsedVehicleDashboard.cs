@@ -20,6 +20,7 @@ namespace VehicleDashboard.Models
         public List<VehicleData> VehicleData { get; set; }
         public List<PhotosByVin> Photos { get; set; }
         public string Location { get; set; }
+        public string NoPDF { get; set; }
 
         public string[] PDFs_1550_1551 { get; set; }
     }
