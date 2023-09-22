@@ -196,7 +196,7 @@
             newVehicleCount = companyNew.Count;
             newShouldBeFMCount = newVehicleCount - companyWebsiteNew.Count;
             new10PlusPhotos = companyNew.Count(x => x.Photos > 10);
-            newTenOrLessPhotos = companyNew.Count(x => x.Photos <= 10);
+            newTenOrLessPhotos = companyNew.Count(x => x.Photos > 0 && x.Photos <= 10);
             newMissingPhotos = companyNew.Count(x => x.Photos == 0);
 
             foreach (var vehicle in companyNew)
@@ -379,12 +379,7 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-xs-5">
-            </div>
-        </div>
-
-        <div >
+        <div>
             <div class="col-xs-2 text-center">
                 <h4><br /><a href="@applicationPath/Reports/Handyman?Location=@Model.Location" target="_blank">Handyman</a></h4>
                 <div class="box text-center">
@@ -406,15 +401,18 @@
                 </div>
             </div>
 
-            <div class="col-xs-2 text-center">
-                <h4><a href="@applicationPath/Reports/NotCheckedOut?Location=@Model.Location" target="_blank">Missing Checkout</a></h4>
+            <div class="col-xs-3 text-center">
+                <h4><br /><a href="@applicationPath/Reports/NotCheckedOut?Location=@Model.Location" target="_blank">Missing Checkout</a></h4>
                 <div class="box text-center">
                     <div id="usedMissingCheckout" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
                 </div>
             </div>
         </div>
 
-
+        <div class="row">
+            <div class="col-xs-5">
+            </div>
+        </div>
         <div class="col-xs-2 text-center">
             <h4><a href="@applicationPath/Reports/AllVehicles?Location=@Model.Location&Condition=USED&PhotoShow=NONE" target="_blank">Missing Photos</a></h4>
             <div class="box text-center">

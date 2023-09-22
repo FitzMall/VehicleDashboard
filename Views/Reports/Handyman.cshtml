@@ -125,7 +125,7 @@
                         var vehicleDetails = Model.AllUsedInventory.Find(x => x.vin == vehicle.vin);
                         if (vehicleDetails.slscode == "HDM")
                         {
-                            if (Model.PDFs_1550_1551.Contains("//192.168.100.16/c$/inetpub/wwwroot/production/FITZWAY/Pictures/UCPDFS/101-" + vehicleDetails.vin.Trim() + ".pdf"))
+                            if ((Model.PDFs_1550_1551.Contains("//192.168.100.16/c$/inetpub/wwwroot/production/FITZWAY/Pictures/UCPDFS/101-" + vehicleDetails.vin.Trim() + ".pdf")) == false)
                             {
 
                                 <tr>
@@ -152,7 +152,7 @@
                         var vehicleDetails = Model.AllUsedInventory.Find(x => x.vin == vehicle.vin);
                         if (vehicleDetails.slscode == "HDM")
                         {
-                            if (Model.PDFs_1550_1551.Contains("//192.168.100.16/c$/inetpub/wwwroot/production/FITZWAY/Pictures/UCPDFS/151-" + vehicleDetails.vin.Trim() + ".pdf"))
+                            if ((Model.PDFs_1550_1551.Contains("//192.168.100.16/c$/inetpub/wwwroot/production/FITZWAY/Pictures/UCPDFS/151-" + vehicleDetails.vin.Trim() + ".pdf")) == false)
                             {
                                 {
                                     <tr>
