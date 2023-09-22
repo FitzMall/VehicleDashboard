@@ -59,8 +59,7 @@ namespace VehicleDashboard.Business
             var sqlGet = "[FITZWAY].dbo.UsedInventory_VehicleDashboard";
 
             var vehicles = SqlMapperUtil.StoredProcWithParams<AllInventory>(sqlGet, new { }, "JJFServer");
-            var photos = SqlMapperUtil.StoredProcWithParams<PhotosByVin>("GetPhotoNumberByVIN", new { }, "Rackspace");
-
+         
               return vehicles;
 
         }

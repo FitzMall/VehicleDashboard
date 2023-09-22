@@ -161,7 +161,7 @@ namespace VehicleDashboard.Models
 
         public int FitzWayCheckedOut { get; set; }
 
-        public int Photos { get; set; }
+     //   public int Photos { get; set; }
         public int count1550 { get; set; }
         public int count1551 { get; set; }
 

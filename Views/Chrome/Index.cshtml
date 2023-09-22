@@ -278,7 +278,7 @@
             var companyWebsiteUsed = Model.UsedVehicleDashboard.WebsiteUsedInventory;
 
             used10PlusPhotos = companyUsed.Count(x => x.Photos > 10);
-            usedTenOrLessPhotos = companyUsed.Count(x => x.Photos <= 10);
+            usedTenOrLessPhotos = companyUsed.Count(x => x.Photos > 0 && x.Photos <= 10);
             usedMissingPhotos = companyUsed.Count(x => x.Photos == 0);
 
             usedVehicleCount = companyUsed.Count;

@@ -165,21 +165,21 @@ namespace VehicleDashboard.Controllers
                 switch (PhotoShow)
                 { case "10P":
                         vehicleOptionModel.UsedVehicleDashboard.AllUsedInventory = mUsedInventory.FindAll(x=> x.Photos > 10);
-                        vehicleOptionModel.UsedVehicleDashboard.WebsiteUsedInventory = mUsedWeb.FindAll(x => x.Photos > 10);
+                        vehicleOptionModel.UsedVehicleDashboard.WebsiteUsedInventory = mUsedWeb;
                         vehicleOptionModel.NewVehicleDashboard.AllNewInventory = mNewInventory.FindAll(x => x.Photos > 10);
-                        vehicleOptionModel.NewVehicleDashboard.WebsiteNewInventory = mNewWeb.FindAll(x => x.Photos > 10);
+                        vehicleOptionModel.NewVehicleDashboard.WebsiteNewInventory = mNewWeb;
                         break;
                     case "NONE":
                         vehicleOptionModel.UsedVehicleDashboard.AllUsedInventory = mUsedInventory.FindAll(x => x.Photos == 0);
-                        vehicleOptionModel.UsedVehicleDashboard.WebsiteUsedInventory = mUsedWeb.FindAll(x => x.Photos == 0);
+                        vehicleOptionModel.UsedVehicleDashboard.WebsiteUsedInventory = mUsedWeb;
                         vehicleOptionModel.NewVehicleDashboard.AllNewInventory = mNewInventory.FindAll(x => x.Photos == 0);
-                        vehicleOptionModel.NewVehicleDashboard.WebsiteNewInventory = mNewWeb.FindAll(x => x.Photos == 0);
+                        vehicleOptionModel.NewVehicleDashboard.WebsiteNewInventory = mNewWeb;
                         break;
                     case "10L":
                         vehicleOptionModel.UsedVehicleDashboard.AllUsedInventory = mUsedInventory.FindAll(x => x.Photos < 11 && x.Photos > 0);
-                        vehicleOptionModel.UsedVehicleDashboard.WebsiteUsedInventory = mUsedWeb.FindAll(x => x.Photos < 11 && x.Photos > 0);
+                        vehicleOptionModel.UsedVehicleDashboard.WebsiteUsedInventory = mUsedWeb;
                         vehicleOptionModel.NewVehicleDashboard.AllNewInventory = mNewInventory.FindAll(x => x.Photos < 11 && x.Photos > 0);
-                        vehicleOptionModel.NewVehicleDashboard.WebsiteNewInventory = mNewWeb.FindAll(x => x.Photos < 11 && x.Photos > 0);
+                        vehicleOptionModel.NewVehicleDashboard.WebsiteNewInventory = mNewWeb;
                         break;
                 }
             }
