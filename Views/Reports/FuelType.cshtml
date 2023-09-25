@@ -98,23 +98,11 @@
                     if (Model.Condition != null && Model.Condition.ToUpper() == "USED")
                     {
                         vehicleDetails = Model.UsedVehicleDashboard.AllUsedInventory.Find(x => x.vin == vehicle.VIN);
-                    }
-                    else
-                    {
-                        var details = Model.NewVehicleDashboard.AllNewInventory.Find(x => x.vin == vehicle.VIN);
-                        if (details != null)
-                        {
-                            vehicleDetails.daysinv = Int32.Parse(details.days);
-                            vehicleDetails.list_amt = details.list_amt;
-                            vehicleDetails.status = details.status;
-                        }
-                    }
-                    if (vehicleDetails.status == 1 || vehicleDetails.status == 2)
-                    {
+
 
                         <tr>
                             <td>@vehicle.VehicleLocation</td>
-                
+
                             @if (vehicle.StyleId > 0)
                             {
                                 <td><a href="@applicationPath/Chrome/Vehicle/?VIN=@vehicle.VIN&Chromed=true" target="_blank">@vehicle.StockNumber</a></td>
@@ -123,7 +111,7 @@
                             {
                                 <td><a href="@applicationPath/Chrome/ChromeNoStyle/?VIN=@vehicle.VIN" target="_blank">@vehicle.StockNumber</a></td>
                             }
-                        
+
                             <td>@vehicle.Year</td>
                             <td>@vehicle.Make</td>
                             <td>@vehicle.Model</td>
@@ -134,7 +122,48 @@
                             <td>@vehicle.FuelType</td>
                             <td>@vehicle.ManagerSpecial</td>
                         </tr>
+
                     }
+                    else
+                    {
+                        var details = Model.NewVehicleDashboard.AllNewInventory.Find(x => x.vin == vehicle.VIN);
+                        if (details != null)
+                        {
+
+                            vehicleDetails.daysinv = Int32.Parse(details.days);
+                            vehicleDetails.list_amt = details.list_amt;
+                            vehicleDetails.status = details.status;
+
+                            if (details.status != 26 || details.status != 7)
+                            {
+
+                            <tr>
+                                <td>@vehicle.VehicleLocation</td>
+
+                                @if (vehicle.StyleId > 0)
+                                {
+                                    <td><a href="@applicationPath/Chrome/Vehicle/?VIN=@vehicle.VIN&Chromed=true" target="_blank">@vehicle.StockNumber</a></td>
+                                }
+                                else if (vehicle.StyleId == 0)
+                                {
+                                    <td><a href="@applicationPath/Chrome/ChromeNoStyle/?VIN=@vehicle.VIN" target="_blank">@vehicle.StockNumber</a></td>
+                                }
+
+                                <td>@vehicle.Year</td>
+                                <td>@vehicle.Make</td>
+                                <td>@vehicle.Model</td>
+                                <td>@vehicleDetails.daysinv</td>
+                                <td>@vehicleDetails.list_amt.ToString("C", nfi)</td>
+                                <td>@vehicleDetails.status</td>
+                                <td>@vehicle.StyleId</td>
+                                <td>@vehicle.FuelType</td>
+                                <td>@vehicle.ManagerSpecial</td>
+                            </tr>
+                            }
+
+                        }
+                    }
+
                 }
             </tbody>
         </table>

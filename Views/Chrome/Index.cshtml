@@ -190,7 +190,7 @@
         <h3>New Vehicle Summary</h3>
         @if (Model.NewVehicleDashboard != null)
         {
-            var companyNew = Model.NewVehicleDashboard.AllNewInventory.FindAll(x => (x.status != 26 && x.status != 7));//.FindAll(x => x.vin != null && x.vin != ""  && x.vin != "XX");
+            var companyNew = Model.NewVehicleDashboard.AllNewInventory.FindAll(x => (x.status != 26 && x.status != 7));
             var companyWebsiteNew = Model.NewVehicleDashboard.WebsiteNewInventory.FindAll(x => x.V_Status != 2);
 
             newVehicleCount = companyNew.Count;
@@ -203,7 +203,7 @@
             {
                 newChromedCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin);
                 newNeedsStyledCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.StyleId == 0 && x.Condition == "NEW");
-                newFuelType += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.FuelType == null && x.Condition == "NEW");
+                newFuelType += Model.VehicleData.Count(x => x.VIN == vehicle.vin && (x.FuelType == null) && x.Condition == "NEW");
                 newMgrSpcCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.ManagerSpecial == 1);
             }
             newNeedsChromedCount = newVehicleCount - newChromedCount;
