@@ -5,7 +5,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <_PublishTargetUrl>J:\inetpub\wwwroot\production\VehicleDashboard2</_PublishTargetUrl>
-    <History>True|2023-09-29T15:51:42.7303916Z;True|2023-09-29T11:39:38.4062206-04:00;True|2023-09-29T11:38:57.2506615-04:00;</History>
+    <History>True|2023-10-02T14:22:11.4317517Z;True|2023-10-02T10:13:45.4641513-04:00;True|2023-10-02T10:12:05.0182141-04:00;True|2023-10-02T10:11:22.6558733-04:00;False|2023-10-02T10:10:39.8732306-04:00;True|2023-10-02T10:05:27.2520661-04:00;True|2023-10-02T09:58:17.8365286-04:00;True|2023-10-02T09:52:23.2877921-04:00;True|2023-10-02T09:51:31.0127326-04:00;True|2023-09-29T14:48:17.8730853-04:00;True|2023-09-29T14:47:04.9053885-04:00;True|2023-09-29T14:38:25.3587171-04:00;True|2023-09-29T14:30:17.5350575-04:00;True|2023-09-29T14:29:35.2481997-04:00;True|2023-09-29T14:25:31.2378385-04:00;True|2023-09-29T14:14:46.0278574-04:00;True|2023-09-29T14:11:47.3562376-04:00;True|2023-09-29T14:11:02.2665231-04:00;True|2023-09-29T14:09:49.6492441-04:00;True|2023-09-29T14:07:23.4374560-04:00;False|2023-09-29T14:02:34.6867847-04:00;False|2023-09-29T14:02:06.5077652-04:00;False|2023-09-29T13:59:41.3160267-04:00;False|2023-09-29T13:59:16.6614568-04:00;False|2023-09-29T13:58:45.1457641-04:00;True|2023-09-29T12:31:06.7341424-04:00;True|2023-09-29T12:30:19.0776666-04:00;True|2023-09-29T12:27:08.8803352-04:00;True|2023-09-29T12:04:18.0756526-04:00;True|2023-09-29T12:03:15.8017174-04:00;True|2023-09-29T11:51:42.7303916-04:00;True|2023-09-29T11:39:38.4062206-04:00;True|2023-09-29T11:38:57.2506615-04:00;</History>
   </PropertyGroup>
   <ItemGroup>
     <File Include="bin/Antlr3.Runtime.dll">
@@ -15,10 +15,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>09/08/2023 12:37:16</publishTime>
     </File>
     <File Include="bin/App_global.asax.compiled">
-      <publishTime>09/29/2023 11:51:34</publishTime>
+      <publishTime>10/02/2023 10:22:10</publishTime>
     </File>
     <File Include="bin/App_global.asax.dll">
-      <publishTime>09/29/2023 11:51:34</publishTime>
+      <publishTime>10/02/2023 10:22:10</publishTime>
     </File>
     <File Include="bin/DapperORM.dll">
       <publishTime>09/08/2023 12:37:16</publishTime>
@@ -93,13 +93,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>09/08/2023 12:37:16</publishTime>
     </File>
     <File Include="bin/VehicleDashboard.dll">
-      <publishTime>09/29/2023 11:39:28</publishTime>
+      <publishTime>10/02/2023 10:22:07</publishTime>
     </File>
     <File Include="bin/VehicleDashboard.dll.config">
-      <publishTime>09/29/2023 11:51:18</publishTime>
+      <publishTime>09/29/2023 12:30:02</publishTime>
     </File>
     <File Include="bin/VehicleDashboard.pdb">
-      <publishTime>09/29/2023 11:39:28</publishTime>
+      <publishTime>10/02/2023 10:22:07</publishTime>
     </File>
     <File Include="bin/WebGrease.dll">
       <publishTime>09/08/2023 12:37:16</publishTime>
@@ -135,7 +135,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>09/08/2023 12:59:34</publishTime>
     </File>
     <File Include="PrecompiledApp.config">
-      <publishTime>09/29/2023 11:51:31</publishTime>
+      <publishTime>10/02/2023 10:22:08</publishTime>
     </File>
     <File Include="Scripts/bootstrap.js">
       <publishTime>09/08/2023 12:37:16</publishTime>
@@ -294,7 +294,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>09/08/2023 12:37:16</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>09/29/2023 11:51:31</publishTime>
+      <publishTime>09/29/2023 13:59:41</publishTime>
     </File>
   </ItemGroup>
 </Project>
