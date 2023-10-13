@@ -92,6 +92,7 @@ namespace VehicleDashboard.Business
 
                 // List data response.
                 HttpResponseMessage response = client.GetAsync(urlParameters).Result;  // Blocking call!
+                
                 if (response.IsSuccessStatusCode)
                 {
                     // Parse the response body. Blocking!
