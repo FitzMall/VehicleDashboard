@@ -17,8 +17,8 @@ namespace VehicleDashboard.Business
         public static string[] ALL_1551and1550_Files()
         {
 
-//            string[] allfiles = Directory.GetFiles("D:/", "*.pdf", SearchOption.TopDirectoryOnly);
-            string[] allfiles = Directory.GetFiles("//192.168.100.16/c$/inetpub/wwwroot/production/FITZWAY/Pictures/UCPDFS/", "*.pdf", SearchOption.TopDirectoryOnly);
+  //          string[] allfiles = Directory.GetFiles(@"R:/inetpub/wwwroot/production/FITZWAY/Pictures/UCPDFS", " *.pdf", SearchOption.TopDirectoryOnly);
+           string[] allfiles = Directory.GetFiles(@"\\192.168.100.16\c$\inetpub\wwwroot\production\FITZWAY\Pictures\UCPDFS\", "*.pdf", SearchOption.TopDirectoryOnly);
 
             return allfiles;
         }
@@ -35,7 +35,7 @@ namespace VehicleDashboard.Business
         public static int Get_1550_Files(string vin)
         {
             //101-
-             string[] allfiles = Directory.GetFiles("//192.168.100.16/c$/inetpub/wwwroot/production/FITZWAY/Pictures/UCPDFS/", "FCO-" + vin.Trim() + ".pdf", SearchOption.TopDirectoryOnly);
+             string[] allfiles = Directory.GetFiles("//192.168.100.16/c$/inetpub/wwwroot/production/FITZWAY/Pictures/UCPDFS/", "101-" + vin.Trim() + ".pdf", SearchOption.TopDirectoryOnly);
 
             var retval = allfiles.Count();
 
