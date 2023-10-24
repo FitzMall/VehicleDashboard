@@ -45,7 +45,6 @@
     var usedMissingCheckout = 0;
 
     var usedInReconVehicles = new List<VehicleDashboard.Models.VehicleData>();
-    var test_val = 0;
 
     var locations = Model.UsedVehicleDashboard.WebsiteUsedInventory.Select(x => x.V_loc).Distinct().OrderBy(X => X).ToList();
 
@@ -267,8 +266,7 @@
 
         }
     </div>
-    <div class="col-xs-1">
-    </div>
+
 
     <div class="col-xs-5">
         <h3>Used Vehicle Summary</h3>
@@ -302,22 +300,11 @@
                 usedChromedCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin);
                 usedNeedsStyledCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.StyleId == 0 && x.Condition == "USED");
 
-                test_val = Model.UsedVehicleDashboard.PDFs_1550_1551.Count(x => x.Contains("//192.168.100.16/c$/inetpub/wwwroot/production/FITZWAY/Pictures/UCPDFS/101-" + vehicle.vin.Trim() + ".pdf"));
-                usedMissing1550 += test_val;
+                if (Model.UsedVehicleDashboard.PDFs_1550_1551.Count(x => x.VIN == vehicle.vin) != 0) {
+                    usedMissing1550 += Model.UsedVehicleDashboard.PDFs_1550_1551.Find(x => x.VIN == vehicle.vin).Counter1550;
 
-                if (test_val > 0)
-                {
-                  //  <p>1550 @vehicle.vin</p>
+                    usedMissing1551 += Model.UsedVehicleDashboard.PDFs_1550_1551.Find(x => x.VIN == vehicle.vin).Counter1551;
                 }
-
-                test_val = Model.UsedVehicleDashboard.PDFs_1550_1551.Count(x => x.Contains("//192.168.100.16/c$/inetpub/wwwroot/production/FITZWAY/Pictures/UCPDFS/151-" + vehicle.vin.Trim() + ".pdf"));
-                usedMissing1551 += test_val;
-
-                if (test_val > 0)
-                {
-                 //   <p>1551 @vehicle.vin</p>
-                }
-
 
                 usedFuelType += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.FuelType == null && x.Condition == "USED");
 

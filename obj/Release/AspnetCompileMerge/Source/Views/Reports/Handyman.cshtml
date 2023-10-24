@@ -125,36 +125,11 @@
                         var vehicleDetails = Model.AllUsedInventory.Find(x => x.vin == vehicle.vin);
                         if (vehicleDetails.slscode == "HDM")
                         {
-                            if ((Model.PDFs_1550_1551.Contains("//192.168.100.16/c$/inetpub/wwwroot/production/FITZWAY/Pictures/UCPDFS/101-" + vehicleDetails.vin.Trim() + ".pdf")) == false)
-                            {
 
-                                <tr>
-                                    <td>@vehicle.slscode</td>
-                                    <td>@vehicle.loc</td>
 
-                                    <td>@vehicle.stk</td>
-                                    <td>@vehicle.yr</td>
-                                    <td>@vehicle.make</td>
-                                    <td>@vehicle.carline</td>
-                                    <td>@vehicleDetails.daysinv</td>
-                                    <td>@vehicleDetails.list_amt.ToString("C", nfi)</td>
-                                    <td>@vehicleDetails.status</td>
-                                </tr>
-                            }
-                        }
-                    }
-                }
-
-                @if (Model.NoPDF == "1551")
-                {
-                    foreach (var vehicle in HandymanVehicles)
-                    {
-                        var vehicleDetails = Model.AllUsedInventory.Find(x => x.vin == vehicle.vin);
-                        if (vehicleDetails.slscode == "HDM")
-                        {
-                            if ((Model.PDFs_1550_1551.Contains("//192.168.100.16/c$/inetpub/wwwroot/production/FITZWAY/Pictures/UCPDFS/151-" + vehicleDetails.vin.Trim() + ".pdf")) == false)
-                            {
+                                if ((Model.PDFs_1550_1551.Count(x => x.VIN == vehicle.vin && x.Counter1550 > 0)) == 0)
                                 {
+
                                     <tr>
                                         <td>@vehicle.slscode</td>
                                         <td>@vehicle.loc</td>
@@ -171,45 +146,71 @@
                             }
                         }
                     }
-                }
-                </tbody>
-            </table>
-        </div>
-    </div>
+                    @if (Model.NoPDF == "1551")
+                    {
+                        foreach (var vehicle in HandymanVehicles)
+                        {
+                            var vehicleDetails = Model.AllUsedInventory.Find(x => x.vin == vehicle.vin);
+                            if (vehicleDetails.slscode == "HDM")
+                            {
+                                if ((Model.PDFs_1550_1551.Count(x => x.VIN == vehicle.vin && x.Counter1551 > 0)) == 0)
+                                {
+                                    {
+                                        <tr>
+                                            <td>@vehicle.slscode</td>
+                                            <td>@vehicle.loc</td>
 
-    @section scripts
-{
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $('#table-InRecon').DataTable({
-                    searching: true,
-                    dom: 'Bfrti',
-                    pageLength: -1,
-                    buttons: [
-                        {
-                            extend: 'copyHtml5', footer: true,
-                        },
-                        {
-                            extend: 'excelHtml5', footer: true,
-                        },
-                        {
-                            extend: 'pdfHtml5', footer: true,
-                            orientation: 'landscape'
-                        },
-                        {
-                            extend: 'print', footer: true,
-                            orientation: 'landscape'
+                                            <td>@vehicle.stk</td>
+                                            <td>@vehicle.yr</td>
+                                            <td>@vehicle.make</td>
+                                            <td>@vehicle.carline</td>
+                                            <td>@vehicleDetails.daysinv</td>
+                                            <td>@vehicleDetails.list_amt.ToString("C", nfi)</td>
+                                            <td>@vehicleDetails.status</td>
+                                        </tr>
+                                    }
+                                }
+                            }
                         }
-                    ]
-                    //,
-                    //columnDefs: [
-                    //  { type: 'any-number', targets: [18, 19, 20, 21, 22, 23, 24,25,26] },
-                    //  { type: 'date-us', targets: [6] }
-                    //]
+                    }
+            </tbody>
+        </table>
+    </div>
+</div>
 
-                });
+@section scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#table-InRecon').DataTable({
+                searching: true,
+                dom: 'Bfrti',
+                pageLength: -1,
+                buttons: [
+                    {
+                        extend: 'copyHtml5', footer: true,
+                    },
+                    {
+                        extend: 'excelHtml5', footer: true,
+                    },
+                    {
+                        extend: 'pdfHtml5', footer: true,
+                        orientation: 'landscape'
+                    },
+                    {
+                        extend: 'print', footer: true,
+                        orientation: 'landscape'
+                    }
+                ]
+                //,
+                //columnDefs: [
+                //  { type: 'any-number', targets: [18, 19, 20, 21, 22, 23, 24,25,26] },
+                //  { type: 'date-us', targets: [6] }
+                //]
 
             });
 
-        </script>
-    }
+        });
+
+    </script>
+}
