@@ -14,12 +14,13 @@ namespace VehicleDashboard.Business
 
 
 
-        public static string[] ALL_1551and1550_Files()
+        public static List<PDFsByVIN> ALL_1551and1550_Files()
         {
 
-  //          string[] allfiles = Directory.GetFiles(@"R:/inetpub/wwwroot/production/FITZWAY/Pictures/UCPDFS", " *.pdf", SearchOption.TopDirectoryOnly);
-           string[] allfiles = Directory.GetFiles(@"\\192.168.100.16\c$\inetpub\wwwroot\production\FITZWAY\Pictures\UCPDFS\", "*.pdf", SearchOption.TopDirectoryOnly);
+            var sqlGet = "SELECT [VIN] ,SUM([Counter1550]) AS Counter1550, SUM([Counter1551]) AS Counter1551 FROM[FITZWAY].[dbo].[Pdf1550_51ExportCountsDaily]  GROUP BY[VIN]";
 
+            var allfiles = SqlMapperUtil.SqlWithParams<PDFsByVIN>(sqlGet, new { }, "Rackspace");
+      
             return allfiles;
         }
 

@@ -22,10 +22,20 @@ namespace VehicleDashboard.Models
         public string Location { get; set; }
         public string NoPDF { get; set; }
 
-        public string[] PDFs_1550_1551 { get; set; }
+        public List<PDFsByVIN> PDFs_1550_1551 { get; set; }
     }
 
-    public class CSV_vehicleUSED
+    public class PDFsByVIN
+    {
+        public string VIN { get; set; }
+
+        public int Counter1550 { get; set; }
+
+        public int Counter1551 { get; set; }
+
+}
+
+        public class CSV_vehicleUSED
     {
         public int USEDID { get; set; }
         public string branch { get; set; }

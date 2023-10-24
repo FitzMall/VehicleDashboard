@@ -130,6 +130,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Business\APIHelper.cs" />
     <Compile Include="Business\ChromeData.cs" />
+    <Compile Include="Business\UNCAccessWithCredentials.cs" />
     <Compile Include="Business\SqlMapperUtil.cs" />
     <Compile Include="Business\SqlQueries.cs" />
     <Compile Include="Controllers\ChromeController.cs" />
