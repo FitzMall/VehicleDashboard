@@ -55,3 +55,6 @@ C:\Users\burroughsd\Documents\GitHub\VehicleDashboard\bin\System.Web.Optimizatio
 C:\Users\burroughsd\Documents\GitHub\VehicleDashboard\bin\System.Web.Razor.xml
 C:\Users\burroughsd\Documents\GitHub\VehicleDashboard\bin\System.Web.WebPages.Deployment.xml
 C:\Users\burroughsd\Documents\GitHub\VehicleDashboard\bin\Newtonsoft.Json.xml
+C:\Users\burroughsd\Documents\GitHub\VehicleDashboard\bin\System.Web.WebPages.xml
+C:\Users\burroughsd\Documents\GitHub\VehicleDashboard\bin\System.Web.WebPages.Razor.xml
+C:\Users\burroughsd\Documents\GitHub\VehicleDashboard\obj\Debug\VehicleDashboard.csproj.AssemblyReference.cache

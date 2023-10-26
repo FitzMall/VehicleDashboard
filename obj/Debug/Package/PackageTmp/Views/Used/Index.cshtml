@@ -1,0 +1,538 @@
+﻿@model VehicleDashboard.Models.UsedVehicleDashboard
+
+@{
+    ViewBag.Title = "Used Vehicle Dashboard";
+
+    var applicationPath = Request.ApplicationPath;
+
+    if (applicationPath == "/")
+    {
+        applicationPath = "";
+    }
+
+    var locations = Model.WebsiteUsedInventory.Select(x => x.V_loc).Distinct().OrderBy(X => X).ToList();
+
+    var storeUsed = Model.AllUsedInventory.FindAll(x => (x.status == 1 || x.status == 2 || x.status == 4));
+    var storeWebsiteUsed = Model.WebsiteUsedInventory;
+    var storeHandyman = Model.WebsiteUsedInventory.FindAll(x =>  (x.V_certified.TrimEnd() == "F916" || x.V_certified.TrimEnd() == "F917" || x.V_certified.TrimEnd() == "F918"));
+    var storeValue = Model.WebsiteUsedInventory.FindAll(x => (x.V_certified.TrimEnd() == "F915"));
+    var storeFitzUsed = Model.WebsiteUsedInventory.FindAll(x =>  (x.V_certified.TrimEnd() == "F910" || x.V_certified.TrimEnd() == "F914"));
+    var storeCertifiedUsed = Model.WebsiteUsedInventory.FindAll(x =>  (x.V_certified.TrimEnd() != "F910" && x.V_certified.TrimEnd() != "F914" && x.V_certified.TrimEnd() != "F915" && x.V_certified.TrimEnd() != "F916" && x.V_certified.TrimEnd() != "F917" && x.V_certified.TrimEnd() != "F918"));
+    var storeInRecon = Model.AllUsedInventory.FindAll(x => (x.tag == "R"));
+    var storeNextCarUsed = Model.WebsiteUsedInventory.FindAll(x =>  (x.V_stock.Substring(1, 1) == "N" && !Char.IsLetter(x.V_stock.Substring(x.V_stock.Length - 1),0)  ));
+
+    if(Model.Location != null && Model.Location != "ALL")
+    {
+        storeUsed = Model.AllUsedInventory.FindAll(x => x.loc == Model.Location && (x.status == 1 || x.status == 2 || x.status == 4));
+        storeWebsiteUsed = Model.WebsiteUsedInventory.FindAll(x => x.V_loc == Model.Location);
+        storeHandyman = Model.WebsiteUsedInventory.FindAll(x => x.V_loc == Model.Location && (x.V_certified.TrimEnd() == "F916" || x.V_certified.TrimEnd() == "F917" || x.V_certified.TrimEnd() == "F918"));
+        storeValue = Model.WebsiteUsedInventory.FindAll(x => x.V_loc == Model.Location && (x.V_certified.TrimEnd() == "F915"));
+        storeFitzUsed = Model.WebsiteUsedInventory.FindAll(x => x.V_loc == Model.Location && (x.V_certified.TrimEnd() == "F910" || x.V_certified.TrimEnd() == "F914"));
+        storeCertifiedUsed = Model.WebsiteUsedInventory.FindAll(x => x.V_loc == Model.Location && (x.V_certified.TrimEnd() != "F910" && x.V_certified.TrimEnd() != "F914" && x.V_certified.TrimEnd() != "F915" && x.V_certified.TrimEnd() != "F916" && x.V_certified.TrimEnd() != "F917" && x.V_certified.TrimEnd() != "F918"));
+        storeInRecon = Model.AllUsedInventory.FindAll(x => x.loc == Model.Location && (x.tag == "R"));
+        storeNextCarUsed = Model.WebsiteUsedInventory.FindAll(x => x.V_loc == Model.Location && (x.V_stock.Substring(1, 1) == "N" && !Char.IsLetter(x.V_stock.Substring(x.V_stock.Length - 1), 0)));
+
+    }
+
+    var usedCount = storeUsed.Count();
+    var usedWebsiteCount = storeWebsiteUsed.Count();
+    var usedShouldBeCount = usedCount - usedWebsiteCount;
+    var usedHandymanCount = storeHandyman.Count();
+    var usedValueCount = storeValue.Count();
+    var usedFitzCount = storeFitzUsed.Count();
+    var usedCertifiedCount = storeCertifiedUsed.Count();
+    var usedNotSetCount = usedCount - usedHandymanCount - usedValueCount - usedFitzCount- usedCertifiedCount;
+    var usedInReconCount = storeInRecon.Count();
+    var usedNextCarCount = storeNextCarUsed.Count();
+
+}
+
+@section CSS
+{
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
+    <style type="text/css">
+        .location-row{
+            background-color:#eee;
+        }
+    </style>
+}
+
+<div class="row" style="border-bottom:1px solid #eee; margin-bottom:20px;">
+    <div class="col-sm-12 col-md-10">
+        <h2>Used Vehicle Dashboard</h2>
+        <div class="row location-row">
+            <div class="col-xs-12">
+                <h4>Locations:</h4>
+                <input class="form-inline" type="radio" name="locationValue" id="chk-ALL" onclick="window.location='@applicationPath/Used?Location=ALL';" value="ALL" @(Model.Location == "ALL" ? "checked" : "" )>
+                <label class="form-inline" style="margin-right:15px;" for="chk-ALL">ALL</label>
+
+                @foreach (var location in locations)
+                {
+                    <input class="form-inline" type="radio" name="locationValue" id="chk-@location" onclick="window.location='@applicationPath/Used?Location=@location';"value="@location" @(Model.Location == location ? "checked" : "" )>
+                    <label class="form-inline" style="margin-right:15px;" for="chk-@location">@location</label>
+                }
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+
+        <div class="row" style="border-bottom:1px solid #eee; margin-bottom:20px;">
+            <div class="col-sm-12 col-md-6 col-lg-2">
+                <h4 class="text-center">Used Vehicles</h4>
+                <div class="box text-center">
+                    <div id="usedCount" class="gauge"></div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-2">
+                <h4 class="text-center">On FitzMall</h4>
+                <div class="box text-center">
+                    <div id="usedWebsiteCount" class="gauge"></div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-2">
+                <h4 class="text-center">Should Be On FitzMall</h4>
+                <div class="box text-center">
+                    <div id="usedShouldBeCount" class="gauge"></div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-2">
+                <h4 class="text-center"><a href="@applicationPath/Reports/InRecon?Location=@Model.Location">In Reconditioning</a></h4>
+                <div class="box text-center">
+                    <div id="usedInReconCount" class="gauge"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="border-bottom:1px solid #eee; margin-bottom:20px;">
+            <div class="col-sm-12 col-md-2">
+                <div class="row">
+                    <div class="col-xs-4">
+                        <div class="box text-center">
+                            <div id="usedCertifiedCount" style="width:100px; height:80px; margin-left:auto; margin-right:auto;" class="gauge"></div>
+                        </div>
+                    </div>
+                    <div class="col-xs-8">
+                        <h4 style="margin-top:30px;">CPO Vehicles</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4">
+                        <div class="box text-center">
+                            <div id="usedFitzCount" style="width:100px; height:80px; margin-left:auto; margin-right:auto;" class="gauge"></div>
+                        </div>
+                    </div>
+                    <div class="col-xs-8">
+                        <h4  style="margin-top:30px;">FitzWay Used</h4>        
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4">
+                        <div class="box text-center">
+                            <div id="usedValueCount" style="width:100px; height:80px;margin-left:auto; margin-right:auto;" class="gauge"></div>
+                        </div>
+                    </div>
+                    <div class="col-xs-8">
+                        <h4  style="margin-top:30px;"">FitzWay Value</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4">
+                        <div class="box text-center">
+                            <div id="usedHandyManCount" style="width:100px; height:80px; margin-left:auto; margin-right:auto;" class="gauge"></div>
+                        </div>
+                    </div>
+                    <div class="col-xs-8">
+                        <h4 style="margin-top:30px;">Handyman</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4">
+                        <div class="box text-center">
+                            <div id="usedNotSetCount" style="width:100px; height:80px; margin-left:auto; margin-right:auto;" class="gauge"></div>
+                        </div>
+                    </div>
+                    <div class="col-xs-8">
+                        <h4 style="margin-top:30px;">Not Set</h4>
+                    </div>
+                </div>
+            </div>
+<div class="col-sm-12 col-md-6">
+                <div id="chartContainerCertified" style="height: 370px; width: 100%;"></div>
+
+                <script type="text/javascript">
+                    $(function () {
+                        var chart = new CanvasJS.Chart("chartContainerCertified", {
+                            title: {
+                                text: "Used Vehicle Breakdown",
+                                fontSize:18
+                            },
+                            animationEnabled: true,
+                            exportEnabled: true,
+                            legend: {
+                                verticalAlign: "center",
+                                horizontalAlign: "left",
+                                fontSize: 12,
+                                fontFamily: "Helvetica"
+                            },
+                            theme: "light2",
+                            data: [
+                            {
+                                type: "pie",
+                                indexLabelFontFamily: "Garamond",
+                                indexLabelFontSize: 12,
+                                indexLabel: "{label} {y}%",
+                                startAngle: -20,
+                                showInLegend: true,
+                                toolTipContent: "{legendText} {y}%",
+                                dataPoints: [
+                                    @{
+                                        var percentCPO = Math.Round(((double)usedCertifiedCount / (double)usedCount)*100,1);
+                                        var percentValue = Math.Round(((double)usedValueCount / (double)usedCount)*100,1);
+                                        var percentUsed = Math.Round(((double) usedFitzCount / (double)usedCount)*100,1);
+                                        var percentHandy = Math.Round(((double)usedHandymanCount / (double)usedCount)*100,1);
+                                        var percentOther = 100 - (percentCPO + percentValue + percentUsed + percentHandy);
+                                }
+
+                                    { y: @percentCPO, legendText: "CPO", label: "CPO" },
+                                    { y: @percentUsed, legendText: "Used", label: "Used" },
+                                    { y: @percentValue, legendText: "Value", label: "Value" },
+                                    { y: @percentHandy, legendText: "Handyman", label: "Handyman" },
+                                    { y: @percentOther, legendText: "Not Set", label: "Not Set" }
+
+                                    //{ y: 72.48, legendText: "Google", label: "Google" },
+                                    //{ y: 10.39, legendText: "Bing", label: "Bing" },
+                                    //{ y: 7.78, legendText: "Yahoo!", label: "Yahoo!" },
+                                    //{ y: 7.14, legendText: "Baidu", label: "Baidu" },
+                                    //{ y: 0.22, legendText: "Ask", label: "Ask" },
+                                    //{ y: 0.15, legendText: "AOL", label: "AOL" },
+                                    //{ y: 1.84, legendText: "Others", label: "Others" }
+                                ],
+
+                                @*//You can add dynamic data from the controller as shown below. Check the controller and uncomment the line which generates dataPoints.
+                            //dataPoints: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(phoneLeadDataPoints)),*@
+                            }
+                            ]
+                        });
+                        chart.render();
+                    });
+                </script>
+            </div>
+            </div>
+            @*<div class="row" style="border-bottom:1px solid #eee; margin-bottom:20px;">
+                
+                <div class="col-sm-12 col-md-6 col-lg-2">
+                    <h4 class="text-center">Stock Variance</h4>
+                    <div class="box text-center">
+                        <div id="usedShouldBeCount" class="gauge"></div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-2">
+                    <h4 class="text-center">Missing Styles</h4>
+                    <div class="box text-center">
+                        <div id="usedWebsiteCount" class="gauge"></div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-2">
+                    <h4 class="text-center">Missing Pictures</h4>
+                    <div class="box text-center">
+                        <div id="usedShouldBeCount" class="gauge"></div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-2">
+                    <h4 class="text-center">NextCar</h4>
+                    <div class="box text-center">
+                        <div id="usedNextCarCount" class="gauge"></div>
+                    </div>
+                </div>
+            </div>*@
+
+        </div>
+</div>
+
+@section scripts
+{
+    <script src="~/Scripts/raphael-2.1.4.min.js"></script>
+    <script src="~/Scripts/justgage.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function(event) {
+
+
+            var chromedNew = new JustGage({
+                id: 'chromedNew',
+                value: 85,
+                min: 0,
+                max: 100,
+                symbol: '%',
+                pointer: true,
+                pointerOptions: {
+                    toplength: -15,
+                    bottomlength: 10,
+                    bottomwidth: 12,
+                    color: '#8e8e93',
+                    stroke: '#ffffff',
+                    stroke_width: 3,
+                    stroke_linecap: 'round'
+                },
+                levelColors: [
+                "#ff0000", "#f9c802", "#a9d70b"
+                ],
+                gaugeWidthScale: 0.6,
+                counter: true
+            });
+
+            var pricedNew = new JustGage({
+                id: 'pricedNew',
+                value: 92,
+                min: 0,
+                max: 100,
+                symbol: '%',
+                pointer: true,
+                pointerOptions: {
+                    toplength: -15,
+                    bottomlength: 10,
+                    bottomwidth: 12,
+                    color: '#8e8e93',
+                    stroke: '#ffffff',
+                    stroke_width: 3,
+                    stroke_linecap: 'round'
+                },
+                levelColors: [
+                "#ff0000", "#f9c802", "#a9d70b"
+                ],
+                gaugeWidthScale: 0.6,
+                counter: true
+            });
+
+
+            var imagesNew = new JustGage({
+                id: 'imagesNew',
+                value: 74,
+                min: 0,
+                max: 100,
+                symbol: '%',
+                pointer: true,
+                pointerOptions: {
+                    toplength: -15,
+                    bottomlength: 10,
+                    bottomwidth: 12,
+                    color: '#8e8e93',
+                    stroke: '#ffffff',
+                    stroke_width: 3,
+                    stroke_linecap: 'round'
+                },
+                levelColors: [
+                "#ff0000", "#f9c802", "#a9d70b"
+                ],
+                gaugeWidthScale: 0.6,
+                counter: true
+            });
+
+            var dayssupplyNew = new JustGage({
+                id: "dayssupplyNew",
+                value: 72,
+                min: 0,
+                max: 100,
+                donut: true,
+                gaugeWidthScale: 0.6,
+                counter: true,
+                hideInnerShadow: true
+            });
+
+
+            var chromedUsed = new JustGage({
+                id: 'chromedUsed',
+                value: 35,
+                min: 0,
+                max: 100,
+                symbol: '%',
+                pointer: true,
+                pointerOptions: {
+                    toplength: -15,
+                    bottomlength: 10,
+                    bottomwidth: 12,
+                    color: '#8e8e93',
+                    stroke: '#ffffff',
+                    stroke_width: 3,
+                    stroke_linecap: 'round'
+                },
+                levelColors: [
+                "#ff0000", "#f9c802", "#a9d70b"
+                ],
+                gaugeWidthScale: 0.6,
+                counter: true
+            });
+
+            var pricedUsed = new JustGage({
+                id: 'pricedUsed',
+                value: 95,
+                min: 0,
+                max: 100,
+                symbol: '%',
+                pointer: true,
+                pointerOptions: {
+                    toplength: -15,
+                    bottomlength: 10,
+                    bottomwidth: 12,
+                    color: '#8e8e93',
+                    stroke: '#ffffff',
+                    stroke_width: 3,
+                    stroke_linecap: 'round'
+                },
+                levelColors: [
+                "#ff0000", "#f9c802", "#a9d70b"
+                ],
+                gaugeWidthScale: 0.6,
+                counter: true
+            });
+
+
+            var imagesUsed = new JustGage({
+                id: 'imagesUsed',
+                value: 40,
+                min: 0,
+                max: 100,
+                symbol: '%',
+                pointer: true,
+                pointerOptions: {
+                    toplength: -15,
+                    bottomlength: 10,
+                    bottomwidth: 12,
+                    color: '#8e8e93',
+                    stroke: '#ffffff',
+                    stroke_width: 3,
+                    stroke_linecap: 'round'
+                },
+                levelColors: [
+                "#ff0000", "#f9c802", "#a9d70b"
+                ],
+                gaugeWidthScale: 0.6,
+                counter: true
+            });
+
+            var usedCount = new JustGage({
+                id: "usedCount",
+                value: @usedCount,
+                min: 0,
+                max: @usedCount,
+                donut: true,
+                gaugeWidthScale: 0.6,
+                counter: true,
+                levelColors:["#a9d70b"],
+                hideInnerShadow: true
+            });
+
+            var usedHandyman = new JustGage({
+                id: "usedHandyManCount",
+                value: @usedHandymanCount,
+                min: 0,
+                max: @usedHandymanCount,
+                donut: true,
+                gaugeWidthScale: 0.6,
+                counter: true,
+                levelColors:["#a9d70b"],
+                hideInnerShadow: true
+            });
+
+            var usedValue = new JustGage({
+                id: "usedValueCount",
+                value: @usedValueCount,
+                min: 0,
+                max: @usedValueCount,
+                donut: true,
+                gaugeWidthScale: 0.6,
+                counter: true,
+                levelColors:["#df7970"],
+                hideInnerShadow: true
+            });
+
+            var usedFitz = new JustGage({
+                id: "usedFitzCount",
+                value: @usedFitzCount,
+                min: 0,
+                max: @usedFitzCount,
+                donut: true,
+                gaugeWidthScale: 0.6,
+                counter: true,
+                levelColors:["#51cda0"],
+                hideInnerShadow: true
+            });
+
+            var usedCertified = new JustGage({
+                id: "usedCertifiedCount",
+                value: @usedCertifiedCount,
+                min: 0,
+                max: @usedCertifiedCount,
+                donut: true,
+                gaugeWidthScale: 0.6,
+                counter: true,
+                levelColors:["#6d78ad"],
+                hideInnerShadow: true
+            });
+
+            var usedNotSet = new JustGage({
+                id: "usedNotSetCount",
+                value: @usedNotSetCount,
+                min: 0,
+                max: @usedNotSetCount,
+                donut: true,
+                gaugeWidthScale: 0.6,
+                counter: true,
+                levelColors:["#a97a95"],
+                hideInnerShadow: true
+            });
+
+
+            var usedWebsiteCount = new JustGage({
+                id: "usedWebsiteCount",
+                value: @usedWebsiteCount,
+                min: 0,
+                max: @usedCount,
+                donut: false,
+                gaugeWidthScale: 0.6,
+                counter: true,
+                levelColors: ["#ff0000", "#f9c802", "#a9d70b"],
+                hideInnerShadow: true
+            });
+
+            var usedInRecon = new JustGage({
+                id: "usedInReconCount",
+                value: @usedInReconCount,
+                min: 0,
+                max: @usedCount,
+                donut: false,
+                gaugeWidthScale: 0.6,
+                counter: true,
+                hideInnerShadow: true
+            });
+
+
+            var usedInRecon = new JustGage({
+                id: "usedNextCarCount",
+                value: @usedNextCarCount,
+                min: 0,
+                max: @usedCount,
+                donut: false,
+                gaugeWidthScale: 0.6,
+                counter: true,
+                hideInnerShadow: true
+            });
+
+            //usedInReconCount
+            var usedShouldBeCount = new JustGage({
+                id: "usedShouldBeCount",
+                value: @usedShouldBeCount,
+                min: 0,
+                max: @usedCount,
+                donut: true,
+                gaugeWidthScale: 0.6,
+                counter: true,
+                hideInnerShadow: true
+            });
+        });
+    </script>
+
+}
