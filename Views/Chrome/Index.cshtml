@@ -202,7 +202,10 @@
             {
                 newChromedCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin);
                 newNeedsStyledCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.StyleId == 0 && x.Condition == "NEW");
-                newFuelType += Model.VehicleData.Count(x => x.VIN == vehicle.vin && (x.FuelType == null) && x.Condition == "NEW");
+                if (vehicle.status != 26 && vehicle.status != 7)
+                {
+                    newFuelType += Model.VehicleData.Count(x => x.VIN == vehicle.vin && (x.FuelType == null) && x.Condition == "NEW");
+                }
                 newMgrSpcCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.ManagerSpecial == 1);
             }
             newNeedsChromedCount = newVehicleCount - newChromedCount;
@@ -341,13 +344,14 @@
                     usedMissing1551 += Model.UsedVehicleDashboard.PDFs_1550_1551.Find(x => x.VIN == vehicle.vin).Counter1551;
                 }
 
-                usedFuelType += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.FuelType == null && x.Condition == "USED");
-
-                if (vehicle.status == 1 || vehicle.status == 2 || vehicle.status == 4)
+                if (vehicle.status !=1 && vehicle.status != 2 && vehicle.status != 4)
                 {
-                    usedMgrSpcCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.ManagerSpecial == 1);
+                    usedFuelType += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.FuelType == null && x.Condition == "USED");
                 }
 
+        
+                usedMgrSpcCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.ManagerSpecial == 1);
+        
                 if (vehicle.slscode == "HDM")
                 {
                     usedHandyman += 1;
