@@ -99,44 +99,7 @@
                     {
                         vehicleDetails = Model.UsedVehicleDashboard.AllUsedInventory.Find(x => x.vin == vehicle.VIN);
                         if (vehicleDetails.status == 1 || vehicleDetails.status == 2 || vehicleDetails.status == 4)
-                    {
-
-                        <tr>
-                            <td>@vehicle.VehicleLocation</td>
-
-                            @if (vehicle.StyleId > 0)
-                            {
-                                <td><a href="@applicationPath/Chrome/Vehicle/?VIN=@vehicle.VIN&Chromed=true" target="_blank">@vehicle.StockNumber</a></td>
-                            }
-                            else if (vehicle.StyleId == 0)
-                            {
-                                <td><a href="@applicationPath/Chrome/ChromeNoStyle/?VIN=@vehicle.VIN" target="_blank">@vehicle.StockNumber</a></td>
-                            }
-
-                            <td>@vehicle.Year</td>
-                            <td>@vehicle.Make</td>
-                            <td>@vehicle.Model</td>
-                            <td>@vehicleDetails.daysinv</td>
-                            <td>@vehicleDetails.list_amt.ToString("C", nfi)</td>
-                            <td>@vehicleDetails.status</td>
-                            <td>@vehicle.StyleId</td>
-                            <td>@vehicle.FuelType</td>
-                            <td>@vehicle.ManagerSpecial</td>
-                        </tr>
-
-                    }
-                    else
-                    {
-                        var details = Model.NewVehicleDashboard.AllNewInventory.Find(x => x.vin == vehicle.VIN);
-                        if (details != null)
                         {
-
-                            vehicleDetails.daysinv = Int32.Parse(details.days);
-                            vehicleDetails.list_amt = details.list_amt;
-                            vehicleDetails.status = details.status;
-
-                            if (details.status != 26 || details.status != 7)
-                            {
 
                             <tr>
                                 <td>@vehicle.VehicleLocation</td>
@@ -160,15 +123,54 @@
                                 <td>@vehicle.FuelType</td>
                                 <td>@vehicle.ManagerSpecial</td>
                             </tr>
-                                }
-
-                            }
-
 
                         }
                     }
+                    else
+                    {
+                        var details = Model.NewVehicleDashboard.AllNewInventory.Find(x => x.vin == vehicle.VIN);
+                        if (details != null)
+                        {
 
+                            vehicleDetails.daysinv = Int32.Parse(details.days);
+                            vehicleDetails.list_amt = details.list_amt;
+                            vehicleDetails.status = details.status;
+
+                            if (details.status != 26 || details.status != 7)
+                            {
+
+                                <tr>
+                                    <td>@vehicle.VehicleLocation</td>
+
+                                    @if (vehicle.StyleId > 0)
+                                    {
+                                        <td><a href="@applicationPath/Chrome/Vehicle/?VIN=@vehicle.VIN&Chromed=true" target="_blank">@vehicle.StockNumber</a></td>
+                                    }
+                                    else if (vehicle.StyleId == 0)
+                                    {
+                                        <td><a href="@applicationPath/Chrome/ChromeNoStyle/?VIN=@vehicle.VIN" target="_blank">@vehicle.StockNumber</a></td>
+                                    }
+
+                                    <td>@vehicle.Year</td>
+                                    <td>@vehicle.Make</td>
+                                    <td>@vehicle.Model</td>
+                                    <td>@vehicleDetails.daysinv</td>
+                                    <td>@vehicleDetails.list_amt.ToString("C", nfi)</td>
+                                    <td>@vehicleDetails.status</td>
+                                    <td>@vehicle.StyleId</td>
+                                    <td>@vehicle.FuelType</td>
+                                    <td>@vehicle.ManagerSpecial</td>
+                                </tr>
+                            }
+
+                        }
+
+
+                    }
                 }
+
+            
+
             </tbody>
         </table>
     </div>
@@ -177,36 +179,36 @@
 @section scripts
 {
     <script type="text/javascript">
-            $(document).ready(function () {
-                $('#table-InRecon').DataTable({
-                    searching: true,
-                    dom: 'Bfrti',
-                    pageLength: -1,
-                    buttons: [
-                        {
-                            extend: 'copyHtml5', footer: true,
-                        },
-                        {
-                            extend: 'excelHtml5', footer: true,
-                        },
-                        {
-                            extend: 'pdfHtml5', footer: true,
-                            orientation: 'landscape'
-                        },
-                        {
-                            extend: 'print', footer: true,
-                            orientation: 'landscape'
-                        }
-                    ]
-                    //,
-                    //columnDefs: [
-                    //  { type: 'any-number', targets: [18, 19, 20, 21, 22, 23, 24,25,26] },
-                    //  { type: 'date-us', targets: [6] }
-                    //]
-
-                });
+        $(document).ready(function () {
+            $('#table-InRecon').DataTable({
+                searching: true,
+                dom: 'Bfrti',
+                pageLength: -1,
+                buttons: [
+                    {
+                        extend: 'copyHtml5', footer: true,
+                    },
+                    {
+                        extend: 'excelHtml5', footer: true,
+                    },
+                    {
+                        extend: 'pdfHtml5', footer: true,
+                        orientation: 'landscape'
+                    },
+                    {
+                        extend: 'print', footer: true,
+                        orientation: 'landscape'
+                    }
+                ]
+                //,
+                //columnDefs: [
+                //  { type: 'any-number', targets: [18, 19, 20, 21, 22, 23, 24,25,26] },
+                //  { type: 'date-us', targets: [6] }
+                //]
 
             });
+
+        });
 
     </script>
 }
