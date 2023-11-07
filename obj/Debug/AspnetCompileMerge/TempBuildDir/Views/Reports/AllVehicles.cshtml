@@ -32,6 +32,7 @@
     nfi.CurrencySymbol = "";
 
     var locations = Model.UsedVehicleDashboard.WebsiteUsedInventory.Select(x => x.V_loc).Distinct().OrderBy(X => X).ToList();
+    string UploadURL;
 
     string sColHeader = "";
     if (isPhotoCount == true)
@@ -303,7 +304,13 @@
                     }
                     else
                     {
-                        <td>@vehicle.Photos</td>
+                        UploadURL = "http://adm.fitzmall.com/Uploader?token=6ee48d25-983a-4399-a4fb-2e28be51f29f&vin=";
+                        UploadURL += vehicle.vin;
+                        UploadURL += "&mode=USED&loc=";
+                        UploadURL += vehicle.loc.ToString();
+
+                        <td><a href=@UploadURL>@vehicle.Photos</a></td>
+
                     }
                     <td>@vehicle.SALE_DATE.ToShortDateString()</td>
                 </tr>
