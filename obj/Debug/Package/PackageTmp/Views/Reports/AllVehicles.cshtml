@@ -309,7 +309,14 @@
                         UploadURL += "&mode=USED&loc=";
                         UploadURL += vehicle.loc.ToString();
 
-                        <td><a href=@UploadURL>@vehicle.Photos</a></td>
+                        if (Model.PhotoShow == "NONE")
+                        {
+                            <td><a href=@UploadURL>UPLOAD</a></td>
+                        }
+                        else
+                        {
+                            <td><a href=@UploadURL>@vehicle.Photos</a></td>
+                        }
 
                     }
                     <td>@vehicle.SALE_DATE.ToShortDateString()</td>
