@@ -6,9 +6,11 @@
     @using (Html.BeginForm("_UploadFile", "Reports", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         <input type="File" name="file" id="file" value="Choose File" />
+        <br>
+        <br>
         <button type="submit">Upload</button>
-    }
-</div>
+        }
+    </div>
 
 @if (null != ViewBag.Processed && (bool)ViewBag.Processed == true) {
     <script>

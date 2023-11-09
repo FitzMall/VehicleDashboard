@@ -19,8 +19,8 @@ namespace VehicleDashboard.Controllers
         public ActionResult _UploadFile()
         {
             // "~/PDFs1550/"
-            //var path = Server.MapPath(@"C:\Users\burroughsd\Documents");
-            var path = (@"C:\Users\burroughsd\Documents");
+            //var path = Server.MapPath(@"C:\inetpub\wwwroot\production\FITZWAY\Pictures\UCPDFS");
+            var path = (@"C:\inetpub\wwwroot\production\FITZWAY\Pictures\UCPDFS");
 
             var dir = new DirectoryInfo(path);
 
@@ -33,8 +33,8 @@ namespace VehicleDashboard.Controllers
         [HttpPost]
         public ActionResult _UploadFile(HttpPostedFileBase file)
         {
-            //   var path = Path.Combine(Server.MapPath(@"C:\Users\burroughsd\Documents"), file.FileName);
-            var path = Path.Combine((@"C:\Users\burroughsd\Documents"), file.FileName);
+            //   var path = Path.Combine(Server.MapPath(@"C:\inetpub\wwwroot\production\FITZWAY\Pictures\UCPDFS"), file.FileName);
+            var path = Path.Combine((@"C:\inetpub\wwwroot\production\FITZWAY\Pictures\UCPDFS"), file.FileName);
 
             var data = new byte[file.ContentLength];
             file.InputStream.Read(data, 0, file.ContentLength);
