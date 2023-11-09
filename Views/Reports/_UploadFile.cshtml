@@ -1,0 +1,11 @@
+﻿@model IEnumerable<string>
+<link rel="stylesheet" href="~\Content\Site.css">
+<h1>Upload</h1>
+
+<div>
+    @using (Html.BeginForm("_UploadFile", "Reports", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <input type="File" name="file" id="file" value="Choose File" />
+        <button type="submit">Upload</button>
+    }
+</div>

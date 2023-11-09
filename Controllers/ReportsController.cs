@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 using System.Web;
 using System.Web.Mvc;
 using VehicleDashboard.Models;
@@ -13,6 +14,37 @@ namespace VehicleDashboard.Controllers
         public ActionResult Index()
         {
             return View();
+        }
+
+        public ActionResult _UploadFile()
+        {
+            // "~/PDFs1550/"
+            //var path = Server.MapPath(@"C:\Users\burroughsd\Documents");
+            var path = (@"C:\Users\burroughsd\Documents");
+
+            var dir = new DirectoryInfo(path);
+
+            var files = ""; 
+            // dir.EnumerateFiles().Select(f => f.Name);
+
+            return View(files);
+        }
+
+        [HttpPost]
+        public ActionResult _UploadFile(HttpPostedFileBase file)
+        {
+            //   var path = Path.Combine(Server.MapPath(@"C:\Users\burroughsd\Documents"), file.FileName);
+            var path = Path.Combine((@"C:\Users\burroughsd\Documents"), file.FileName);
+
+            var data = new byte[file.ContentLength];
+            file.InputStream.Read(data, 0, file.ContentLength);
+
+            using (var sw = new FileStream(path, FileMode.Create))
+            {
+                sw.Write(data, 0, data.Length);
+            }
+
+            return RedirectToAction("Handyman");
         }
         public ActionResult Handyman(string Location, string NoPDF)
         {

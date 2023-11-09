@@ -79,6 +79,7 @@
     </div>
 </div>
 
+
 <div class="row">
     <div class="col-sm-12 col-md-12">
         <table class="table table-striped table-bordered" id="table-InRecon">
@@ -108,20 +109,20 @@
 
                         if (vehicleDetails.slscode == "HDM")
                         {
-                            <tr>
-                                <td>@vehicle.slscode</td>
-                                <td>@vehicle.loc</td>
+                <tr>
+                    <td>@vehicle.slscode</td>
+                    <td>@vehicle.loc</td>
 
-                                <td>@vehicle.stk</td>
-                                <td>@vehicle.yr</td>
-                                <td>@vehicle.make</td>
-                                <td>@vehicle.carline</td>
-                                <td>@vehicleDetails.daysinv</td>
-                                <td>@vehicleDetails.list_amt.ToString("C", nfi)</td>
-                                <td>@vehicleDetails.status</td>
-                                <td><a href=@UploadURL>UPLOAD</a></td>
+                    <td>@vehicle.stk</td>
+                    <td>@vehicle.yr</td>
+                    <td>@vehicle.make</td>
+                    <td>@vehicle.carline</td>
+                    <td>@vehicleDetails.daysinv</td>
+                    <td>@vehicleDetails.list_amt.ToString("C", nfi)</td>
+                    <td>@vehicleDetails.status</td>
+                    <td><a href="@applicationPath/Reports/_UploadFile" target="_blank">UPLOAD</a></td>
 
-                            </tr>
+                </tr>
                         }
                     }
                 }
@@ -131,10 +132,6 @@
                     foreach (var vehicle in HandymanVehicles)
                     {
                         var vehicleDetails = Model.AllUsedInventory.Find(x => x.vin == vehicle.vin);
-                        UploadURL = "http://adm.fitzmall.com/Uploader?token=6ee48d25-983a-4399-a4fb-2e28be51f29f&vin=";
-                        UploadURL += vehicle.vin;
-                        UploadURL += "&mode=USED&loc=";
-                        UploadURL += vehicle.loc.ToString();
                         if (vehicleDetails.slscode == "HDM")
                         {
 
@@ -153,7 +150,7 @@
                                     <td>@vehicleDetails.daysinv</td>
                                     <td>@vehicleDetails.list_amt.ToString("C", nfi)</td>
                                     <td>@vehicleDetails.status</td>
-                                    <td><a href=@UploadURL>UPLOAD</a></td>
+                                    <td><a href="@applicationPath/Reports/_UploadFile" target="_blank">UPLOAD</a></td>
                                 </tr>
                             }
                         }
@@ -164,10 +161,6 @@
                     foreach (var vehicle in HandymanVehicles)
                     {
                         var vehicleDetails = Model.AllUsedInventory.Find(x => x.vin == vehicle.vin);
-                        UploadURL = "http://adm.fitzmall.com/Uploader?token=6ee48d25-983a-4399-a4fb-2e28be51f29f&vin=";
-                        UploadURL += vehicle.vin;
-                        UploadURL += "&mode=USED&loc=";
-                        UploadURL += vehicle.loc.ToString();
                         if (vehicleDetails.slscode == "HDM")
                         {
                             if ((Model.PDFs_1550_1551.Count(x => x.VIN == vehicle.vin && x.Counter1551 > 0)) == 0)
@@ -184,7 +177,8 @@
                                         <td>@vehicleDetails.daysinv</td>
                                         <td>@vehicleDetails.list_amt.ToString("C", nfi)</td>
                                         <td>@vehicleDetails.status</td>
-                                        <td><a href=@UploadURL>UPLOAD</a></td>
+                                        <td><a href="@applicationPath/Reports/_UploadFile" target="_blank">UPLOAD</a></td>
+
                                     </tr>
                                 }
                             }

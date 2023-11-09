@@ -304,19 +304,7 @@
                     }
                     else
                     {
-                        UploadURL = "http://adm.fitzmall.com/Uploader?token=6ee48d25-983a-4399-a4fb-2e28be51f29f&vin=";
-                        UploadURL += vehicle.vin;
-                        UploadURL += "&mode=USED&loc=";
-                        UploadURL += vehicle.loc.ToString();
-
-                        if (Model.PhotoShow == "NONE")
-                        {
-                            <td><a href=@UploadURL>UPLOAD</a></td>
-                        }
-                        else
-                        {
-                            <td><a href=@UploadURL>@vehicle.Photos</a></td>
-                        }
+                            <td>@vehicle.Photos</td>
 
                     }
                     <td>@vehicle.SALE_DATE.ToShortDateString()</td>
