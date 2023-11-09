@@ -102,10 +102,7 @@
                     foreach (var vehicle in HandymanVehicles)
                     {
                         var vehicleDetails = Model.AllUsedInventory.Find(x => x.vin == vehicle.vin);
-                        UploadURL = "http://adm.fitzmall.com/Uploader?token=6ee48d25-983a-4399-a4fb-2e28be51f29f&vin=";
-                        UploadURL += vehicle.vin;
-                        UploadURL += "&mode=USED&loc=";
-                        UploadURL += vehicle.loc.ToString();
+                      
 
                         if (vehicleDetails.slscode == "HDM")
                         {

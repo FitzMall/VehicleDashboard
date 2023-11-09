@@ -44,7 +44,8 @@ namespace VehicleDashboard.Controllers
                 sw.Write(data, 0, data.Length);
             }
 
-            return RedirectToAction("Handyman");
+            ViewBag.Processed = true;
+            return View("");
         }
         public ActionResult Handyman(string Location, string NoPDF)
         {

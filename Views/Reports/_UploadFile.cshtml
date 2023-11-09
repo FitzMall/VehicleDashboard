@@ -9,3 +9,10 @@
         <button type="submit">Upload</button>
     }
 </div>
+
+@if (null != ViewBag.Processed && (bool)ViewBag.Processed == true) {
+    <script>
+        window.close();
+    </script>
+}
+
