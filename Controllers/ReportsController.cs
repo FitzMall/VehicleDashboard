@@ -33,18 +33,21 @@ namespace VehicleDashboard.Controllers
         [HttpPost]
         public ActionResult _UploadFile(HttpPostedFileBase file)
         {
-            //   var path = Path.Combine(Server.MapPath(@"C:\inetpub\wwwroot\production\FITZWAY\Pictures\UCPDFS"), file.FileName);
-            var path = Path.Combine((@"C:\inetpub\wwwroot\production\FITZWAY\Pictures\UCPDFS"), file.FileName);
-
-            var data = new byte[file.ContentLength];
-            file.InputStream.Read(data, 0, file.ContentLength);
-
-            using (var sw = new FileStream(path, FileMode.Create))
+   
+            if (file != null)
             {
-                sw.Write(data, 0, data.Length);
-            }
+                //   var path = Path.Combine(Server.MapPath(@"C:\inetpub\wwwroot\production\FITZWAY\Pictures\UCPDFS"), file.FileName);
+                var path = Path.Combine((@"C:\inetpub\wwwroot\production\FITZWAY\Pictures\UCPDFS"), file.FileName);
 
-            ViewBag.Processed = true;
+                var data = new byte[file.ContentLength];
+                file.InputStream.Read(data, 0, file.ContentLength);
+
+                using (var sw = new FileStream(path, FileMode.Create))
+                {
+                    sw.Write(data, 0, data.Length);
+                }
+                ViewBag.Processed = true;
+            }
             return View("");
         }
         public ActionResult Handyman(string Location, string NoPDF)
