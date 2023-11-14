@@ -16,7 +16,7 @@ namespace VehicleDashboard.Controllers
             return View();
         }
 
-        public ActionResult _UploadFile()
+        public ActionResult _UploadFile(string VIN)
         {
             // "~/PDFs1550/"
             //var path = Server.MapPath(@"C:\inetpub\wwwroot\production\FITZWAY\Pictures\UCPDFS");
@@ -24,9 +24,14 @@ namespace VehicleDashboard.Controllers
 
             var dir = new DirectoryInfo(path);
 
-            var files = ""; 
-            // dir.EnumerateFiles().Select(f => f.Name);
-
+        //    var files = dir.EnumerateFiles("????" + VIN + ".pdf").Select(f => f.Name);
+            var files = dir.EnumerateFiles(VIN + ".pdf").Select(f => f.Name);
+            ViewBag.UserMsg = VIN + ".pdf";
+            ViewBag.UserWarn = "";
+            if (files.Count() > 0)
+            {
+                ViewBag.UserWarn = "File Already There";
+            }
             return View(files);
         }
 
@@ -105,6 +110,7 @@ namespace VehicleDashboard.Controllers
             usedVehicleDashboard.WebsiteUsedInventory = Business.SqlQueries.GetWebsiteUsedInventory();
             usedVehicleDashboard.Location = Location;
             usedVehicleDashboard.VehicleData = Business.SqlQueries.GetAllChromedVehicles();
+            usedVehicleDashboard.FitzwayCheckoutIDs = Business.SqlQueries.FitzWayCheckout_IDs();
 
 
             return View(usedVehicleDashboard);

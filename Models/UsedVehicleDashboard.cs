@@ -13,6 +13,12 @@ namespace VehicleDashboard.Models
 
     }
 
+    public class CheckoutIDByVIN
+    {
+        public string VIN { get; set; } // MetaDataValue7
+        public int ID { get; set; }
+    }
+
     public class UsedVehicleDashboard
     {
         public List<CSV_vehicleUSED> AllUsedInventory { get; set; }
@@ -22,6 +28,7 @@ namespace VehicleDashboard.Models
         public string Location { get; set; }
         public string NoPDF { get; set; }
 
+        public List<CheckoutIDByVIN> FitzwayCheckoutIDs { get; set; }
         public List<PDFsByVIN> PDFs_1550_1551 { get; set; }
     }
 

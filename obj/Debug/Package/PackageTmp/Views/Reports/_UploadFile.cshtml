@@ -1,18 +1,21 @@
 ﻿@model IEnumerable<string>
 <link rel="stylesheet" href="~\Content\Site.css">
-<h1>Upload</h1>
+<h1>Upload </h1>
+<h3>Upload this filename:  @ViewBag.UserMsg</h3>
+<h2>@ViewBag.UserWarn</h2>
 
 <div>
     @using (Html.BeginForm("_UploadFile", "Reports", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
-        <input type="File" name="file" id="file" value="Choose File" />
+        <input type="File" name="file" id="file" value="Choose File" accept="@ViewBag.UserMsg" />
         <br>
         <br>
         <button type="submit">Upload</button>
-        }
-    </div>
+    }
+</div>
 
-@if (null != ViewBag.Processed && (bool)ViewBag.Processed == true) {
+@if (null != ViewBag.Processed && (bool)ViewBag.Processed == true)
+{
     <script>
         window.close();
     </script>

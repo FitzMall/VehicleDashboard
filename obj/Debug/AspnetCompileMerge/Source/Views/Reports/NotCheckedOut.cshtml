@@ -18,6 +18,7 @@
     var locations = Model.WebsiteUsedInventory.Select(x => x.V_loc).Distinct().OrderBy(X => X).ToList();
 
     var NCOd_Vehicles = Model.WebsiteUsedInventory.FindAll(x => x.FitzWayCheckedOut == 0);
+    string FitzCheckoutID = "";
 
     if (Model.Location != null && Model.Location != "ALL")
     {
@@ -78,6 +79,7 @@
                     <th>List Amt</th>
                     <th>Status</th>
                     <th>Style Id</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -85,30 +87,46 @@
                 {
                     var vehicleDetails = Model.AllUsedInventory.Find(x => x.vin == vehicle.V_Vin);
 
-                    if (vehicleDetails != null) { 
+                    if (vehicleDetails != null)
+                    {
 
-                    
-                            <tr>
-                                <td>@vehicle.V_loc</td>
-                
-                                @if (vehicle.V_styleid != "0")
-                                {
-                                    <td><a href="@applicationPath/Chrome/Vehicle/?VIN=@vehicle.V_Vin&Chromed=true" target="_blank">@vehicle.V_stock</a></td>
-                                }
-                                else if (vehicle.V_styleid == "0")
-                                {
-                                    <td><a href="@applicationPath/Chrome/ChromeNoStyle/?VIN=@vehicle.V_Vin" target="_blank">@vehicle.V_stock</a></td>
-                                }
-                        
-                                <td>@vehicle.V_Year</td>
-                                <td>@vehicle.V_MakeName</td>
-                                <td>@vehicle.V_ModelName</td>
-                                <td>@vehicleDetails.daysinv</td>
-                                <td>@vehicleDetails.list_amt.ToString("C", nfi)</td>
-                                <td>@vehicleDetails.status</td>
-                                <td>@vehicle.V_styleid</td>
-                            </tr>
+                        var checkoutID = Model.FitzwayCheckoutIDs.Find(x => x.VIN == vehicle.V_Vin);
+
+                        FitzCheckoutID = "0";
+                        if (checkoutID != null)
+                        {
+                            FitzCheckoutID = checkoutID.ID.ToString();
                         }
+
+
+                <tr>
+                    <td>@vehicle.V_loc</td>
+
+                    @if (vehicle.V_styleid != "0")
+                    {
+                        <td><a href="@applicationPath/Chrome/Vehicle/?VIN=@vehicle.V_Vin&Chromed=true" target="_blank">@vehicle.V_stock</a></td>
+                    }
+                    else if (vehicle.V_styleid == "0")
+                    {
+                        <td><a href="@applicationPath/Chrome/ChromeNoStyle/?VIN=@vehicle.V_Vin" target="_blank">@vehicle.V_stock</a></td>
+                    }
+
+                    <td>@vehicle.V_Year</td>
+                    <td>@vehicle.V_MakeName</td>
+                    <td>@vehicle.V_ModelName</td>
+                    <td>@vehicleDetails.daysinv</td>
+                    <td>@vehicleDetails.list_amt.ToString("C", nfi)</td>
+                    <td>@vehicleDetails.status</td>
+                    <td>@vehicle.V_styleid</td>
+
+                    @if (FitzCheckoutID != "0")
+                    {
+                        <td><a href="//jjfserver/FitzwayCheckout/Inspection/GetItem?ID=@FitzCheckoutID&type=UsedVehicle" target="_blank">Finish</a></td>
+                    } else {
+                        <td><a href="//jjfserver/FitzwayCheckout/Inspection/" target="_blank">Start</a></td>
+                    }
+                </tr>
+                    }
                 }
             </tbody>
         </table>
@@ -118,36 +136,36 @@
 @section scripts
 {
     <script type="text/javascript">
-            $(document).ready(function () {
-                $('#table-NCOd_').DataTable({
-                    searching: true,
-                    dom: 'Bfrti',
-                    pageLength: -1,
-                    buttons: [
-                        {
-                            extend: 'copyHtml5', footer: true,
-                        },
-                        {
-                            extend: 'excelHtml5', footer: true,
-                        },
-                        {
-                            extend: 'pdfHtml5', footer: true,
-                            orientation: 'landscape'
-                        },
-                        {
-                            extend: 'print', footer: true,
-                            orientation: 'landscape'
-                        }
-                    ]
-                    //,
-                    //columnDefs: [
-                    //  { type: 'any-number', targets: [18, 19, 20, 21, 22, 23, 24,25,26] },
-                    //  { type: 'date-us', targets: [6] }
-                    //]
-
-                });
+        $(document).ready(function () {
+            $('#table-NCOd_').DataTable({
+                searching: true,
+                dom: 'Bfrti',
+                pageLength: -1,
+                buttons: [
+                    {
+                        extend: 'copyHtml5', footer: true,
+                    },
+                    {
+                        extend: 'excelHtml5', footer: true,
+                    },
+                    {
+                        extend: 'pdfHtml5', footer: true,
+                        orientation: 'landscape'
+                    },
+                    {
+                        extend: 'print', footer: true,
+                        orientation: 'landscape'
+                    }
+                ]
+                //,
+                //columnDefs: [
+                //  { type: 'any-number', targets: [18, 19, 20, 21, 22, 23, 24,25,26] },
+                //  { type: 'date-us', targets: [6] }
+                //]
 
             });
+
+        });
 
     </script>
 }

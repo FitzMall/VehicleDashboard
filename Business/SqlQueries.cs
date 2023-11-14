@@ -13,8 +13,17 @@ namespace VehicleDashboard.Business
     {
 
 
+        //FitzWayCheckout
+        public static List<CheckoutIDByVIN> FitzWayCheckout_IDs()
+        {
+            var sqlGet = @"Select MetaDataValue7 AS VIN, ID from [Checklists].[dbo].[ChecklistRecord] WHERE Status = 1";
 
-        public static List<PDFsByVIN> ALL_1551and1550_Files()
+            var checkouts = SqlMapperUtil.SqlWithParams<CheckoutIDByVIN>(sqlGet, new { }, "FitzWayCheckout");
+
+            return checkouts;
+        }
+
+            public static List<PDFsByVIN> ALL_1551and1550_Files()
         {
               var sqlGet = "[FITZWAY].dbo.Get1550_51PDFCounts";
 
