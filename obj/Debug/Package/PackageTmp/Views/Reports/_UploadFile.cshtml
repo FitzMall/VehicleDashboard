@@ -7,7 +7,7 @@
 <div>
     @using (Html.BeginForm("_UploadFile", "Reports", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
-        <input type="File" name="file" id="file" value="Choose File" accept="@ViewBag.UserMsg" />
+        <input type="File" name="file" id="file" value="Choose File" accept=".pdf" />
         <br>
         <br>
         <button type="submit">Upload</button>

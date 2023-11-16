@@ -32,6 +32,9 @@
         }
     }
 
+//ChecklistRecord
+//htttp://jjfserver/FitzwayCheckout/Supervisor/ViewInspection/40549
+
 }
 
 @section CSS
@@ -121,9 +124,10 @@
 
                     @if (FitzCheckoutID != "0")
                     {
-                        <td><a href="//jjfserver/FitzwayCheckout/Inspection/GetItem?ID=@FitzCheckoutID&type=UsedVehicle" target="_blank">Finish</a></td>
+                        <td><a href="http://jjfserver/FitzwayCheckout/Supervisor/ViewInspection/@FitzCheckoutID" target="_blank">Finish</a></td>
                     } else {
-                        <td><a href="//jjfserver/FitzwayCheckout/Inspection/" target="_blank">Start</a></td>
+                        <td><a href="http://jjfserver/FitzwayCheckout/Inspection" target="_blank">Start</a></td>
+
                     }
                 </tr>
                     }
