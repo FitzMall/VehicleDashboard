@@ -6,12 +6,70 @@ using System.Web;
 using System.Web.Mvc;
 using System.Linq;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace VehicleDashboard.Business
 {
     public class SqlQueries
     {
 
+
+        public static string GetUserPermissions(string cookInput)
+        {
+             
+                //"name=David+Burroughs&password=daveb1&login=daveb1";
+
+            // Regular expression pattern
+            string pattern = @"name=([^&]+)&password=([^&]+)&login=([^&]+)";
+          
+            // Using Regex.Match to extract values
+            Match match = Regex.Match(cookInput, pattern);
+
+            if (match.Success)
+            {
+                string UserFullName = (match.Groups[1].Value);
+                string UserPassword = (match.Groups[2].Value);
+                string UserID =  (match.Groups[3].Value);
+                var sqlGet = @"[Checklists].dbo.GetCheckoutPermissions";
+                //GetCheckoutPermissions
+                var users = SqlMapperUtil.StoredProcWithParams<string>(sqlGet, new { parUSERID = UserID }, "FitzWayCheckout");
+                return users[0];
+            }
+            else
+            {
+                return "";
+            }
+
+        }
+
+
+        public static string GetUserRole(string cookInput)
+        {
+
+            // = "name=David+Burroughs&password=daveb1&login=daveb1";
+
+            // Regular expression pattern
+            string pattern = @"name=([^&]+)&password=([^&]+)&login=([^&]+)";
+          
+            // Using Regex.Match to extract values
+            Match match = Regex.Match(cookInput, pattern);
+
+            if (match.Success)
+            {
+                string UserFullName = (match.Groups[1].Value);
+                string UserPassword = (match.Groups[2].Value);
+                string UserID = (match.Groups[3].Value);
+                var sqlGet = @"[Checklists].dbo.GetCheckoutRole";
+                //GetCheckoutRole
+                var users = SqlMapperUtil.StoredProcWithParams<string>(sqlGet, new { parUSERID = UserID }, "FitzWayCheckout");
+                return users[0];
+            }
+            else
+            {
+                return "";
+            }
+
+        }
 
         //FitzWayCheckout
         public static List<CheckoutIDByVIN> FitzWayCheckout_IDs()
@@ -23,7 +81,17 @@ namespace VehicleDashboard.Business
             return checkouts;
         }
 
-            public static List<PDFsByVIN> ALL_1551and1550_Files()
+        //FitzWayCheckout
+        public static List<CheckoutIDByVIN> UserRank()
+        {
+            var sqlGet = @"Select MetaDataValue7 AS VIN, ID from [Checklists].[dbo].[ChecklistRecord] WHERE Status = 1";
+
+            var users = SqlMapperUtil.SqlWithParams<CheckoutIDByVIN>(sqlGet, new { }, "FitzWayCheckout");
+
+            return users;
+        }
+
+        public static List<PDFsByVIN> ALL_1551and1550_Files()
         {
               var sqlGet = "[FITZWAY].dbo.Get1550_51PDFCounts";
 

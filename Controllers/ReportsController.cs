@@ -110,7 +110,7 @@ namespace VehicleDashboard.Controllers
             }
 
             string UserCookie = Request.Cookies["user"].Value;
-            ViewBag.UserID = Business.SqlQueries.GetIVORYUserId(UserCookie);
+            ViewBag.UserRank = Business.SqlQueries.GetUserRole(UserCookie);
 
             usedVehicleDashboard.AllUsedInventory = Business.SqlQueries.GetAllUsedInventory();
             usedVehicleDashboard.WebsiteUsedInventory = Business.SqlQueries.GetWebsiteUsedInventory();
