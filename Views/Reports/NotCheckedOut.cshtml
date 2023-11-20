@@ -51,7 +51,7 @@
 
 <div class="row" style="border-bottom:1px solid #eee; margin-bottom:20px;">
     <div class="col-sm-12 col-md-10">
-        <h2>Vehicles Not Checked Out @RoleCheckout</h2>
+        <h2>Vehicles Not Checked Out</h2>
         <div class="row location-row">
             <div class="col-xs-12">
                 <h4>Locations:</h4>
@@ -103,59 +103,59 @@
                         }
 
 
-                        <tr>
-                            <td>@vehicle.V_loc</td>
+                <tr>
+                    <td>@vehicle.V_loc</td>
 
-                            @if (vehicle.V_styleid != "0")
-                            {
-                                <td><a href="@applicationPath/Chrome/Vehicle/?VIN=@vehicle.V_Vin&Chromed=true" target="_blank">@vehicle.V_stock</a></td>
-                            }
-                            else if (vehicle.V_styleid == "0")
-                            {
-                                <td><a href="@applicationPath/Chrome/ChromeNoStyle/?VIN=@vehicle.V_Vin" target="_blank">@vehicle.V_stock</a></td>
-                            }
+                    @if (vehicle.V_styleid != "0")
+                    {
+                        <td><a href="@applicationPath/Chrome/Vehicle/?VIN=@vehicle.V_Vin&Chromed=true" target="_blank">@vehicle.V_stock</a></td>
+                    }
+                    else if (vehicle.V_styleid == "0")
+                    {
+                        <td><a href="@applicationPath/Chrome/ChromeNoStyle/?VIN=@vehicle.V_Vin" target="_blank">@vehicle.V_stock</a></td>
+                    }
 
-                            <td>@vehicle.V_Year</td>
-                            <td>@vehicle.V_MakeName</td>
-                            <td>@vehicle.V_ModelName</td>
-                            <td>@vehicleDetails.daysinv</td>
-                            <td>@vehicleDetails.list_amt.ToString("C", nfi)</td>
-                            <td>@vehicleDetails.status</td>
-                            <td>@vehicle.V_styleid</td>
+                    <td>@vehicle.V_Year</td>
+                    <td>@vehicle.V_MakeName</td>
+                    <td>@vehicle.V_ModelName</td>
+                    <td>@vehicleDetails.daysinv</td>
+                    <td>@vehicleDetails.list_amt.ToString("C", nfi)</td>
+                    <td>@vehicleDetails.status</td>
+                    <td>@vehicle.V_styleid</td>
 
 
-                            @if (FitzCheckoutID != "")
-                            {
-                                if (RoleCheckout == "1")
-                                {
-                                    <td><a href="http://jjfserver/FitzwayCheckout/Supervisor/ViewInspection/@FitzCheckoutID" target="_blank">Finish</a></td>
-                                }
-                                else if (RoleCheckout == "3")
-                                {
-                                    <td><a href="http://jjfserver/FitzwayCheckout/Inspection/@FitzCheckoutID" target="_blank">Finish</a></td>
-                                }
-                                else
-                                {
-                                    <td></td>
-                                }
-                            }
-                            else
-                            {
-                                if (RoleCheckout == "1")
-                                {
-                                    <td><a href="http://jjfserver/FitzwayCheckout/Supervisor" target="_blank">Begin</a></td>
-                                }
-                                else if (RoleCheckout == "3")
-                                {
-                                    <td><a href="http://jjfserver/FitzwayCheckout/Inspection" target="_blank">Begin</a></td>
-                                }
-                                else
-                                {
-                                    <td></td>
-                                }
+                    @if (FitzCheckoutID != "0")
+                    {
+                        if (RoleCheckout == "1")
+                        {
+                            <td><a href="http://jjfserver/FitzwayCheckout/Supervisor/ViewInspection/@FitzCheckoutID" target="_blank">Sup.Finish</a></td>
+                        }
+                        else if (RoleCheckout == "3")
+                        {
+                            <td><a href="http://jjfserver/FitzwayCheckout/Inspection/GetItem?ID=@FitzCheckoutID&type=ChecklistRecord" target="_blank">Tech.Finish</a></td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                    }
+                    else
+                    {
+                        if (RoleCheckout == "1")
+                        {
+                            <td></td>
+                        }
+                        else if (RoleCheckout == "3")
+                        {
+                            <td></td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
 
-                            }
-                        </tr>
+                    }
+                </tr>
                     }
                 }
             </tbody>

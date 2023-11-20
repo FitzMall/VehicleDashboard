@@ -51,7 +51,7 @@
 
 <div class="row" style="border-bottom:1px solid #eee; margin-bottom:20px;">
     <div class="col-sm-12 col-md-10">
-        <h2>Vehicles Not Checked Out @RoleCheckout</h2>
+        <h2>Vehicles Not Checked Out</h2>
         <div class="row location-row">
             <div class="col-xs-12">
                 <h4>Locations:</h4>
@@ -123,18 +123,37 @@
                     <td>@vehicleDetails.status</td>
                     <td>@vehicle.V_styleid</td>
 
-                    
-                    @if (RoleCheckout == "1")
+
+                    @if (FitzCheckoutID != "0")
                     {
-                        <td><a href="http://jjfserver/FitzwayCheckout/Supervisor/ViewInspection/@FitzCheckoutID" target="_blank">@FitzCheckoutID</a></td>
-                    }
-                    else if (RoleCheckout == "3")
-                    {
-                        <td><a href="http://jjfserver/FitzwayCheckout/Inspection/@FitzCheckoutID" target="_blank">@FitzCheckoutID</a></td>
+                        if (RoleCheckout == "1")
+                        {
+                            <td><a href="http://jjfserver/FitzwayCheckout/Supervisor/ViewInspection/@FitzCheckoutID" target="_blank">Sup.Finish</a></td>
+                        }
+                        else if (RoleCheckout == "3")
+                        {
+                            <td><a href="http://jjfserver/FitzwayCheckout/Inspection/GetItem?ID=@FitzCheckoutID&type=ChecklistRecord" target="_blank">Tech.Finish</a></td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
                     }
                     else
                     {
-                        <td></td>
+                        if (RoleCheckout == "1")
+                        {
+                            <td></td>
+                        }
+                        else if (RoleCheckout == "3")
+                        {
+                            <td></td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+
                     }
                 </tr>
                     }

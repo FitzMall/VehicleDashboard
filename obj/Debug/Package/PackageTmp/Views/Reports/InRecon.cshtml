@@ -89,27 +89,34 @@
                     if (vehicleDetails.status == 1 || vehicleDetails.status == 2)
                     {
 
-                        <tr>
-                            <td>@vehicle.VehicleLocation</td>
-                
-                            @if (vehicle.StyleId > 0)
-                            {
-                                <td><a href="@applicationPath/Chrome/Vehicle/?VIN=@vehicle.VIN&Chromed=true" target="_blank">@vehicle.StockNumber</a></td>
-                            }
-                            else if (vehicle.StyleId == 0)
-                            {
-                                <td><a href="@applicationPath/Chrome/ChromeNoStyle/?VIN=@vehicle.VIN" target="_blank">@vehicle.StockNumber</a></td>
-                            }
-                        
-                            <td>@vehicle.Year</td>
-                            <td>@vehicle.Make</td>
-                            <td>@vehicle.Model</td>
-                            <td>@vehicleDetails.daysinv</td>
-                            <td>@vehicleDetails.list_amt.ToString("C", nfi)</td>
-                            <td>@vehicleDetails.status</td>
-                            <td>@vehicle.StyleId</td>
-                            <td>@vehicle.ManagerSpecial</td>
-                        </tr>
+                <tr>
+                    <td>@vehicle.VehicleLocation</td>
+
+                    @if (vehicle.StyleId > 0)
+                    {
+                        <td><a href="@applicationPath/Chrome/Vehicle/?VIN=@vehicle.VIN&Chromed=true" target="_blank">@vehicle.StockNumber</a></td>
+                    }
+                    else if (vehicle.StyleId == 0)
+                    {
+                        <td><a href="@applicationPath/Chrome/ChromeNoStyle/?VIN=@vehicle.VIN" target="_blank">@vehicle.StockNumber</a></td>
+                    }
+
+                    <td>@vehicle.Year</td>
+                    <td>@vehicle.Make</td>
+                    <td>@vehicle.Model</td>
+                    <td>@vehicleDetails.daysinv</td>
+                    <td>@vehicleDetails.list_amt.ToString("C", nfi)</td>
+                    <td>@vehicleDetails.status</td>
+                    <td>@vehicle.StyleId</td>
+                    @if (vehicle.ManagerSpecial > 0)
+                    {
+                        <td>YES</td>
+                    }
+                    else
+                    {
+                        <td> </td>
+                    }
+                </tr>
                     }
                 }
             </tbody>

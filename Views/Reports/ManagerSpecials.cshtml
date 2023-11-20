@@ -138,7 +138,14 @@
                                 <td>@vehicle.ManagerSpecialStartDate.ToShortDateString()</td>
                                 <td>@vehicle.ManagerSpecialEndDate.ToShortDateString()</td>
                                 <td>@vehicle.StyleId</td>
-                                <td>@vehicle.InReconditioning</td>
+                                @if (vehicle.InReconditioning > 0)
+                                {
+                                    <td>RECON</td>
+                                }
+                                else
+                                {
+                                    <td> </td>
+                                }
                             </tr>
 
                         }
@@ -167,13 +174,20 @@
                             <td>@vehicle.ManagerSpecialStartDate.ToShortDateString()</td>
                             <td>@vehicle.ManagerSpecialEndDate.ToShortDateString()</td>
                             <td>@vehicle.StyleId</td>
-                            <td>@vehicle.InReconditioning</td>
+                            @if (vehicle.InReconditioning > 0)
+                            {
+                                <td>RECON</td>
+                            }
+                            else
+                            {
+                                <td> </td>
+                            }
                         </tr>
 
                     }
 
                 }
-               
+
             </tbody>
         </table>
     </div>
@@ -182,36 +196,36 @@
 @section scripts
 {
     <script type="text/javascript">
-            $(document).ready(function () {
-                $('#table-InRecon').DataTable({
-                    searching: true,
-                    dom: 'Bfrti',
-                    pageLength: -1,
-                    buttons: [
-                        {
-                            extend: 'copyHtml5', footer: true,
-                        },
-                        {
-                            extend: 'excelHtml5', footer: true,
-                        },
-                        {
-                            extend: 'pdfHtml5', footer: true,
-                            orientation: 'landscape'
-                        },
-                        {
-                            extend: 'print', footer: true,
-                            orientation: 'landscape'
-                        }
-                    ]
-                    ,
-                    columnDefs: [
-                      { type: 'any-number', targets: [2,5,6,7,10] },
-                      { type: 'date-us', targets: [8,9] }
-                    ]
-
-                });
+        $(document).ready(function () {
+            $('#table-InRecon').DataTable({
+                searching: true,
+                dom: 'Bfrti',
+                pageLength: -1,
+                buttons: [
+                    {
+                        extend: 'copyHtml5', footer: true,
+                    },
+                    {
+                        extend: 'excelHtml5', footer: true,
+                    },
+                    {
+                        extend: 'pdfHtml5', footer: true,
+                        orientation: 'landscape'
+                    },
+                    {
+                        extend: 'print', footer: true,
+                        orientation: 'landscape'
+                    }
+                ]
+                ,
+                columnDefs: [
+                    { type: 'any-number', targets: [2, 5, 6, 7, 10] },
+                    { type: 'date-us', targets: [8, 9] }
+                ]
 
             });
+
+        });
 
     </script>
 }
