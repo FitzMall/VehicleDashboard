@@ -121,7 +121,14 @@
                                 <td>@vehicleDetails.status</td>
                                 <td>@vehicle.StyleId</td>
                                 <td>@vehicle.FuelType</td>
-                                <td>@vehicle.ManagerSpecial</td>
+                                @if (vehicle.ManagerSpecial > 0)
+                                {
+                                    <td>YES</td>
+                                }
+                                else
+                                {
+                                    <td> </td>
+                                }
                             </tr>
 
                         }
@@ -159,7 +166,14 @@
                                     <td>@vehicleDetails.status</td>
                                     <td>@vehicle.StyleId</td>
                                     <td>@vehicle.FuelType</td>
-                                    <td>@vehicle.ManagerSpecial</td>
+                                    @if (vehicle.ManagerSpecial > 0)
+                                    {
+                                        <td>YES</td>
+                                    }
+                                    else
+                                    {
+                                        <td> </td>
+                                    }
                                 </tr>
                             }
 
@@ -169,7 +183,7 @@
                     }
                 }
 
-            
+
 
             </tbody>
         </table>
