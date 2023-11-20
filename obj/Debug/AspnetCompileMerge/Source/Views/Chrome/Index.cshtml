@@ -344,7 +344,7 @@
                     usedMissing1551 += Model.UsedVehicleDashboard.PDFs_1550_1551.Find(x => x.VIN == vehicle.vin).Counter1551;
                 }
 
-                if (vehicle.status !=1 && vehicle.status != 2 && vehicle.status != 4)
+                if (vehicle.status ==1 || vehicle.status == 2 || vehicle.status == 4)
                 {
                     usedFuelType += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.FuelType == null && x.Condition == "USED");
                 }
@@ -415,7 +415,7 @@
                     </div>
                 </div>
 
-                  <div class="col-xs-2 text-center">
+                <div class="col-xs-2 text-center">
                     <h4><a href="@applicationPath/Reports/FuelType?Location=@Model.Location&Condition=USED" target="_blank">Missing Fuel Type</a></h4>
                 </div>
             </div>
