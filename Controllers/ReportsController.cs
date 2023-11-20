@@ -8,6 +8,8 @@ using VehicleDashboard.Models;
 
 namespace VehicleDashboard.Controllers
 {
+
+
     public class ReportsController : Controller
     {
         // GET: Reports
@@ -51,8 +53,9 @@ namespace VehicleDashboard.Controllers
                 {
                     sw.Write(data, 0, data.Length);
                 }
-                ViewBag.Processed = true;
+               
             }
+            ViewBag.Processed = true;
             return View("");
         }
         public ActionResult Handyman(string Location, string NoPDF)
@@ -105,6 +108,9 @@ namespace VehicleDashboard.Controllers
             {
                 Location = "ALL";
             }
+
+            string UserCookie = Request.Cookies["user"].Value;
+            ViewBag.UserID = Business.SqlQueries.GetIVORYUserId(UserCookie);
 
             usedVehicleDashboard.AllUsedInventory = Business.SqlQueries.GetAllUsedInventory();
             usedVehicleDashboard.WebsiteUsedInventory = Business.SqlQueries.GetWebsiteUsedInventory();
