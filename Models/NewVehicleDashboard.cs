@@ -5,12 +5,15 @@ using System.Web;
 
 namespace VehicleDashboard.Models
 {
+ 
+    
     public class NewVehicleDashboard
     {
         public List<CSV_vehicleNew> AllNewInventory { get; set; }
         public List<AllInventory> WebsiteNewInventory { get; set; }
         public List<VehicleData> VehicleData { get; set; }
         public string Location { get; set; }
+        public List<PhotosByVin> Photos { get; set; }
     }
 
     public class CSV_vehicleNew
@@ -100,5 +103,7 @@ namespace VehicleDashboard.Models
 	    public string cincentiveend { get; set; }
 	    public string rimastKEY { get; set; }
         public DateTime lastupdate { get; set; }
+
+        public int Photos { get; set; }
     }
 }

@@ -5,33 +5,158 @@ using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
 using System.Linq;
+using System.IO;
+using System.Text.RegularExpressions;
 
 namespace VehicleDashboard.Business
 {
     public class SqlQueries
     {
-        
+
+
+        public static string GetUserPermissions(string cookInput)
+        {
+             
+                //"name=David+Burroughs&password=daveb1&login=daveb1";
+
+            // Regular expression pattern
+            string pattern = @"name=([^&]+)&password=([^&]+)&login=([^&]+)";
+          
+            // Using Regex.Match to extract values
+            Match match = Regex.Match(cookInput, pattern);
+
+            if (match.Success)
+            {
+                string UserFullName = (match.Groups[1].Value);
+                string UserPassword = (match.Groups[2].Value);
+                string UserID =  (match.Groups[3].Value);
+                var sqlGet = @"[Checklists].dbo.GetCheckoutPermissions";
+                //GetCheckoutPermissions
+                var users = SqlMapperUtil.StoredProcWithParams<string>(sqlGet, new { parUSERID = UserID }, "FitzWayCheckout");
+                return users[0];
+            }
+            else
+            {
+                return "";
+            }
+
+        }
+
+
+        public static string GetUserRole(string cookInput)
+        {
+
+            // = "name=David+Burroughs&password=daveb1&login=daveb1";
+
+            // Regular expression pattern
+            string pattern = @"name=([^&]+)&password=([^&]+)&login=([^&]+)";
+          
+            // Using Regex.Match to extract values
+            Match match = Regex.Match(cookInput, pattern);
+
+            if (match.Success)
+            {
+                string UserFullName = (match.Groups[1].Value);
+                string UserPassword = (match.Groups[2].Value);
+                string UserID = (match.Groups[3].Value);
+                var sqlGet = @"[Checklists].dbo.GetCheckoutRole";
+                //GetCheckoutRole
+                var users = SqlMapperUtil.StoredProcWithParams<string>(sqlGet, new { parUSERID = UserID }, "FitzWayCheckout");
+                return users[0];
+            }
+            else
+            {
+                return "";
+            }
+
+        }
+
+        //FitzWayCheckout
+        public static List<CheckoutIDByVIN> FitzWayCheckout_IDs()
+        {
+            var sqlGet = @"Select MetaDataValue7 AS VIN, ID from [Checklists].[dbo].[ChecklistRecord] WHERE Status = 1";
+
+            var checkouts = SqlMapperUtil.SqlWithParams<CheckoutIDByVIN>(sqlGet, new { }, "FitzWayCheckout");
+
+            return checkouts;
+        }
+
+        //FitzWayCheckout
+        public static List<CheckoutIDByVIN> UserRank()
+        {
+            var sqlGet = @"Select MetaDataValue7 AS VIN, ID from [Checklists].[dbo].[ChecklistRecord] WHERE Status = 1";
+
+            var users = SqlMapperUtil.SqlWithParams<CheckoutIDByVIN>(sqlGet, new { }, "FitzWayCheckout");
+
+            return users;
+        }
+
+        public static List<PDFsByVIN> ALL_1551and1550_Files()
+        {
+              var sqlGet = "[FITZWAY].dbo.Get1550_51PDFCounts";
+
+                var allfiles = SqlMapperUtil.StoredProcWithParams<PDFsByVIN>(sqlGet, new { }, "Rackspace");
+
+                return allfiles;
+
+            }
+
+
+            public static int Get_1551_Files(string vin)
+        {
+
+            string[] allfiles = Directory.GetFiles("j:/inetpub/wwwroot/production/FITZWAY/Pictures/UCPDFS/", "151-" + vin.Trim() + ".pdf", SearchOption.TopDirectoryOnly);
+
+            var retval = allfiles.Count();
+            return retval;
+        }
+
+        public static int Get_1550_Files(string vin)
+        {
+            //101-
+             string[] allfiles = Directory.GetFiles("//192.168.100.16/c$/inetpub/wwwroot/production/FITZWAY/Pictures/UCPDFS/", "101-" + vin.Trim() + ".pdf", SearchOption.TopDirectoryOnly);
+
+            var retval = allfiles.Count();
+
+            return retval;
+        }
         public static List<CSV_vehicleUSED> GetAllUsedInventory()
         {        
             var sqlGet = @"Select * from [JUNK].[dbo].[CSV_vehicleUSED]";
 
             var vehicles = SqlMapperUtil.SqlWithParams<CSV_vehicleUSED>(sqlGet, new { }, "JJFServer");
+            var photos = SqlMapperUtil.StoredProcWithParams<PhotosByVin>("GetPhotoNumberByVIN", new { }, "Rackspace");
+            foreach (var thisCar in vehicles)
+            {
+                var allThisCarPhotos = photos.FindAll(x => x.VIN == thisCar.vin);
+                thisCar.Photos = allThisCarPhotos.Sum(x => x.ImagesSum);
+              }
             return vehicles;
         }
 
         public static List<AllInventory> GetWebsiteUsedInventory()
         {
-            var sqlGet = @"Select * from [FITZWAY].dbo.[AllInventory] where V_nu = 'USED' and V_Certified <> ''";
+            var sqlGet = "[FITZWAY].dbo.UsedInventory_VehicleDashboard";
 
-            var vehicles = SqlMapperUtil.SqlWithParams<AllInventory>(sqlGet, new { }, "JJFServer");
-            return vehicles;
+            var vehicles = SqlMapperUtil.StoredProcWithParams<AllInventory>(sqlGet, new { }, "JJFServer");
+         
+              return vehicles;
+
         }
+
+        //UsedInventory_VehicleDashboard
 
         public static List<CSV_vehicleNew> GetAllNewInventory()
         {
             var sqlGet = @"Select * from [JUNK].[dbo].[CSV_vehicleNew]  where [year] >= DATEADD(year,-2,GETDATE())";
 
             var vehicles = SqlMapperUtil.SqlWithParams<CSV_vehicleNew>(sqlGet, new { }, "JJFServer");
+            var photos = SqlMapperUtil.StoredProcWithParams<PhotosByVin>("GetPhotoNumberByVIN", new { }, "Rackspace");
+            foreach (var thisCar in vehicles)
+            {
+                var allThisCarPhotos = photos.FindAll(x => x.VIN == thisCar.vin);
+                thisCar.Photos = allThisCarPhotos.Sum(x => x.ImagesSum);
+            }
             return vehicles;
         }
 
@@ -40,17 +165,46 @@ namespace VehicleDashboard.Business
             var sqlGet = @"Select * from [FITZWAY].dbo.[AllInventory] where V_nu = 'NEW'";
 
             var vehicles = SqlMapperUtil.SqlWithParams<AllInventory>(sqlGet, new { }, "JJFServer");
+ 
             return vehicles;
         }
 
-        public static List<VehicleData> GetAllChromedVehicles()
+        public static List<PhotosByVin> GetPhotoNumberByVIN()
         {
-            var results = SqlMapperUtil.StoredProcWithParams<VehicleData>("sp_GetChromedInventory", new {  }, "ChromeData");
 
+        //  =============================================
+        // Author:		DAVID BURROUGHS
+        // Create date: 9 / 13 / 2023
+        //  Description: Photos in Inventory for Vehicle Dashboard (Vehicle Options)
+        //  =============================================
+
+           var results = SqlMapperUtil.StoredProcWithParams<PhotosByVin>("GetPhotoNumberByVIN", new {  }, "Rackspace");
             return results;
 
         }
 
+
+        public static List<PhotosByVin> GetPhotoNumberByVIN_NEW()
+        {
+            var results = SqlMapperUtil.StoredProcWithParams<PhotosByVin>("GetPhotoNumberByVIN_NEW", new { }, "Rackspace");
+            return results;
+
+        }
+
+        public static List<PhotosByVin> GetPhotoNumberByVIN_USED()
+        {
+           var results = SqlMapperUtil.StoredProcWithParams<PhotosByVin>("GetPhotoNumberByVIN_USED", new { }, "Rackspace");
+            return results;
+
+        }
+
+        public static List<VehicleData> GetAllChromedVehicles()
+        {
+            var results = SqlMapperUtil.StoredProcWithParams<VehicleData>("sp_GetChromedInventory", new { }, "ChromeData");
+
+            return results;
+
+        }
 
         public static VehicleData GetChromeVehicle(string vin)
         {
@@ -153,6 +307,14 @@ namespace VehicleDashboard.Business
             var results = SqlMapperUtil.SqlWithParams<InStockVehicle>("Select V_Vin as VIN, v_Stock as StockNumber, V_xrefid as XrefId from fitzway.dbo.AllInventoryFM where v_vin <> 'XX' and v_vin not in (Select VIN from ChromeDataCVD.dbo.Vehicle)", "", "JJFServer");
             return results;
         }
+
+        public static List<InStockVehicle> HandymanVehicles()
+        {
+            var results = SqlMapperUtil.SqlWithParams<InStockVehicle>("Select [sl_VehicleVIN] as VIN, [sl_VehicleStockNumber] as StockNumber, [sl_VehicleDealNo] as XrefId from SalesCommission.dbo.saleslog where sl_Certificationlevel = 'hdm'", "", "SalesCommission");
+            return results;
+        }
+
+        
         public static InStockVehicle GetInStockVehicle(string VIN)
         {
             var result = new InStockVehicle();

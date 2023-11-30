@@ -1,0 +1,831 @@
+﻿@model VehicleDashboard.Models.VehicleDataModel
+
+@{
+    ViewBag.Title = "Vehicles Options";
+    var applicationPath = Request.ApplicationPath;
+
+    if (applicationPath == "/")
+    {
+        applicationPath = "";
+    }
+
+}
+
+<style type="text/css">
+    .quick-search {
+        background-color: #f9f9f9;
+        margin: 0px 0 0px 0px;
+        padding: 10px;
+    }
+
+    .row-divider {
+        margin: 15px;
+    }
+</style>
+
+<h2>Vehicle Options</h2>
+
+@using (Html.BeginForm("Vehicle", "Chrome", FormMethod.Post, new { id = "VehicleDetail" }))
+{
+    <input type="hidden" name="vin" value="@Model.VehicleData.VIN" />
+    <input type="hidden" name="stock" value="@Model.VehicleData.StockNumber" />
+    <input type="hidden" name="condition" value="@Model.VehicleData.Condition" />
+    <input type="hidden" name="rdoFuelType" id="FuelType" value="@Model.VehicleData.FuelType" />
+
+    <div class="row quick-search">
+        @if (Model.VehicleData != null && Model.VehicleData.Condition == "USED")
+        {
+            if (Model.VehicleData.VehicleLocation != null && Model.VehicleData.VehicleLocation != "")
+            {
+                Model.VehicleData.VehicleLocation = Model.VehicleData.VehicleLocation.Substring(0, 3);
+            }
+            <div class="col-sm-3">
+                <h4>Certifications</h4>
+
+                @if (Model.VehicleData.Make.ToUpper() == "TOYOTA" && (Model.VehicleData.VehicleLocation == "LFT" || Model.VehicleData.VehicleLocation == "LFM" || Model.VehicleData.VehicleLocation == "FTO"))
+                {
+                    @:<input type="radio" name="rdoCertification" id="CPO" value="F911" @(Model.VehicleData.CertificationLevelCode.Trim() == "F911" ? "checked" : "") /> Toyota Certified Used
+                    @:<br />
+            }
+
+                @if (Model.VehicleData.Make.ToUpper() == "VOLKSWAGEN" && (Model.VehicleData.VehicleLocation == "FOC" || Model.VehicleData.VehicleLocation == "FCG" || Model.VehicleData.VehicleLocation == "FSS"))
+                {
+                    @:<input type="radio" name="rdoCertification" id="CPO" value="F924" @(Model.VehicleData.CertificationLevelCode.Trim() == "F924" || Model.VehicleData.CertificationLevelCode.Trim() == "F909" ? "checked" : "") /> VW Certified Pre-Owned
+                    @:<br />
+            }
+
+                @if (Model.VehicleData.Make.ToUpper() == "GENESIS" && (Model.VehicleData.VehicleLocation == "LFO" || Model.VehicleData.VehicleLocation == "CDO" || Model.VehicleData.VehicleLocation == "CHY" || Model.VehicleData.VehicleLocation == "COC"))
+                {
+                    @:<input type="radio" name="rdoCertification" id="CPO" value="F925" @(Model.VehicleData.CertificationLevelCode.Trim() == "F925" ? "checked" : "") /> Genesis Certified Pre-Owned
+                    @:<br />
+            }
+
+                @if (Model.VehicleData.Make.ToUpper() == "CADILLAC" && (Model.VehicleData.VehicleLocation == "FHG" || Model.VehicleData.VehicleLocation == "FCG" || Model.VehicleData.VehicleLocation == "FOC" || Model.VehicleData.VehicleLocation == "FSS"))
+                {
+                    @:<input type="radio" name="rdoCertification" id="CPO" value="F922" @(Model.VehicleData.CertificationLevelCode.Trim() == "F922" ? "checked" : "") /> Cadillac Certified Pre-Owned
+                    @:<br />
+            }
+
+                @if (Model.VehicleData.Make.ToUpper() == "HYUNDAI" && (Model.VehicleData.VehicleLocation == "LFO" || Model.VehicleData.VehicleLocation == "CDO" || Model.VehicleData.VehicleLocation == "CHY" || Model.VehicleData.VehicleLocation == "COC"))
+                {
+                    @:<input type="radio" name="rdoCertification" id="CPO" value="F908" @(Model.VehicleData.CertificationLevelCode.Trim() == "F908" ? "checked" : "") /> Hyundai Certified Pre-Owned
+                    @:<br />
+            }
+
+                @if (Model.VehicleData.Make.ToUpper() == "SUBARU" && (Model.VehicleData.VehicleLocation == "LFO" || Model.VehicleData.VehicleLocation == "FBS" || Model.VehicleData.VehicleLocation == "FBC" || Model.VehicleData.VehicleLocation == "CSS" || Model.VehicleData.VehicleLocation == "COC"))
+                {
+                    @:<input type="radio" name="rdoCertification" id="CPO" value="F912" @(Model.VehicleData.CertificationLevelCode.Trim() == "F912" ? "checked" : "") /> Subaru Certified Pre-Owned
+                    @:<br />
+            }
+
+                @if (Model.VehicleData.Make.ToUpper() == "MAZDA" && (Model.VehicleData.VehicleLocation == "FCG" || Model.VehicleData.VehicleLocation == "FMM" || Model.VehicleData.VehicleLocation == "FSS"))
+                {
+                    @:<input type="radio" name="rdoCertification" id="CPO" value="F923" @(Model.VehicleData.CertificationLevelCode.Trim() == "F923" ? "checked" : "") /> Mazda Certified Pre-Owned
+                    @:<br />
+            }
+
+                @if ((Model.VehicleData.Make.ToUpper() == "CHEVROLET" || Model.VehicleData.Make.ToUpper() == "GMC" || Model.VehicleData.Make.ToUpper() == "BUICK") && (Model.VehicleData.VehicleLocation == "FCG" || Model.VehicleData.VehicleLocation == "FHG" || Model.VehicleData.VehicleLocation == "FBN" || Model.VehicleData.VehicleLocation == "FSS"))
+                {
+                    @:<input type="radio" name="rdoCertification" id="CPO" value="F906" @(Model.VehicleData.CertificationLevelCode.Trim() == "F906" ? "checked" : "") /> GM Certified Pre-Owned
+                    @:<br />
+            }
+
+                @if ((Model.VehicleData.Make.ToUpper() == "CHRYSLER" || Model.VehicleData.Make.ToUpper() == "DODGE" || Model.VehicleData.Make.ToUpper() == "JEEP" || Model.VehicleData.Make.ToUpper() == "RAM") && (Model.VehicleData.VehicleLocation == "FHT" || Model.VehicleData.VehicleLocation.Substring(0,3) == "FLP" || Model.VehicleData.VehicleLocation == "CJE" || Model.VehicleData.VehicleLocation == "COC"))
+                {
+                    @:<input type="radio" name="rdoCertification" id="CPO" value="F907" @(Model.VehicleData.CertificationLevelCode.Trim() == "F907" ? "checked" : "") /> Chrysler Certified Pre-Owned
+                    @:<br />
+            }
+
+                <input type="radio" name="rdoCertification" id="CPO" value="F914" @(Model.VehicleData.CertificationLevelCode.Trim() == "F914" ? "checked" : "") /> FitzWay Premium Used<br />
+                <input type="radio" name="rdoCertification" id="CPO" value="F910" @(Model.VehicleData.CertificationLevelCode.Trim() == "F910" ? "checked" : "") /> FitzWay Select Used<br />
+                <input type="radio" name="rdoCertification" id="CPO" value="F915" @(Model.VehicleData.CertificationLevelCode.Trim() == "F915" ? "checked" : "") /> FitzWay Value Used<br />
+
+                <input type="radio" name="rdoCertification" id="CPO" value="F917" @(Model.VehicleData.CertificationLevelCode.Trim() == "F917" ? "checked" : "") /> FitzWay HandyMan Fixer-Upper Special (FL)<br />
+                <input type="radio" name="rdoCertification" id="CPO" value="F918" @(Model.VehicleData.CertificationLevelCode.Trim() == "F918" ? "checked" : "") /> FitzWay HandyMan Fixer-Upper Special (PA)<br />
+                <input type="radio" name="rdoCertification" id="CPO" value="F916" @(Model.VehicleData.CertificationLevelCode.Trim() == "F916" ? "checked" : "") /> FitzWay HandyMan Fixer-Upper Special (MD)<br />
+
+
+            </div>
+        }
+        <div class="col-sm-3">
+            <h4>Company Options</h4>
+@if (Model.VehicleData != null && Model.VehicleData.Condition == "USED")
+{
+            <input type="checkbox" name="chkInRecon" id="chkInRecon" @(Model.VehicleData.InReconditioning == 1 ? "checked" : "") /> @:In Reconditioning<br />
+}
+            <input type="checkbox" name="chkMgrSpecial" id="chkMgrSpecial" onchange="showDates()" @(Model.VehicleData.ManagerSpecial == 1 ? "checked" : "") /> Manager Special<br />
+            
+            @{ 
+                var displayDates = "";
+                var disabled = "";
+
+                if(Model.VehicleData.ManagerSpecial == 0)
+                {
+                    //displayDates = " style=display:none; ";
+                    disabled = "disabled";
+                }
+            }
+            
+            <div class="row" id="special-dates" @displayDates>
+                <div class="col-xs-6">
+                    <h5>Manager Special Start Date:</h5>
+                    <input type="text" name="startDate" id="startDate" @disabled value="@(Model.VehicleData.ManagerSpecialStartDate.ToShortDateString() != "1/1/0001" && Model.VehicleData.ManagerSpecialStartDate.ToShortDateString() != "1/1/1900" ? Model.VehicleData.ManagerSpecialStartDate.ToShortDateString() : DateTime.Now.ToShortDateString() )" />
+                </div>
+                <div class="col-xs-6">
+                    <h5>Manager Special End Date:</h5>
+                    <input type="text" name="endDate" id="endDate" @disabled value="@(Model.VehicleData.ManagerSpecialEndDate.ToShortDateString() != "1/1/0001" && Model.VehicleData.ManagerSpecialEndDate.ToShortDateString() != "1/1/1900" ? Model.VehicleData.ManagerSpecialEndDate.ToShortDateString() : "" )" />
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2">
+        <h4>Fuel Type</h4>
+        <input type="radio" name="rdoFuelType" id="FuelType" value="Diesel" @(Model.VehicleData.FuelType == "Diesel" ? "checked" : "") /> Diesel<br />
+        <input type="radio" name="rdoFuelType" id="FuelType" value="Electric" @(Model.VehicleData.FuelType == "Electric" ? "checked" : "") /> Electric<br />
+        <input type="radio" name="rdoFuelType" id="FuelType" value="Gasoline" @(Model.VehicleData.FuelType == "Gasoline" ? "checked" : "") /> Gasoline<br />
+        <input type="radio" name="rdoFuelType" id="FuelType" value="Hybrid" @(Model.VehicleData.FuelType == "Hybrid" ? "checked" : "") /> Hybrid<br />
+        <input type="radio" name="rdoFuelType" id="FuelType" value="Plug-In Hybrid" @(Model.VehicleData.FuelType == "Plug-In Hybrid" ? "checked" : "") /> Plug-In Hybrid<br />
+    </div>
+    <div class="col-sm-4">
+        <h4>Dealer Installed Accessories</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="text" id="txtInstalledDesc-1" name="txtInstalledDesc-1" /></td>
+                    <td><input type="text" id="txtInstalledCost-1" name="txtInstalledCost-1" /></td>
+                </tr>
+
+            </tbody>
+        </table>
+
+
+    </div>
+
+    </div>
+<div class="row quick-search" style="margin-bottom:20px;">
+    <div class="col-sm-12">
+        <div class="row text-center" style="margin-top:10px;">
+            <input type="submit" class="btn btn-primary" value="Update Options" />
+
+            @if (Model.VehicleData != null)
+                {
+                <h5 class="text-center">Last Update: @Model.VehicleData.DateUpdated</h5>
+            }
+        </div>
+    </div>
+
+</div>
+}
+
+@if (Model != null && Model.VehicleData != null)
+{
+
+    <div class="row">
+        <div class="col-sm-3">
+            <h4>Vehicle Photo</h4>
+            @if (Model.VehicleImages != null && Model.VehicleImages.Count > 0)
+            {
+                <img src="@Model.VehicleImages[0].ImagePath" class="img-responsive" />
+            }
+
+            @{ 
+                var xrefId = "";
+
+                if(Model.VehicleData.XrefId != null && Model.VehicleData.XrefId != "")
+                {
+                    xrefId = Model.VehicleData.XrefId;
+                }
+                else
+                {
+                    xrefId = Model.VehicleData.VIN;
+                }
+            }
+
+            <a href="https://staging.fitzmall.com/Inventory/Detail/@xrefId" target="_blank">View on FitzMall</a>
+        </div>
+        <div class="col-sm-3">
+            <h4>Vehicle Information</h4>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-right">VIN:</td>
+                        <td class="text-left">@Model.VehicleData.VIN</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Stock Number:</td>
+                        <td class="text-left">@Model.VehicleData.StockNumber</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Year:</td>
+                        <td class="text-left">@Model.VehicleData.Year</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Make:</td>
+                        <td class="text-left">@Model.VehicleData.Make</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Model:</td>
+                        <td class="text-left">@Model.VehicleData.Model</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Model Id:</td>
+                        <td class="text-left">@Model.VehicleData.ModelId</td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+        <div class="col-sm-3">
+            <h4>Build Information</h4>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-right">Manufacturer:</td>
+                        <td class="text-left">@Model.VehicleData.Manufacturer</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Country:</td>
+                        <td class="text-left">@Model.VehicleData.Country</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Build Date:</td>
+                        <td class="text-left">@Model.VehicleData.BuildDate.ToShortDateString()</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Build MSRP:</td>
+                        <td class="text-left">@Model.VehicleData.BuildMSRP</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Build Source:</td>
+                        <td class="text-left">@Model.VehicleData.BuildSource</td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+        </div>
+        <div class="col-sm-3">
+            <h4>Exterior Color</h4>
+            @if (Model.ExteriorColorData != null)
+            {
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-right">Exterior Color Code:</td>
+                            <td class="text-left">@Model.ExteriorColorData.ColorCode</td>
+                            <td></td>
+                        </tr>
+                        
+                        <tr>
+                            <td class="text-right">Exterior Color:</td>
+                            <td class="text-left">@Model.ExteriorColorData.Description</td>
+                            <td style="background-color:@Model.ExteriorColorData.RGBHexValue">&nbsp;</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            }
+
+            <h4>Interior Color</h4>
+            @if (Model.InteriorColorData != null)
+                {
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-right">Interior Color Code:</td>
+                            <td class="text-left">@Model.InteriorColorData.ColorCode</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Interior Color:</td>
+                            <td class="text-left">@Model.InteriorColorData.Description</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            }
+        </div>
+
+    </div>
+
+    <div class="row-divider">
+        <hr />
+    </div>
+
+    <h4>Style Information</h4>
+                if (Model.StyleData != null && Model.StyleData.StyleId != 0)
+                {
+        <div class="row">
+            <div class="col-sm-3">
+
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-right">Style Id:</td>
+                            <td class="text-left">@Model.StyleData.StyleId</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Description:</td>
+                            <td class="text-left">@Model.StyleData.StyleDescription</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Trim:</td>
+                            <td class="text-left">@Model.StyleData.Trim</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Mfr Model Code:</td>
+                            <td class="text-left">@Model.StyleData.MFRModelCode</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Body Type:</td>
+                            <td class="text-left">@Model.StyleData.BodyType</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="col-sm-3">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-right">Drive Type:</td>
+                            <td class="text-left">@Model.StyleData.DriveType</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Segment:</td>
+                            <td class="text-left">@Model.StyleData.Segment</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Doors:</td>
+                            <td class="text-left">@Model.StyleData.Doors</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Base MSRP:</td>
+                            <td class="text-left">@Model.StyleData.BaseMSRP</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Destination Charge:</td>
+                            <td class="text-left">@Model.StyleData.DestinationCharge</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm-3">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+
+                        <tr>
+                            <td class="text-right">Standard Curb Weight:</td>
+                            <td class="text-left">@Model.StyleData.StandardCurbWeight</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Standard GVWR:</td>
+                            <td class="text-left">@Model.StyleData.StandardGVWR</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Standard Towing Capacity:</td>
+                            <td class="text-left">@Model.StyleData.StandardTowingCapacity</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Wheelbase:</td>
+                            <td class="text-left">@Model.StyleData.Wheelbase</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Country:</td>
+                            <td class="text-left">@Model.StyleData.Country</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+    else if (Model.PossibleStyleData != null)
+    {
+        <div class="row quick-search">
+            <div class="col-sm-12">
+                <h5>This vehicle's Style could not be determined, please select one below:</h5>
+
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Style Id</th>
+                            <th>Description</th>
+                            <th>Trim</th>
+                            <th>Body Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var style in Model.PossibleStyleData)
+                        {
+                            <tr>
+                                <td>@style.styleId</td>
+                                <td><a href="@applicationPath/Chrome/UpdateStyle?vin=@Model.VehicleData.VIN&stock=@Model.VehicleData.StockNumber&StyleId=@style.styleId">@style.styleDescription</a></td>
+                                <td>@style.trim</td>
+                                <td>@style.bodyType</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+        </div>
+    </div>
+
+                }
+                <div class="row-divider">
+                    <hr />
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h4>Installed Options</h4>
+@using (Html.BeginForm("VehicleOptions", "Chrome", FormMethod.Post, new { id = "VehicleOptions" }))
+{
+    <input type="hidden" name="vin" id="vin" value="@Model.VehicleData.VIN"/>
+    <input type="hidden" name="stock" id="stock" value="@Model.VehicleData.StockNumber" />
+    if (Model.OptionData != null)
+    {
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Show</th>
+                                        <th>Option Code</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var option in Model.OptionData)
+                                    {
+                                        <tr>
+                                            <td>                                                
+                                                <input type="checkbox" id="Option-@option.Id" class="chk-option-select" name="Option-@option.Id" @(option.ShowOption == true ? "checked" : "")/>
+                                                <input type="hidden"name="Option-@option.Id" value="@(option.ShowOption == true ? "true" : "false")"/>
+                                            </td>
+                                            <td class="text-center">@option.OptionCode</td>
+                                            <td class="text-left">@option.OptionDescription</td>
+                                        </tr>
+                                        <script type="text/javascript">
+                                            $('#Option-@option.Id').bind('click', function () {
+
+                                                    var checked = "false";
+                                                    if ($('#Option-@option.Id').is(":checked")) {
+                                                        checked = "true";
+                                                    }
+
+                                                    var url = '@applicationPath/Chrome/UpdateOptions?Id=@option.Id&Show=' + checked;
+                                                    $.ajax({
+                                                        url: url,
+                                                        success: function (data) {
+                                                            //alert('it worked');
+                                                        },
+                                                        type: 'POST', dataType: 'json'
+                                                    });
+                                                });
+
+                                        </script>
+                                    }
+                                </tbody>
+                            </table>
+                            @*<input type="submit" class="btn btn-primary" value="Update Options"/>*@
+                        }
+}
+                    </div>
+                    <div class="col-sm-6">
+                        <h4>Installed Packages</h4>
+@using (Html.BeginForm("VehiclePackages", "Chrome", FormMethod.Post, new { id = "VehiclePackages" }))
+{
+    <input type="hidden" name="vin" id="vin" value="@Model.VehicleData.VIN" />
+    <input type="hidden" name="stock" id="stock" value="@Model.VehicleData.StockNumber" />
+                        if (Model.PackageData != null)
+                        {
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Show</th>
+                                        <th>Option Code</th>
+                                        <th>Name</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var package in Model.PackageData)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <input type="checkbox" id="Package-@package.Id" class="chk-package-select" name="Package-@package.Id" @(package.ShowOption == true ? "checked" : "") />
+                                                <input type="hidden" name="Package-@package.Id" value="@(package.ShowOption == true ? "true" : "false")" />
+                                            </td>
+                                            <td class="text-center">@package.OptionCode</td>
+                                            <td class="text-left">@package.Name</td>
+                                            <td class="text-left">@package.Description</td>
+                                        </tr>
+                                        <script type="text/javascript">
+                                                $('#Package-@package.Id').bind('click', function () {
+
+                                                    var checked = "false";
+                                                    if ($('#Package-@package.Id').is(":checked")) {
+                                                        checked = "true";
+                                                    }
+
+                                                    var url = '@applicationPath/Chrome/UpdatePackages?Id=@package.Id&Show=' + checked;
+                                                    $.ajax({
+                                                        url: url,
+                                                        success: function (data) {
+                                                            //alert('it worked');
+                                                        },
+                                                        type: 'POST', dataType: 'json'
+                                                    });
+                                                });
+
+                                        </script>
+                                    }
+                                </tbody>
+                            </table>
+                            @*<input type="submit" class="btn btn-primary" value="Update Packages" />*@
+                        }
+                        }
+                    </div>
+
+                </div>
+
+                <div class="row-divider">
+                    <hr />
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+
+                        @if (Model.FeatureData != null)
+                        {
+
+                            <h4>Top 15 Features</h4>
+                            var topFeatures = Model.FeatureData.FindAll(x => x.ShowOption == true).OrderByDescending(x => x.RankingValue).Take(15);
+
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Section</th>
+                                        <th>Name</th>
+                                        <th>Description</th>
+                                        <th>Ranking</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var feature in topFeatures)
+                                    {
+
+                                        <tr>
+                                            <td class="text-center">@feature.SectionName</td>
+                                            <td class="text-left">@feature.Name</td>
+                                            <td class="text-left">@feature.Description</td>
+                                            <td class="text-left">@feature.RankingValue</td>
+                                        </tr>                                        
+                                    }
+                                </tbody>
+                            </table>
+
+                            <hr />
+
+                            <h4>All Features</h4>
+using (Html.BeginForm("VehicleFeatures", "Chrome", FormMethod.Post, new { id = "VehicleFeatures" }))
+{
+    <input type="hidden" name="vin" id="vin" value="@Model.VehicleData.VIN" />
+    <input type="hidden" name="stock" id="stock" value="@Model.VehicleData.StockNumber" />
+    var sections = Model.FeatureData.Select(x => x.SectionId).Distinct().ToList();
+
+    foreach (var sectionId in sections)
+    {
+        var sectionItems = Model.FeatureData.FindAll(x => x.SectionId == sectionId).OrderByDescending(x => x.RankingValue).ToList();
+
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Section</th>
+                                            <th>Show</th>
+                                            <th>Name</th>
+                                            <th>Description</th>
+                                            <th>Ranking</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+
+                                        @foreach (var feature in sectionItems)
+                                        {
+                                            <tr>
+
+                                                <td class="text-center">@feature.SectionName</td>
+                                                <td>
+                                                    <input type="checkbox" id="Feature-@feature.Id" class="chk-feature-select" name="Feature-@feature.Id" @(feature.ShowOption == true ? "checked" : "") />
+                                                    <input type="hidden" name="Feature-@feature.Id" value="@(feature.ShowOption == true ? "true" : "false")" />
+                                                </td>
+                                                <td class="text-left">@feature.Name</td>
+                                                <td class="text-left">@feature.Description</td>
+                                                <td class="text-left">@feature.RankingValue</td>
+                                            </tr>
+                                            <script type="text/javascript">
+                                                $('#Feature-@feature.Id').bind('click', function () {
+
+                                                    var checked = "false";
+                                                    if ($('#Feature-@feature.Id').is(":checked")) {
+                                                        checked = "true";
+                                                    }
+
+                                                    var url = '@applicationPath/Chrome/UpdateFeatures?Id=@feature.Id&Show=' + checked;
+                                                    $.ajax({
+                                                        url: url,
+                                                        success: function (data) {
+                                                            //alert('it worked');
+                                                        },
+                                                        type: 'POST', dataType: 'json'
+                                                    });
+                                                });
+
+                                            </script>
+                                        }
+
+                                    </tbody>
+                                </table>
+                                }
+                                @*<input type="submit" class="btn btn-primary" value="Update Features" />*@
+                            }
+                        }
+
+                    </div>
+                    <div class="col-sm-6">
+
+                        @if (Model.TechSpecData != null)
+                        {
+                            <h4>Top 15 Technical Specifications</h4>
+                            var topTechSpecs = Model.TechSpecData.FindAll(x => x.ShowOption == true).OrderByDescending(x => x.RankingValue).Take(15);
+
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Section</th>
+                                        <th>Name</th>
+                                        <th>Description</th>
+                                        <th>Ranking</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var feature in topTechSpecs)
+                                    {
+                                        <tr>
+
+                                            <td class="text-center">@feature.SectionName</td>
+                                            <td class="text-left">@feature.Name</td>
+                                            <td class="text-left">@feature.Description</td>
+                                            <td class="text-left">@feature.RankingValue</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+
+                            <hr />
+
+                            <h4>All Technical Specifications</h4>
+using (Html.BeginForm("VehicleTechSpecs", "Chrome", FormMethod.Post, new { id = "VehicleTechSpecs" }))
+{
+    <input type="hidden" name="vin" id="vin" value="@Model.VehicleData.VIN" />
+    <input type="hidden" name="stock" id="stock" value="@Model.VehicleData.StockNumber" />
+                                var sections = Model.TechSpecData.Select(x => x.SectionId).Distinct().ToList();
+
+                                foreach (var sectionId in sections)
+                                {
+
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Section</th>
+                                            <th>Show</th>
+                                            <th>Name</th>
+                                            <th>Description</th>
+                                            <th>Ranking</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @{
+                                            var sectionItems = Model.TechSpecData.FindAll(x => x.SectionId == sectionId).OrderByDescending(x => x.RankingValue).ToList();
+                                        }
+                                        @foreach (var techspec in sectionItems)
+                                        {
+                                            <tr>
+
+                                                <td class="text-center">@techspec.SectionName</td>
+                                                <td>
+                                                    <input type="checkbox" id="Techspec-@techspec.Id" class="chk-techspec-select" name="Techspec-@techspec.Id" @(techspec.ShowOption == true ? "checked" : "") />
+                                                    <input type="hidden" name="Techspec-@techspec.Id" value="@(techspec.ShowOption == true ? "true" : "false")" />
+                                                </td>
+                                                <td class="text-left">@techspec.Name</td>
+                                                <td class="text-left">@techspec.Description</td>
+                                                <td class="text-left">@techspec.RankingValue</td>
+                                            </tr>
+                                            <script type="text/javascript">
+                                                $('#Techspec-@techspec.Id').bind('click', function () {
+
+                                                    var checked = "false";
+                                                    if ($('#Techspec-@techspec.Id').is(":checked")) {
+                                                        checked = "true";
+                                                    }
+
+                                                    var url = '@applicationPath/Chrome/UpdateTechSpecs?Id=@techspec.Id&Show=' + checked;
+                                                    $.ajax({
+                                                        url: url,
+                                                        success: function (data) {
+                                                            //alert('it worked');
+                                                        },
+                                                        type: 'POST', dataType: 'json'
+                                                    });
+                                                });
+
+                                            </script>
+                                        }
+
+                                    </tbody>
+                                </table>
+
+                                            }
+                                            @*<input type="submit" class="btn btn-primary" value="Update Tech Specs" />*@
+                                                }
+                                            }
+                    </div>
+                </div>
+                }
+
+                @section scripts
+{
+                    <script type="text/javascript">
+                        $(function () {
+                            $("#startDate").datepicker();
+                            $("#endDate").datepicker();
+                        });
+
+                        $("input:checkbox").change(function () {
+                            $(this).parent().find('input:hidden').val($(this).is(':checked', false));
+                        });
+
+                        function showDates() {
+                            if ($('#chkMgrSpecial').is(":checked"))
+                                //$("#special-dates").show();
+                            {
+                                $('#startDate').attr("disabled", false);
+                                $('#endDate').attr("disabled", false);
+                            }
+                            else
+                            {
+                                //$("#special-dates").hide();
+                                $('#startDate').attr("disabled", true);
+                                $('#endDate').attr("disabled", true);
+                            }
+                        }
+
+                    </script>
+                }

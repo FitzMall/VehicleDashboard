@@ -5,15 +5,44 @@ using System.Web;
 
 namespace VehicleDashboard.Models
 {
+
+    public class PhotosByVin
+    {
+        public int ImagesSum { get; set; }
+        public string VIN { get; set; }
+
+    }
+
+    public class CheckoutIDByVIN
+    {
+        public string VIN { get; set; } // MetaDataValue7
+        public int ID { get; set; }
+    }
+
     public class UsedVehicleDashboard
     {
         public List<CSV_vehicleUSED> AllUsedInventory { get; set; }
         public List<AllInventory> WebsiteUsedInventory { get; set; }
         public List<VehicleData> VehicleData { get; set; }
+        public List<PhotosByVin> Photos { get; set; }
         public string Location { get; set; }
+        public string NoPDF { get; set; }
+
+        public List<CheckoutIDByVIN> FitzwayCheckoutIDs { get; set; }
+        public List<PDFsByVIN> PDFs_1550_1551 { get; set; }
     }
 
-    public class CSV_vehicleUSED
+    public class PDFsByVIN
+    {
+        public string VIN { get; set; }
+
+        public int Counter1550 { get; set; }
+
+        public int Counter1551 { get; set; }
+
+}
+
+        public class CSV_vehicleUSED
     {
         public int USEDID { get; set; }
         public string branch { get; set; }
@@ -91,6 +120,10 @@ namespace VehicleDashboard.Models
         public string rb { get; set; }
         public DateTime csvupdate { get; set; }
 
+        public int Photos { get; set; }
+        public int count1550 { get; set; }
+        public int count1551 { get; set; }
+
     }
 
     public class AllInventory
@@ -142,5 +175,14 @@ namespace VehicleDashboard.Models
         public DateTime v_fdend { get; set; }
         public DateTime v_crstart { get; set; }
         public DateTime v_crend { get; set; }
+
+        public int FitzWayCheckedOut { get; set; }
+
+     //   public int Photos { get; set; }
+        public int count1550 { get; set; }
+        public int count1551 { get; set; }
+
+
     }
+
 }

@@ -1,0 +1,165 @@
+﻿@model VehicleDashboard.Models.VehicleDataModel
+
+@{
+    ViewBag.Title = "Vehicles Options";
+    var applicationPath = Request.ApplicationPath;
+
+    if (applicationPath == "/")
+    {
+        applicationPath = "";
+    }
+
+}
+
+<style type="text/css">
+    .quick-search {
+        background-color: #f9f9f9;
+        margin: 10px 0 20px 0px;
+        padding: 10px;
+    }
+
+    .row-divider {
+        margin: 15px;
+    }
+</style>
+
+<h2>Select Vehicle Options</h2>
+
+<h3>@Model.VehicleData.Year @Model.VehicleData.Make @Model.VehicleData.Model</h3>
+<h4>Stock Number: @Model.VehicleData.StockNumber</h4>
+
+@if (Model.PossibleStyleData != null)
+{
+    <div class="row quick-search">
+        <div class="col-sm-12">
+            <h5>This vehicle's Style could not be determined, please select one below:</h5>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Style Id</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var style in Model.PossibleStyleData)
+                    {
+                        var background = "";
+                        if(style.styleId == Model.VehicleData.StyleId)
+                        {
+                            background = "style=background-color:yellow";
+                        }
+
+                        <tr>
+                            <td @background>@style.styleId</td>
+                            <td @background><a href="@applicationPath/Chrome/VehicleNoVIN?stock=@Model.VehicleData.StockNumber&year=@Model.VehicleData.Year&make=@Model.VehicleData.Make&modelId=@Model.VehicleData.ModelId&StyleId=@style.styleId">@style.styleDescription</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+}
+
+@if (Model.VehicleDescription != null)
+{
+    <div class="row">
+        <div class="col-sm-6">
+            <h4>Exterior Colors</h4>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Color Id</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var color in Model.VehicleDescription.exteriorColor)
+                    {
+                        
+                        <tr>
+                            <td><input type="checkbox" id="Color-@color.colorCode" class="chk-option-select" name="Color-@color.colorCode" /></td>
+
+                            <td>@color.colorCode</td>
+                            <td>@color.colorName</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="col-sm-6">
+            <h4>Interior Colors</h4>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Color Id</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var color in Model.VehicleDescription.interiorColor)
+                    {
+
+                        <tr>
+                            <td><input type="checkbox" id="Color-@color.colorCode" class="chk-option-select" name="Color-@color.colorCode" /></td>
+                            <td>@color.colorCode</td>
+                            <td>@color.colorName</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <h3>Possible Options</h3>
+
+    <div class="row">
+            
+
+            @{
+                var factoryOptions = Model.VehicleDescription.factoryOption.ToList();
+                var sections = factoryOptions.Select(x => x.header.Value).Distinct();
+
+                foreach (var sectionName in sections)
+                {
+                    if (sectionName != "REQUIRED FEE" && sectionName != "PRIMARY PAINT" && sectionName != "PAINT SCHEME")
+                    {
+                        var options = factoryOptions.FindAll(x => x.header.Value == sectionName);
+                        <div class="col-sm-12">
+
+                            <h4>@sectionName</h4>
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Option Id</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var option in options)
+                                    {
+                                        var description = "";
+                                        description = option.description[0];
+
+                                        <tr>
+                                            <td><input type="checkbox" id="Option-@option.oemCode" class="chk-option-select" name="Option-@option.oemCode" /></td>
+                                            <td>@option.oemCode</td>
+                                            <td>@description</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            </div>
+                            }
+                            }
+                            }
+
+                        
+    </div>
+}

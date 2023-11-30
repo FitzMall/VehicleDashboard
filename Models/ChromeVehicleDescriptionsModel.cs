@@ -59,7 +59,9 @@ namespace VehicleDashboard.Models
         public DateTime OptionsApprovedDate { get; set; }
         public string VehicleLocation { get; set; }
         public string FuelType { get; set; }
-        
+
+        public int FitzWayCheckedOut { get; set; }
+
     }
 
     public class StyleData
