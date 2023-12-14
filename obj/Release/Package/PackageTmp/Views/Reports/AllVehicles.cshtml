@@ -32,6 +32,7 @@
     nfi.CurrencySymbol = "";
 
     var locations = Model.UsedVehicleDashboard.WebsiteUsedInventory.Select(x => x.V_loc).Distinct().OrderBy(X => X).ToList();
+    string UploadURL;
 
     string sColHeader = "";
     if (isPhotoCount == true)
@@ -303,7 +304,8 @@
                     }
                     else
                     {
-                        <td>@vehicle.Photos</td>
+                            <td>@vehicle.Photos</td>
+
                     }
                     <td>@vehicle.SALE_DATE.ToShortDateString()</td>
                 </tr>

@@ -165,7 +165,7 @@
 
 <div class="row" style="border-bottom:1px solid #eee; margin-bottom:20px;">
 
-    <div class="col-xs-11">
+    <div class="col-xs-12">
         <h2>Vehicle Options Dashboard</h2>
         <div class="row location-row">
             <div class="col-xs-12">
@@ -185,8 +185,8 @@
 </div>
 
 <div class="row">
-    <div class="col-xs-5">
-        <h3>New Vehicle Summary</h3>
+    <div class="col-sm-5 col-md-5">
+        <h2>New Vehicle Summary</h2>
         @if (Model.NewVehicleDashboard != null)
         {
             var companyNew = Model.NewVehicleDashboard.AllNewInventory.FindAll(x => (x.status != 26 && x.status != 7));
@@ -202,74 +202,111 @@
             {
                 newChromedCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin);
                 newNeedsStyledCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.StyleId == 0 && x.Condition == "NEW");
-                newFuelType += Model.VehicleData.Count(x => x.VIN == vehicle.vin && (x.FuelType == null) && x.Condition == "NEW");
+                if (vehicle.status != 26 && vehicle.status != 7)
+                {
+                    newFuelType += Model.VehicleData.Count(x => x.VIN == vehicle.vin && (x.FuelType == null) && x.Condition == "NEW");
+                }
                 newMgrSpcCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.ManagerSpecial == 1);
             }
             newNeedsChromedCount = newVehicleCount - newChromedCount;
 
-    <div class="row">
-        <div class="col-xs-2 text-center">
-            <h4><br /><a href="@applicationPath/Reports/AllVehicles?Location=@Model.Location&Condition=NEW" target="_blank">Vehicles</a></h4>
-            <div class="box text-center">
-                <div id="newCount" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
-            </div>
-        </div>
+            <div class="row">
+                <div class="col-xs-2 text-center">
+                    <h4><a href="@applicationPath/Reports/AllVehicles?Location=@Model.Location&Condition=NEW" target="_blank">Vehicles</a></h4>
+                </div>
 
-        <div class="col-xs-2 text-center">
-            <h4><a href="@applicationPath/Reports/NotChromed?Location=@Model.Location&Condition=NEW" target="_blank">Needs Chromed</a></h4>
-            <div class="box text-center">
-                <div id="newNotChromed" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
-            </div>
-        </div>
-        <div class="col-xs-2 text-center">
-            <h4><a href="@applicationPath/Reports/ManagerSpecials?Location=@Model.Location&Condition=NEW" target="_blank">Manager Specials</a></h4>
-            <div class="box text-center">
-                <div id="newManagerSpecials" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
-            </div>
-        </div>
-        <div class="col-xs-2 text-center">
-            <h4><a href="@applicationPath/Reports/ShouldBeonFitzMall?Location=@Model.Location&Condition=NEW" target="_blank">Should be on FitzMall</a></h4>
-            <div class="box text-center">
-                <div id="newShouldBeFM" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
-            </div>
-        </div>
-        <div class="col-xs-2 text-center">
-            <h4><a href="@applicationPath/Reports/FuelType?Location=@Model.Location&Condition=NEW" target="_blank">Missing Fuel Type</a></h4>
-            <div class="box text-center">
-                <div id="newFuelType" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
-            </div>
-        </div>
-        <div class="row">
-        </div>
+                <div class="col-xs-2 text-center">
+                    <h4><a href="@applicationPath/Reports/NotChromed?Location=@Model.Location&Condition=NEW" target="_blank">Needs Chromed</a></h4>                </div>
+                <div class="col-xs-2 text-center">
+                    <h4><a href="@applicationPath/Reports/ManagerSpecials?Location=@Model.Location&Condition=NEW" target="_blank">Manager Specials</a></h4>
+                </div>
+                <div class="col-xs-3 text-center">
+                    <h4><a href="@applicationPath/Reports/ShouldBeonFitzMall?Location=@Model.Location&Condition=NEW" target="_blank">Should be on FitzMall</a></h4>
+                </div>
+                <div class="col-xs-2 text-center">
+                    <h4><a href="@applicationPath/Reports/FuelType?Location=@Model.Location&Condition=NEW" target="_blank">Missing Fuel Type</a></h4>
+                </div>
+                <div class="row">
+                </div>
 
-        <div class="col-xs-2 text-center">
-            <h4><a href="@applicationPath/Reports/AllVehicles?Location=@Model.Location&Condition=NEW&PhotoShow=NONE" target="_blank">Missing Photos</a></h4>
-            <div class="box text-center">
-                <div id="newMissingPhotos" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
-            </div>
-        </div>
 
-        <div class="col-xs-2 text-center">
-            <h4><a href="@applicationPath/Reports/AllVehicles?Location=@Model.Location&Condition=NEW&PhotoShow=10L" target="_blank">1-10 Photos</a></h4>
-            <div class="box text-center">
-                <div id="newTenOrLessPhotos" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
             </div>
-        </div>
-        <div class="col-xs-2 text-center">
-            <h4><a href="@applicationPath/Reports/AllVehicles?Location=@Model.Location&Condition=NEW&PhotoShow=10P" target="_blank">More Than 10 Photos</a></h4>
-            <div class="box text-center">
-                <div id="new10PlusPhotos" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
-            </div>
-        </div>
 
-    </div>
+
+            <div class="row">
+                <div class="col-xs-2 text-center">
+                   <div class="box text-center">
+                        <div id="newCount" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                    </div>
+                </div>
+
+                <div class="col-xs-2 text-center">
+                    <div class="box text-center">
+                        <div id="newNotChromed" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                    </div>
+                </div>
+                <div class="col-xs-2 text-center">
+                    <div class="box text-center">
+                        <div id="newManagerSpecials" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                    </div>
+                </div>
+                <div class="col-xs-3 text-center">
+                    <div class="box text-center">
+                        <div id="newShouldBeFM" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                    </div>
+                </div>
+                <div class="col-xs-2 text-center">
+                    <div class="box text-center">
+                        <div id="newFuelType" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                    </div>
+                </div>
+                <div class="row">
+                </div>
+
+
+            </div>
+
+            <div class="row">
+                <h3>Photos</h3>
+                <div class="col-xs-2 text-center">
+                    <h4><a href="@applicationPath/Reports/AllVehicles?Location=@Model.Location&Condition=NEW&PhotoShow=NONE" target="_blank">Missing Photos</a></h4>
+                </div>
+
+                <div class="col-xs-2 text-center">
+                    <h4><a href="@applicationPath/Reports/AllVehicles?Location=@Model.Location&Condition=NEW&PhotoShow=10L" target="_blank">1-10 Photos</a></h4>
+                </div>
+                <div class="col-xs-2 text-center">
+                    <h4><a href="@applicationPath/Reports/AllVehicles?Location=@Model.Location&Condition=NEW&PhotoShow=10P" target="_blank">More Than 10 Photos</a></h4>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-xs-2 text-center">
+                    <div class="box text-center">
+                        <div id="newMissingPhotos" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                    </div>
+                </div>
+
+                <div class="col-xs-2 text-center">
+                    <div class="box text-center">
+                        <div id="newTenOrLessPhotos" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                    </div>
+                </div>
+                <div class="col-xs-2 text-center">
+                    <div class="box text-center">
+                        <div id="new10PlusPhotos" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                    </div>
+                </div>
+
+            </div>
 
         }
     </div>
 
 
-    <div class="col-xs-5">
-        <h3>Used Vehicle Summary</h3>
+    <div class="col-sm-1 col-md-6 col-lg-6">
+        <h2>Used Vehicle Summary</h2>
         @if (Model.UsedVehicleDashboard != null)
         {
             var companyUsed = Model.UsedVehicleDashboard.AllUsedInventory.FindAll(x => (x.status == 1 || x.status == 2 || x.status == 4));
@@ -300,19 +337,21 @@
                 usedChromedCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin);
                 usedNeedsStyledCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.StyleId == 0 && x.Condition == "USED");
 
-                if (Model.UsedVehicleDashboard.PDFs_1550_1551.Count(x => x.VIN == vehicle.vin) != 0) {
+                if (Model.UsedVehicleDashboard.PDFs_1550_1551.Count(x => x.VIN == vehicle.vin) != 0)
+                {
                     usedMissing1550 += Model.UsedVehicleDashboard.PDFs_1550_1551.Find(x => x.VIN == vehicle.vin).Counter1550;
 
                     usedMissing1551 += Model.UsedVehicleDashboard.PDFs_1550_1551.Find(x => x.VIN == vehicle.vin).Counter1551;
                 }
 
-                usedFuelType += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.FuelType == null && x.Condition == "USED");
-
-                if (vehicle.status == 1 || vehicle.status == 2 || vehicle.status == 4)
+                if (vehicle.status ==1 || vehicle.status == 2 || vehicle.status == 4)
                 {
-                    usedMgrSpcCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.ManagerSpecial == 1);
+                    usedFuelType += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.FuelType == null && x.Condition == "USED");
                 }
 
+        
+                usedMgrSpcCount += Model.VehicleData.Count(x => x.VIN == vehicle.vin && x.ManagerSpecial == 1);
+        
                 if (vehicle.slscode == "HDM")
                 {
                     usedHandyman += 1;
@@ -323,110 +362,166 @@
             usedNeedsChromedCount = usedVehicleCount - usedChromedCount;
             usedMissing1550 = (usedHandyman - usedMissing1550);
             usedMissing1551 = (usedHandyman - usedMissing1551);
+            if (usedMissing1550 < 0)
+            { usedMissing1550 = 0; }
+            if (usedMissing1551 < 0)
+            { usedMissing1551 = 0; }
 
-    <div class="row">
-        <div class="col-xs-2 text-center">
-            <h4><br /><a href="@applicationPath/Reports/AllVehicles?Location=@Model.Location&Condition=USED" target="_blank">Vehicles</a></h4>
-            <div class="box text-center">
-                <div id="usedCount" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
-            </div>
-        </div>
+            <div class="row">
+                <div class="col-xs-2 text-center">
+                    <h4><a href="@applicationPath/Reports/AllVehicles?Location=@Model.Location&Condition=USED" target="_blank">Vehicles</a></h4>
+                </div>
 
-        <div class="col-xs-2 text-center">
-            <h4><a href="@applicationPath/Reports/NotChromed?Location=@Model.Location&Condition=USED" target="_blank">Needs Chromed</a></h4>
-            <div class="box text-center">
-                <div id="usedNotChromed" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
-            </div>
-        </div>
-        <div class="col-xs-2 text-center">
-            <h4><a href="@applicationPath/Reports/ManagerSpecials?Location=@Model.Location&Condition=USED" target="_blank">Manager Specials</a></h4>
-            <div class="box text-center">
-                <div id="usedManagerSpecials" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
-            </div>
-        </div>
-        <div class="col-xs-2 text-center">
-            <h4><a href="@applicationPath/Reports/InRecon?Location=@Model.Location&Condition=USED" target="_blank">In Reconditioning</a></h4>
-            <div class="box text-center">
-                <div id="usedInRecon" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
-            </div>
-        </div>
-        <div class="col-xs-3 text-center">
-            <h4><a href="@applicationPath/Reports/ShouldBeonFitzMall?Location=@Model.Location&Condition=USED" target="_blank">Should be on FitzMall</a></h4>
-            <div class="box text-center">
-                <div id="usedShouldBeFM" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
-            </div>
-        </div>
+                <div class="col-xs-2 text-center">
+                    <h4><a href="@applicationPath/Reports/NotChromed?Location=@Model.Location&Condition=USED" target="_blank">Needs Chromed</a></h4>
+                </div>
+                <div class="col-xs-2 text-center">
+                    <h4><a href="@applicationPath/Reports/ManagerSpecials?Location=@Model.Location&Condition=USED" target="_blank">Manager Specials</a></h4>
+                </div>
+                <div class="col-xs-2 text-center">
+                    <h4><a href="@applicationPath/Reports/InRecon?Location=@Model.Location&Condition=USED" target="_blank">In Reconditioning</a></h4>
+                </div>
+                <div class="col-xs-3 text-center">
+                    <h4><a href="@applicationPath/Reports/ShouldBeonFitzMall?Location=@Model.Location&Condition=USED" target="_blank">Should be on FitzMall</a></h4>
+                </div>
 
-
-
-        <div class="col-xs-2 text-center">
-            <h4><a href="@applicationPath/Reports/FuelType?Location=@Model.Location&Condition=USED" target="_blank">Missing Fuel Type</a></h4>
-            <div class="box text-center">
-                <div id="usedFuelType" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
             </div>
-        </div>
 
-        <div>
-            <div class="col-xs-2 text-center">
-                <h4><br /><a href="@applicationPath/Reports/Handyman?Location=@Model.Location" target="_blank">Handyman</a></h4>
-                <div class="box text-center">
-                    <div id="usedHandyman" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+            <div class="row">
+                <div class="col-xs-2 text-center">
+                    <div class="box text-center">
+                        <div id="usedCount" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                    </div>
+                </div>
+
+                <div class="col-xs-2 text-center">
+                    <div class="box text-center">
+                        <div id="usedNotChromed" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                    </div>
+                </div>
+                <div class="col-xs-2 text-center">
+                    <div class="box text-center">
+                        <div id="usedManagerSpecials" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                    </div>
+                </div>
+                <div class="col-xs-2 text-center">
+                    <div class="box text-center">
+                        <div id="usedInRecon" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                    </div>
+                </div>
+                <div class="col-xs-3 text-center">
+                    <div class="box text-center">
+                        <div id="usedShouldBeFM" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                    </div>
+                </div>
+
+                <div class="col-xs-2 text-center">
+                    <h4><a href="@applicationPath/Reports/FuelType?Location=@Model.Location&Condition=USED" target="_blank">Missing Fuel Type</a></h4>
                 </div>
             </div>
 
-            <div class="col-xs-2 text-center">
-                <h4><a href="@applicationPath/Reports/Handyman?Location=@Model.Location&NoPDF=1550" target="_blank">Missing 1550</a></h4>
-                <div class="box text-center">
-                    <div id="usedMissing1550" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+            <div class="row">
+                <div class="col-xs-2 text-center">
+                    <div class="box text-center">
+                        <div id="usedFuelType" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                    </div>
                 </div>
             </div>
 
-            <div class="col-xs-2 text-center">
-                <h4><a href="@applicationPath/Reports/Handyman?Location=@Model.Location&NoPDF=1551" target="_blank">Missing 1551</a></h4>
-                <div class="box text-center">
-                    <div id="usedMissing1551" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+            <div class="row">
+                <h3>Handyman</h3>
+                <div>
+                    <div class="col-xs-2 text-center">
+                        <h4><a href="@applicationPath/Reports/Handyman?Location=@Model.Location" target="_blank">Handyman</a></h4>
+                    </div>
+
+                    <div class="col-xs-2 text-center">
+                        <h4><a href="@applicationPath/Reports/Handyman?Location=@Model.Location&NoPDF=1550" target="_blank">Missing 1550</a></h4>
+                    </div>
+
+                    <div class="col-xs-2 text-center">
+                        <h4><a href="@applicationPath/Reports/Handyman?Location=@Model.Location&NoPDF=1551" target="_blank">Missing 1551</a></h4>
+                    </div>
+
+                    <div class="col-xs-3 text-center">
+                        <h4><a href="@applicationPath/Reports/NotCheckedOut?Location=@Model.Location" target="_blank">Missing Checkout</a></h4>
+                    </div>
                 </div>
+
             </div>
 
-            <div class="col-xs-3 text-center">
-                <h4><br /><a href="@applicationPath/Reports/NotCheckedOut?Location=@Model.Location" target="_blank">Missing Checkout</a></h4>
-                <div class="box text-center">
-                    <div id="usedMissingCheckout" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+            <div class="row">
+
+
+                <div>
+                    <div class="col-xs-2 text-center">
+                        <div class="box text-center">
+                            <div id="usedHandyman" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-2 text-center">
+                        <div class="box text-center">
+                            <div id="usedMissing1550" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-2 text-center">
+                        <div class="box text-center">
+                            <div id="usedMissing1551" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-3 text-center">
+                        <div class="box text-center">
+                            <div id="usedMissingCheckout" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                        </div>
+                    </div>
                 </div>
+
             </div>
-        </div>
 
 
-        <div class="col-xs-2 text-center">
-            <h4><a href="@applicationPath/Reports/AllVehicles?Location=@Model.Location&Condition=USED&PhotoShow=NONE" target="_blank">Missing Photos</a></h4>
-            <div class="box text-center">
-                <div id="usedMissingPhotos" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+            <div class="row">
+                <h3>Photos</h3>
+                <div class="col-xs-2 text-center">
+                    <h4><a href="@applicationPath/Reports/AllVehicles?Location=@Model.Location&Condition=USED&PhotoShow=NONE" target="_blank">Missing Photos</a></h4>
+                </div>
+
+                <div class="col-xs-2 text-center">
+                    <h4><a href="@applicationPath/Reports/AllVehicles?Location=@Model.Location&Condition=USED&PhotoShow=10L" target="_blank">1-10 Photos</a></h4>
+                </div>
+                <div class="col-xs-2 text-center">
+                    <h4><a href="@applicationPath/Reports/AllVehicles?Location=@Model.Location&Condition=USED&PhotoShow=10P" target="_blank">More Than 10 Photos</a></h4>
+                </div>
+
             </div>
-        </div>
 
-        <div class="col-xs-2 text-center">
-            <h4><br /><a href="@applicationPath/Reports/AllVehicles?Location=@Model.Location&Condition=USED&PhotoShow=10L" target="_blank">1-10 Photos</a></h4>
-            <div class="box text-center">
-                <div id="usedTenOrLessPhotos" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+            <div class="row">
+
+
+                <div class="col-xs-2 text-center">
+                    <div class="box text-center">
+                        <div id="usedMissingPhotos" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                    </div>
+                </div>
+
+                <div class="col-xs-2 text-center">
+                    <div class="box text-center">
+                        <div id="usedTenOrLessPhotos" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                    </div>
+                </div>
+                <div class="col-xs-2 text-center">
+                    <div class="box text-center">
+                        <div id="used10PlusPhotos" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
+                    </div>
+                </div>
+
             </div>
-        </div>
-        <div class="col-xs-2 text-center">
-            <h4><a href="@applicationPath/Reports/AllVehicles?Location=@Model.Location&Condition=USED&PhotoShow=10P" target="_blank">More Than 10 Photos</a></h4>
-            <div class="box text-center">
-                <div id="used10PlusPhotos" class="gauge" style="width:120px; height:100px; margin-left:auto; margin-right:auto;"></div>
-            </div>
-        </div>
-
-    </div>
-
         }
     </div>
 </div>
-<div class="row">
-    <div class="col-xs-12">
-        <hr />
-    </div>
-</div>
+
 
 
 @section scripts

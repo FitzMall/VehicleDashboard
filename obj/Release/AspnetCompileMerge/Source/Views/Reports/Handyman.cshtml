@@ -16,6 +16,7 @@
     nfi.CurrencySymbol = "";
 
     var locations = Model.WebsiteUsedInventory.Select(x => x.V_loc).Distinct().OrderBy(X => X).ToList();
+    string UploadVIN = "";
 
     var HandymanVehicles = Model.AllUsedInventory.FindAll(x => x.slscode == "HDM");
 
@@ -78,6 +79,7 @@
     </div>
 </div>
 
+
 <div class="row">
     <div class="col-sm-12 col-md-12">
         <table class="table table-striped table-bordered" id="table-InRecon">
@@ -100,6 +102,8 @@
                     foreach (var vehicle in HandymanVehicles)
                     {
                         var vehicleDetails = Model.AllUsedInventory.Find(x => x.vin == vehicle.vin);
+
+
                         if (vehicleDetails.slscode == "HDM")
                         {
                             <tr>
@@ -113,6 +117,7 @@
                                 <td>@vehicleDetails.daysinv</td>
                                 <td>@vehicleDetails.list_amt.ToString("C", nfi)</td>
                                 <td>@vehicleDetails.status</td>
+
                             </tr>
                         }
                     }
@@ -127,9 +132,38 @@
                         {
 
 
-                                if ((Model.PDFs_1550_1551.Count(x => x.VIN == vehicle.vin && x.Counter1550 > 0)) == 0)
-                                {
+                            if ((Model.PDFs_1550_1551.Count(x => x.VIN == vehicle.vin && x.Counter1550 > 0)) == 0)
+                            {
+                                UploadVIN = "101-" + vehicle.vin;
 
+                                <tr>
+                                    <td>@vehicle.slscode</td>
+                                    <td>@vehicle.loc</td>
+
+                                    <td>@vehicle.stk</td>
+                                    <td>@vehicle.yr</td>
+                                    <td>@vehicle.make</td>
+                                    <td>@vehicle.carline</td>
+                                    <td>@vehicleDetails.daysinv</td>
+                                    <td>@vehicleDetails.list_amt.ToString("C", nfi)</td>
+                                    <td>@vehicleDetails.status</td>
+                                    <td><a href="@applicationPath/Reports/_UploadFile?VIN=@UploadVIN" target="_blank">UPLOAD</a></td>
+                                </tr>
+                            }
+                        }
+                    }
+                }
+                @if (Model.NoPDF == "1551")
+                {
+                    foreach (var vehicle in HandymanVehicles)
+                    {
+                        var vehicleDetails = Model.AllUsedInventory.Find(x => x.vin == vehicle.vin);
+                        if (vehicleDetails.slscode == "HDM")
+                        {
+                            if ((Model.PDFs_1550_1551.Count(x => x.VIN == vehicle.vin && x.Counter1551 > 0)) == 0)
+                            {
+                                UploadVIN = "151-" + vehicle.vin;
+                                {
                                     <tr>
                                         <td>@vehicle.slscode</td>
                                         <td>@vehicle.loc</td>
@@ -141,38 +175,14 @@
                                         <td>@vehicleDetails.daysinv</td>
                                         <td>@vehicleDetails.list_amt.ToString("C", nfi)</td>
                                         <td>@vehicleDetails.status</td>
+                                        <td><a href="@applicationPath/Reports/_UploadFile?VIN=@UploadVIN" target="_blank">UPLOAD</a></td>
+
                                     </tr>
                                 }
                             }
                         }
                     }
-                    @if (Model.NoPDF == "1551")
-                    {
-                        foreach (var vehicle in HandymanVehicles)
-                        {
-                            var vehicleDetails = Model.AllUsedInventory.Find(x => x.vin == vehicle.vin);
-                            if (vehicleDetails.slscode == "HDM")
-                            {
-                                if ((Model.PDFs_1550_1551.Count(x => x.VIN == vehicle.vin && x.Counter1551 > 0)) == 0)
-                                {
-                                    {
-                                        <tr>
-                                            <td>@vehicle.slscode</td>
-                                            <td>@vehicle.loc</td>
-
-                                            <td>@vehicle.stk</td>
-                                            <td>@vehicle.yr</td>
-                                            <td>@vehicle.make</td>
-                                            <td>@vehicle.carline</td>
-                                            <td>@vehicleDetails.daysinv</td>
-                                            <td>@vehicleDetails.list_amt.ToString("C", nfi)</td>
-                                            <td>@vehicleDetails.status</td>
-                                        </tr>
-                                    }
-                                }
-                            }
-                        }
-                    }
+                }
             </tbody>
         </table>
     </div>

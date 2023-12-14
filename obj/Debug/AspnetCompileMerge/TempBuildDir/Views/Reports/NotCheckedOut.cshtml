@@ -55,12 +55,12 @@
         <div class="row location-row">
             <div class="col-xs-12">
                 <h4>Locations:</h4>
-                <input class="form-inline" type="radio" name="locationValue" id="chk-ALL" onclick="window.location='@applicationPath/Reports/NCOd_?Location=ALL';" value="ALL" @(Model.Location == "ALL" ? "checked" : "" )>
+                <input class="form-inline" type="radio" name="locationValue" id="chk-ALL" onclick="window.location='@applicationPath/Reports/NotCheckedOut?Location=ALL';" value="ALL" @(Model.Location == "ALL" ? "checked" : "" )>
                 <label class="form-inline" style="margin-right:15px;" for="chk-ALL">ALL</label>
 
                 @foreach (var location in locations)
                 {
-                    <input class="form-inline" type="radio" name="locationValue" id="chk-@location" onclick="window.location='@applicationPath/Reports/NCOd_?Location=@location';" value="@location" @(Model.Location == location ? "checked" : "" )>
+                    <input class="form-inline" type="radio" name="locationValue" id="chk-@location" onclick="window.location='@applicationPath/Reports/NotCheckedOut?Location=@location';" value="@location" @(Model.Location == location ? "checked" : "" )>
                     <label class="form-inline" style="margin-right:15px;" for="chk-@location">@location</label>
                 }
             </div>
@@ -128,11 +128,11 @@
                     {
                         if (RoleCheckout == "1")
                         {
-                            <td><a href="http://jjfserver/FitzwayCheckout/Supervisor/ViewInspection/@FitzCheckoutID" target="_blank">Sup.Finish</a></td>
+                            <td><a href="http://jjfserver/FitzwayCheckout/Supervisor/ViewInspection/@FitzCheckoutID" target="_blank">Finalize</a></td>
                         }
                         else if (RoleCheckout == "3")
                         {
-                            <td><a href="http://jjfserver/FitzwayCheckout/Inspection/GetItem?ID=@FitzCheckoutID&type=ChecklistRecord" target="_blank">Tech.Finish</a></td>
+                            <td><a href="http://jjfserver/FitzwayCheckout/Inspection/GetItem?ID=@FitzCheckoutID&type=ChecklistRecord" target="_blank">Tech Complete</a></td>
                         }
                         else
                         {

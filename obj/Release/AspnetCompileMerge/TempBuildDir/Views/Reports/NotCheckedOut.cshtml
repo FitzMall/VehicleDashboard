@@ -4,6 +4,7 @@
     ViewBag.Title = "Vehicles Not Checked Out";
 
     var applicationPath = Request.ApplicationPath;
+    string RoleCheckout = ViewBag.UserRank;
 
     if (applicationPath == "/")
     {
@@ -18,6 +19,7 @@
     var locations = Model.WebsiteUsedInventory.Select(x => x.V_loc).Distinct().OrderBy(X => X).ToList();
 
     var NCOd_Vehicles = Model.WebsiteUsedInventory.FindAll(x => x.FitzWayCheckedOut == 0);
+    string FitzCheckoutID = "";
 
     if (Model.Location != null && Model.Location != "ALL")
     {
@@ -30,6 +32,9 @@
             NCOd_Vehicles = NCOd_Vehicles.FindAll(x => x.V_loc == Model.Location && x.FitzWayCheckedOut == 0);
         }
     }
+
+    //ChecklistRecord
+    //htttp://jjfserver/FitzwayCheckout/Supervisor/ViewInspection/40549
 
 }
 
@@ -50,12 +55,12 @@
         <div class="row location-row">
             <div class="col-xs-12">
                 <h4>Locations:</h4>
-                <input class="form-inline" type="radio" name="locationValue" id="chk-ALL" onclick="window.location='@applicationPath/Reports/NCOd_?Location=ALL';" value="ALL" @(Model.Location == "ALL" ? "checked" : "" )>
+                <input class="form-inline" type="radio" name="locationValue" id="chk-ALL" onclick="window.location='@applicationPath/Reports/NotCheckedOut?Location=ALL';" value="ALL" @(Model.Location == "ALL" ? "checked" : "" )>
                 <label class="form-inline" style="margin-right:15px;" for="chk-ALL">ALL</label>
 
                 @foreach (var location in locations)
                 {
-                    <input class="form-inline" type="radio" name="locationValue" id="chk-@location" onclick="window.location='@applicationPath/Reports/NCOd_?Location=@location';" value="@location" @(Model.Location == location ? "checked" : "" )>
+                    <input class="form-inline" type="radio" name="locationValue" id="chk-@location" onclick="window.location='@applicationPath/Reports/NotCheckedOut?Location=@location';" value="@location" @(Model.Location == location ? "checked" : "" )>
                     <label class="form-inline" style="margin-right:15px;" for="chk-@location">@location</label>
                 }
             </div>
@@ -78,6 +83,7 @@
                     <th>List Amt</th>
                     <th>Status</th>
                     <th>Style Id</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -85,30 +91,72 @@
                 {
                     var vehicleDetails = Model.AllUsedInventory.Find(x => x.vin == vehicle.V_Vin);
 
-                    if (vehicleDetails != null) { 
+                    if (vehicleDetails != null)
+                    {
 
-                    
-                            <tr>
-                                <td>@vehicle.V_loc</td>
-                
-                                @if (vehicle.V_styleid != "0")
-                                {
-                                    <td><a href="@applicationPath/Chrome/Vehicle/?VIN=@vehicle.V_Vin&Chromed=true" target="_blank">@vehicle.V_stock</a></td>
-                                }
-                                else if (vehicle.V_styleid == "0")
-                                {
-                                    <td><a href="@applicationPath/Chrome/ChromeNoStyle/?VIN=@vehicle.V_Vin" target="_blank">@vehicle.V_stock</a></td>
-                                }
-                        
-                                <td>@vehicle.V_Year</td>
-                                <td>@vehicle.V_MakeName</td>
-                                <td>@vehicle.V_ModelName</td>
-                                <td>@vehicleDetails.daysinv</td>
-                                <td>@vehicleDetails.list_amt.ToString("C", nfi)</td>
-                                <td>@vehicleDetails.status</td>
-                                <td>@vehicle.V_styleid</td>
-                            </tr>
+                        var checkoutID = Model.FitzwayCheckoutIDs.Find(x => x.VIN == vehicle.V_Vin);
+
+                        FitzCheckoutID = "0";
+                        if (checkoutID != null)
+                        {
+                            FitzCheckoutID = checkoutID.ID.ToString();
                         }
+
+
+                <tr>
+                    <td>@vehicle.V_loc</td>
+
+                    @if (vehicle.V_styleid != "0")
+                    {
+                        <td><a href="@applicationPath/Chrome/Vehicle/?VIN=@vehicle.V_Vin&Chromed=true" target="_blank">@vehicle.V_stock</a></td>
+                    }
+                    else if (vehicle.V_styleid == "0")
+                    {
+                        <td><a href="@applicationPath/Chrome/ChromeNoStyle/?VIN=@vehicle.V_Vin" target="_blank">@vehicle.V_stock</a></td>
+                    }
+
+                    <td>@vehicle.V_Year</td>
+                    <td>@vehicle.V_MakeName</td>
+                    <td>@vehicle.V_ModelName</td>
+                    <td>@vehicleDetails.daysinv</td>
+                    <td>@vehicleDetails.list_amt.ToString("C", nfi)</td>
+                    <td>@vehicleDetails.status</td>
+                    <td>@vehicle.V_styleid</td>
+
+
+                    @if (FitzCheckoutID != "0")
+                    {
+                        if (RoleCheckout == "1")
+                        {
+                            <td><a href="http://jjfserver/FitzwayCheckout/Supervisor/ViewInspection/@FitzCheckoutID" target="_blank">Finalize</a></td>
+                        }
+                        else if (RoleCheckout == "3")
+                        {
+                            <td><a href="http://jjfserver/FitzwayCheckout/Inspection/GetItem?ID=@FitzCheckoutID&type=ChecklistRecord" target="_blank">Tech Complete</a></td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                    }
+                    else
+                    {
+                        if (RoleCheckout == "1")
+                        {
+                            <td></td>
+                        }
+                        else if (RoleCheckout == "3")
+                        {
+                            <td></td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+
+                    }
+                </tr>
+                    }
                 }
             </tbody>
         </table>
@@ -118,36 +166,36 @@
 @section scripts
 {
     <script type="text/javascript">
-            $(document).ready(function () {
-                $('#table-NCOd_').DataTable({
-                    searching: true,
-                    dom: 'Bfrti',
-                    pageLength: -1,
-                    buttons: [
-                        {
-                            extend: 'copyHtml5', footer: true,
-                        },
-                        {
-                            extend: 'excelHtml5', footer: true,
-                        },
-                        {
-                            extend: 'pdfHtml5', footer: true,
-                            orientation: 'landscape'
-                        },
-                        {
-                            extend: 'print', footer: true,
-                            orientation: 'landscape'
-                        }
-                    ]
-                    //,
-                    //columnDefs: [
-                    //  { type: 'any-number', targets: [18, 19, 20, 21, 22, 23, 24,25,26] },
-                    //  { type: 'date-us', targets: [6] }
-                    //]
-
-                });
+        $(document).ready(function () {
+            $('#table-NCOd_').DataTable({
+                searching: true,
+                dom: 'Bfrti',
+                pageLength: -1,
+                buttons: [
+                    {
+                        extend: 'copyHtml5', footer: true,
+                    },
+                    {
+                        extend: 'excelHtml5', footer: true,
+                    },
+                    {
+                        extend: 'pdfHtml5', footer: true,
+                        orientation: 'landscape'
+                    },
+                    {
+                        extend: 'print', footer: true,
+                        orientation: 'landscape'
+                    }
+                ]
+                //,
+                //columnDefs: [
+                //  { type: 'any-number', targets: [18, 19, 20, 21, 22, 23, 24,25,26] },
+                //  { type: 'date-us', targets: [6] }
+                //]
 
             });
+
+        });
 
     </script>
 }
