@@ -403,14 +403,7 @@ namespace VehicleDashboard.Business
                         styleData.Trim = styleDescription.trim;
                         styleData.Wheelbase = styleDescription.wheelbase;
 
-                        //SqlQueries.AddStyle(styleData);
-
-                        //Check to see if the style exists
-                        if (!SqlQueries.CheckStyle(styleData.StyleId))
-                        {
-                            // Style does not exist, add it
-                            SqlQueries.AddStyle(styleData);
-                        }
+                        SqlQueries.AddStyle(styleData);
                     }
                     catch (Exception ex)
                     {
@@ -452,12 +445,7 @@ namespace VehicleDashboard.Business
                                 break;
                             }
 
-                            //Check to see if the style exists
-                            if (!SqlQueries.CheckStyle(newStyleData.StyleId))
-                            {
-                                // Style does not exist, add it
-                                SqlQueries.AddStyle(newStyleData);
-                            }
+                            SqlQueries.AddStyle(newStyleData);
                         }
 
                         //We don't know which one, so reset this
@@ -473,7 +461,7 @@ namespace VehicleDashboard.Business
                 if (styleData.StyleId > 0)
                 {
                     //MAP AND ADD EXTERIOR COLOR
-                    if (vehicleDescription.result.exteriorColors != null && vehicleDescription.result.exteriorColors.Count() > 0)
+                    if (vehicleDescription.result.exteriorColors != null && vehicleDescription.result.exteriorColors.Count() == 1)
                     {
                         try
                         {
@@ -493,15 +481,41 @@ namespace VehicleDashboard.Business
 
                             vehicleData.ExteriorColorId = SqlQueries.AddExteriorColor(exteriorColorData);
 
-                            //Check to see if the color exists
-                            var colorCodeId = SqlQueries.CheckExteriorColor(exteriorColorData.ColorCode, styleData.StyleId);
-                            if (colorCodeId > 0)
-                                vehicleData.ExteriorColorId = colorCodeId;
-                            else
+                        }
+                        catch (Exception ex)
+                        {
+                            var x = ex.Message;
+                        }
+                    }
+                    else if (vehicleDescription.result.exteriorColors != null && vehicleDescription.result.exteriorColors.Count() > 1)
+                    {
+                        try
+                        {
+
+                            foreach (var color in vehicleDescription.result.exteriorColors)
                             {
-                                // Color does not exist, add it
-                                vehicleData.ExteriorColorId = SqlQueries.AddExteriorColor(exteriorColorData);
+                                var tempColorData = new ExteriorColorData();
+
+                                tempColorData.ColorCode = color.colorCode;
+                                tempColorData.Description = color.description;
+                                tempColorData.GenericDescription = color.genericDesc;
+                                tempColorData.InstallCause = color.installCause;
+                                tempColorData.Primary = color.primary;
+                                tempColorData.RGBHexValue = color.rgbHexValue;
+                                tempColorData.RGBValue = color.rgbValue;
+                                if (color.styles.Length > 0)
+                                {
+                                    tempColorData.StyleId = color.styles[0];
+                                }
+
+                                tempColorData.Type = color.type;
+
+                                var colorId = 0;
+
+                                    colorId = SqlQueries.AddExteriorColor(exteriorColorData);
                             }
+
+
                         }
                         catch (Exception ex)
                         {
@@ -523,17 +537,7 @@ namespace VehicleDashboard.Business
                             }
 
                             vehicleData.InteriorColorId = SqlQueries.AddInteriorColor(interiorColorData);
-
-                            //Check to see if the color exists
-                            var colorCodeId = SqlQueries.CheckInteriorColor(interiorColorData.ColorCode, styleData.StyleId);
-                            if (colorCodeId > 0)
-                                vehicleData.InteriorColorId = colorCodeId;
-                            else
-                            {
-                                // Color does not exist, add it
-                                vehicleData.InteriorColorId = SqlQueries.AddInteriorColor(interiorColorData);
-
-                            }
+                            
                         }
                         catch (Exception ex)
                         {
@@ -579,18 +583,8 @@ namespace VehicleDashboard.Business
                         vehicleData.ManagerSpecialEndDate = new DateTime(1900, 1, 1);
                         vehicleData.ManagerSpecialStartDate = new DateTime(1900, 1, 1);
                         vehicleData.OptionsApprovedDate = new DateTime(1900, 1, 1);
-
-                        //vehicleData.Id = SqlQueries.AddVehicle(vehicleData);
-                        // Check to see if the vehicle exists
-                        var vehicleId = SqlQueries.CheckVehicle(vehicleData.VIN);
-                        if (vehicleId > 0)
-                            vehicleData.Id = vehicleId;
-                        else
-                        {
-                            // Vehicle does not exist, add it
-                            vehicleData.Id = SqlQueries.AddVehicle(vehicleData);
-
-                        }
+                    
+                        vehicleData.Id = SqlQueries.AddVehicle(vehicleData);
                     }
                     catch (Exception ex)
                     {
@@ -630,15 +624,8 @@ namespace VehicleDashboard.Business
 
                                 featureData.SubSectionId = feature.subSectionId;
 
-                                // Check to see if the feature exists
-                                var featureId = SqlQueries.CheckFeature(featureData.FeatureId, featureData.Key);
-                                if (featureId > 0)
-                                    featureData.Id = featureId;
-                                else
-                                {
-                                    // Feature does not exist, add it
-                                    featureData.Id = SqlQueries.AddFeature(featureData);
-                                }
+
+                                featureData.Id = SqlQueries.AddFeature(featureData);
 
                                 SqlQueries.AddVehicleFeatureMapping(vehicleData.Id, featureData.Id);
                             }
@@ -686,16 +673,8 @@ namespace VehicleDashboard.Business
                                 packageData.InstallCause = package.styles.First().installCause;
                                 packageData.IsStandard = package.styles.First().isStandard;
 
-                                // Check to see if the feature exists
-                                var packageId = SqlQueries.CheckPackage(packageData.PackageId, packageData.Key);
-                                if (packageId > 0)
-                                    packageData.Id = packageId;
-                                else
-                                {
-                                    // Feature does not exist, add it
-                                    packageData.Id = SqlQueries.AddPackage(packageData);
-                                }
 
+                                packageData.Id = SqlQueries.AddPackage(packageData);
 
                                 SqlQueries.AddVehiclePackageMapping(vehicleData.Id, packageData.Id);
                             }
@@ -761,15 +740,8 @@ namespace VehicleDashboard.Business
                                     }
                                 }
 
-                                // Check to see if the feature exists
-                                var optionId = SqlQueries.CheckOption(optionData.OptionCode, optionData.StyleId);
-                                if (optionId > 0)
-                                    optionData.Id = optionId;
-                                else
-                                {
-                                    // Feature does not exist, add it
-                                    optionData.Id = SqlQueries.AddOption(optionData);
-                                }
+
+                                optionData.Id = SqlQueries.AddOption(optionData);
 
                                 SqlQueries.AddVehicleOptionMapping(vehicleData.Id, optionData.Id, showOption);
                             }
@@ -805,16 +777,7 @@ namespace VehicleDashboard.Business
 
                                 techSpecData.SubSectionId = techspec.subSectionId;
 
-                                // Check to see if the feature exists
-                                var techSpecId = SqlQueries.CheckTechSpec(techSpecData.TechSpecId, techSpecData.Key);
-                                if (techSpecId > 0)
-                                    techSpecData.Id = techSpecId;
-                                else
-                                {
-                                    // Feature does not exist, add it
-                                    techSpecData.Id = SqlQueries.AddTechSpec(techSpecData);
-                                }
-
+                                techSpecData.Id = SqlQueries.AddTechSpec(techSpecData);
                                 SqlQueries.AddVehicleTechSpecMapping(vehicleData.Id, techSpecData.Id);
                             }
                             catch (Exception ex)

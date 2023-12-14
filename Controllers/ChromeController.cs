@@ -532,7 +532,7 @@ namespace VehicleDashboard.Controllers
             modelRequest.ItemElementName = ChromeData7c.ItemChoiceType.divisionId;
             modelRequest.Item = division.id;
             var modelResponse = service.getModels(modelRequest);
-            var vehicleModel = modelResponse.model.ToList().Find(x => x.Value.ToUpper() == model.ToUpper());
+            var vehicleModel = modelResponse.model.ToList().Find(x => x.Value.ToUpper().Contains(model.ToUpper()));
 
             //3. Get the list of potential Style Ids from the Model ID
             var styleRequest = new ChromeData7c.StylesRequest();
@@ -628,7 +628,14 @@ namespace VehicleDashboard.Controllers
             vehicleRequest.Items = new object[1];
             vehicleRequest.Items[0] = styleId;
             vehicleRequest.ItemsElementName[0] = VehicleDashboard.ChromeData7c.ItemsChoiceType.styleId;
-            vehicleRequest.@switch = new[] { VehicleDashboard.ChromeData7c.Switch.ShowExtendedDescriptions, VehicleDashboard.ChromeData7c.Switch.ShowAvailableEquipment, VehicleDashboard.ChromeData7c.Switch.IncludeCatalogData, VehicleDashboard.ChromeData7c.Switch.ShowExtendedTechnicalSpecifications, VehicleDashboard.ChromeData7c.Switch.IncludeRegionalVehicles, VehicleDashboard.ChromeData7c.Switch.IncludeDefinitions };
+            vehicleRequest.@switch = new[] {
+                VehicleDashboard.ChromeData7c.Switch.ShowExtendedDescriptions,
+                VehicleDashboard.ChromeData7c.Switch.ShowAvailableEquipment,
+                VehicleDashboard.ChromeData7c.Switch.IncludeCatalogData,
+                VehicleDashboard.ChromeData7c.Switch.ShowExtendedTechnicalSpecifications,
+                VehicleDashboard.ChromeData7c.Switch.IncludeRegionalVehicles,
+                VehicleDashboard.ChromeData7c.Switch.IncludeDefinitions,
+                VehicleDashboard.ChromeData7c.Switch.IncludeOnlyOEMBuildDataDecode };
             var vehicleResponse = service.describeVehicle(vehicleRequest);
                         
             var vehicleDataModel = new VehicleDataModel();
