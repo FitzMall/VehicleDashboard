@@ -58,7 +58,7 @@ namespace VehicleDashboard.Controllers
             ViewBag.Processed = true;
             return View("");
         }
-        public ActionResult Handyman(string Location, string NoPDF)
+        public ActionResult yHandyman(string Location, string NoPDF)
         {
             var usedVehicleDashboard = new Models.UsedVehicleDashboard();
 
@@ -100,6 +100,42 @@ namespace VehicleDashboard.Controllers
 
             return View(usedVehicleDashboard);
         }
+
+        public ActionResult Handyman(string Location, string NoPDF, string DeleteFile)
+        {
+            var usedVehicleDashboard = new Models.UsedVehicleDashboard();
+
+            if (Location == null)
+            {
+                Location = "ALL";
+            }
+
+            if (NoPDF == null)
+            {
+                NoPDF = "";
+            }
+
+
+            if (System.IO.File.Exists(DeleteFile))
+            {
+                System.IO.File.Delete(DeleteFile); // Delete the file
+               // System.Threading.Thread.Sleep(4000);
+            }
+
+            usedVehicleDashboard.AllUsedInventory = Business.SqlQueries.GetAllUsedInventory();
+            usedVehicleDashboard.AllUsedInventory = usedVehicleDashboard.AllUsedInventory.FindAll(x => (x.status == 1 || x.status == 2 || x.status == 4));
+
+            usedVehicleDashboard.WebsiteUsedInventory = Business.SqlQueries.GetWebsiteUsedInventory();
+            usedVehicleDashboard.Location = Location;
+            usedVehicleDashboard.VehicleData = Business.SqlQueries.GetAllChromedVehicles();
+            usedVehicleDashboard.PDFs_1550_1551 = Business.SqlQueries.ALL_1551and1550_Files();
+            usedVehicleDashboard.NoPDF = NoPDF;  // 1550, 1551, BOTH or blank if regular Handyman report
+
+            return View(usedVehicleDashboard);
+        }
+
+
+
         public ActionResult NotCheckedOut(string Location)
         {
             var usedVehicleDashboard = new Models.UsedVehicleDashboard();

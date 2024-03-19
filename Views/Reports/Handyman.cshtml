@@ -4,6 +4,11 @@
     ViewBag.Title = "Handyman";
 
     var applicationPath = Request.ApplicationPath;
+    var PDFpath = (@"C:\\inetpub\\wwwroot\\production\\FITZWAY\\Pictures\\UCPDFS");
+    var dir = new DirectoryInfo(PDFpath);
+    var files = dir.EnumerateFiles("*.pdf").Select(f => f.Name);
+    var findFile = "";
+    var functionCall = "";
 
     if (applicationPath == "/")
     {
@@ -85,7 +90,6 @@
         <table class="table table-striped table-bordered" id="table-InRecon">
             <thead>
                 <tr>
-                    <th>slscode</th>
                     <th>Location</th>
                     <th>Stock #</th>
                     <th>Year</th>
@@ -94,6 +98,16 @@
                     <th>Days</th>
                     <th>List Amt</th>
                     <th>Status</th>
+                    @if (Model.NoPDF == "")
+                    {
+                        <th></th>
+                        <th></th>
+                    }
+                    else
+                    {
+                        <th></th>
+                    }
+
                 </tr>
             </thead>
             <tbody>
@@ -103,25 +117,60 @@
                     {
                         var vehicleDetails = Model.AllUsedInventory.Find(x => x.vin == vehicle.vin);
 
+                        UploadVIN = vehicle.vin;
 
                         if (vehicleDetails.slscode == "HDM")
                         {
-                            <tr>
-                                <td>@vehicle.slscode</td>
-                                <td>@vehicle.loc</td>
+                <tr>
+                    <td>@vehicle.loc</td>
 
-                                <td>@vehicle.stk</td>
-                                <td>@vehicle.yr</td>
-                                <td>@vehicle.make</td>
-                                <td>@vehicle.carline</td>
-                                <td>@vehicleDetails.daysinv</td>
-                                <td>@vehicleDetails.list_amt.ToString("C", nfi)</td>
-                                <td>@vehicleDetails.status</td>
+                    <td>@vehicle.stk</td>
+                    <td>@vehicle.yr</td>
+                    <td>@vehicle.make</td>
+                    <td>@vehicle.carline</td>
+                    <td>@vehicleDetails.daysinv</td>
+                    <td>@vehicleDetails.list_amt.ToString("C", nfi)</td>
+                    <td>@vehicleDetails.status</td>
+                    @if (UploadVIN != "")
+                    {
+                        findFile = PDFpath + @"\\101-" + UploadVIN + ".pdf";
+                        functionCall = "deleteFile(" + findFile + ")";
+                        if (System.IO.File.Exists(findFile))
+                        {
+                            <td>
+                                <button id="@findFile" value="@findFile" onclick="deleteFile1550('@findFile')">Delete 1550 Form</button>
+                            </td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
 
-                            </tr>
+                        findFile = PDFpath + @"\\151-" + UploadVIN + ".pdf";
+                        if (System.IO.File.Exists(findFile))
+                        {
+                            <td>
+                                <button id="@findFile" value="@findFile" onclick="deleteFile1551('@findFile')">Delete 1551 Form</button>
+                            </td>
+ }
+                        else
+                        {
+                            <td></td>
+                        }
+
+
+                    }
+                    else
+                    {
+                        <td></td>
+                        <td></td>
+                    }
+
+
+                </tr>
+                            }
                         }
                     }
-                }
 
                 @if (Model.NoPDF == "1550")
                 {
@@ -136,23 +185,22 @@
                             {
                                 UploadVIN = "101-" + vehicle.vin;
 
-                                <tr>
-                                    <td>@vehicle.slscode</td>
-                                    <td>@vehicle.loc</td>
+                            <tr>
+                                <td>@vehicle.loc</td>
 
-                                    <td>@vehicle.stk</td>
-                                    <td>@vehicle.yr</td>
-                                    <td>@vehicle.make</td>
-                                    <td>@vehicle.carline</td>
-                                    <td>@vehicleDetails.daysinv</td>
-                                    <td>@vehicleDetails.list_amt.ToString("C", nfi)</td>
-                                    <td>@vehicleDetails.status</td>
-                                    <td><a href="@applicationPath/Reports/_UploadFile?VIN=@UploadVIN" target="_blank">UPLOAD</a></td>
-                                </tr>
-                            }
+                                <td>@vehicle.stk</td>
+                                <td>@vehicle.yr</td>
+                                <td>@vehicle.make</td>
+                                <td>@vehicle.carline</td>
+                                <td>@vehicleDetails.daysinv</td>
+                                <td>@vehicleDetails.list_amt.ToString("C", nfi)</td>
+                                <td>@vehicleDetails.status</td>
+                                <td><a href="@applicationPath/Reports/_UploadFile?VIN=@UploadVIN" target="_blank">UPLOAD</a></td>
+                            </tr>
                         }
                     }
                 }
+            }
                 @if (Model.NoPDF == "1551")
                 {
                     foreach (var vehicle in HandymanVehicles)
@@ -165,7 +213,6 @@
                                 UploadVIN = "151-" + vehicle.vin;
                                 {
                                     <tr>
-                                        <td>@vehicle.slscode</td>
                                         <td>@vehicle.loc</td>
 
                                         <td>@vehicle.stk</td>
@@ -221,6 +268,52 @@
             });
 
         });
+
+        function deleteFile1550(param) {
+
+            var button = document.getElementById(param);
+
+            var r = confirm("Are you sure you want to delete " + param + "?");
+            if (r) {
+                $.ajax({
+                    url: '/Reports/Handyman',
+                    data: { 'DeleteFile': param },
+                    type: 'post',
+                   success: function (response) {
+                        // Handle success (e.g., show a message)
+                       button.remove();
+                       console.log("success " + param + "?");
+
+                    },
+                    error: function () {
+                        // Handle error (e.g., display an error message)
+                        console.log("fail " + param + "?");
+
+                    }
+                });
+            }
+        }
+
+        function deleteFile1551(param) {
+
+            var button = document.getElementById(param);
+
+            var r = confirm("Are you sure you want to delete " + param + "?");
+            if (r) {
+                $.ajax({
+                    url: '/Reports/Handyman',
+                    data: { 'DeleteFile': param },
+                    type: 'post',
+                    success: function (response) {
+                        // Handle success (e.g., show a message)
+                       button.remove();
+                    },
+                    error: function () {
+                        // Handle error (e.g., display an error message)
+                    }
+                });
+            }
+        }
 
     </script>
 }
