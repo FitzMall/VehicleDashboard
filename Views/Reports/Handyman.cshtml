@@ -121,56 +121,56 @@
 
                         if (vehicleDetails.slscode == "HDM")
                         {
-                <tr>
-                    <td>@vehicle.loc</td>
+                            <tr>
+                                <td>@vehicle.loc</td>
 
-                    <td>@vehicle.stk</td>
-                    <td>@vehicle.yr</td>
-                    <td>@vehicle.make</td>
-                    <td>@vehicle.carline</td>
-                    <td>@vehicleDetails.daysinv</td>
-                    <td>@vehicleDetails.list_amt.ToString("C", nfi)</td>
-                    <td>@vehicleDetails.status</td>
-                    @if (UploadVIN != "")
-                    {
-                        findFile = PDFpath + @"\\101-" + UploadVIN + ".pdf";
-                        functionCall = "deleteFile(" + findFile + ")";
-                        if (System.IO.File.Exists(findFile))
-                        {
-                            <td>
-                                <button id="@findFile" value="@findFile" onclick="deleteFile1550('@findFile')">Delete 1550 Form</button>
-                            </td>
+                                <td><a href="@applicationPath/Chrome/ChromeNoStyle/?VIN=@vehicle.vin" target="_blank">@vehicle.stk</a></td>
+                                <td>@vehicle.yr</td>
+                                <td>@vehicle.make</td>
+                                <td>@vehicle.carline</td>
+                                <td>@vehicleDetails.daysinv</td>
+                                <td>@vehicleDetails.list_amt.ToString("C", nfi)</td>
+                                <td>@vehicleDetails.status</td>
+                                @if (UploadVIN != "")
+                                {
+                                    findFile = PDFpath + @"\\101-" + UploadVIN + ".pdf";
+                                    functionCall = "deleteFile(" + findFile + ")";
+                                    if (System.IO.File.Exists(findFile))
+                                    {
+                                        <td>
+                                            <button id="@findFile" value="@findFile" onclick="deleteFile1550('@findFile')">Delete 1550 Form</button>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+                                    }
+
+                                    findFile = PDFpath + @"\\151-" + UploadVIN + ".pdf";
+                                    if (System.IO.File.Exists(findFile))
+                                    {
+                                        <td>
+                                            <button id="@findFile" value="@findFile" onclick="deleteFile1551('@findFile')">Delete 1551 Form</button>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+                                    }
+
+
+                                }
+                                else
+                                {
+                                    <td></td>
+                                    <td></td>
+                                }
+
+
+                            </tr>
                         }
-                        else
-                        {
-                            <td></td>
-                        }
-
-                        findFile = PDFpath + @"\\151-" + UploadVIN + ".pdf";
-                        if (System.IO.File.Exists(findFile))
-                        {
-                            <td>
-                                <button id="@findFile" value="@findFile" onclick="deleteFile1551('@findFile')">Delete 1551 Form</button>
-                            </td>
- }
-                        else
-                        {
-                            <td></td>
-                        }
-
-
                     }
-                    else
-                    {
-                        <td></td>
-                        <td></td>
-                    }
-
-
-                </tr>
-                            }
-                        }
-                    }
+                }
 
                 @if (Model.NoPDF == "1550")
                 {
@@ -185,22 +185,23 @@
                             {
                                 UploadVIN = "101-" + vehicle.vin;
 
-                            <tr>
-                                <td>@vehicle.loc</td>
+                                <tr>
+                                    <td>@vehicle.loc</td>
 
-                                <td>@vehicle.stk</td>
-                                <td>@vehicle.yr</td>
-                                <td>@vehicle.make</td>
-                                <td>@vehicle.carline</td>
-                                <td>@vehicleDetails.daysinv</td>
-                                <td>@vehicleDetails.list_amt.ToString("C", nfi)</td>
-                                <td>@vehicleDetails.status</td>
-                                <td><a href="@applicationPath/Reports/_UploadFile?VIN=@UploadVIN" target="_blank">UPLOAD</a></td>
-                            </tr>
+                                    <td><a href="@applicationPath/Chrome/ChromeNoStyle/?VIN=@vehicle.vin" target="_blank">@vehicle.stk</a></td>
+                                    <td>@vehicle.stk</td>
+                                    <td>@vehicle.yr</td>
+                                    <td>@vehicle.make</td>
+                                    <td>@vehicle.carline</td>
+                                    <td>@vehicleDetails.daysinv</td>
+                                    <td>@vehicleDetails.list_amt.ToString("C", nfi)</td>
+                                    <td>@vehicleDetails.status</td>
+                                    <td><a href="@applicationPath/Reports/_UploadFile?VIN=@UploadVIN" target="_blank">UPLOAD</a></td>
+                                </tr>
+                            }
                         }
                     }
                 }
-            }
                 @if (Model.NoPDF == "1551")
                 {
                     foreach (var vehicle in HandymanVehicles)
@@ -214,8 +215,8 @@
                                 {
                                     <tr>
                                         <td>@vehicle.loc</td>
-
-                                        <td>@vehicle.stk</td>
+                                        
+                                        <td><a href="@applicationPath/Chrome/ChromeNoStyle/?VIN=@vehicle.vin" target="_blank">@vehicle.stk</a></td>
                                         <td>@vehicle.yr</td>
                                         <td>@vehicle.make</td>
                                         <td>@vehicle.carline</td>
@@ -269,25 +270,30 @@
 
         });
 
+        function getFileName(path) {
+            return path.match(/[-_\w]+[.][\w]+$/i)[0];
+        }
+
         function deleteFile1550(param) {
 
             var button = document.getElementById(param);
+            var shortName = getFileName(param)
 
-            var r = confirm("Are you sure you want to delete " + param + "?");
+            var r = confirm("Are you sure you want to delete " + shortName + "?");
             if (r) {
                 $.ajax({
                     url: '/Reports/Handyman',
                     data: { 'DeleteFile': param },
                     type: 'post',
-                   success: function (response) {
+                    success: function (response) {
                         // Handle success (e.g., show a message)
-                       button.remove();
-                       console.log("success " + param + "?");
+                        location.reload();
+                        console.log("success " + param);
 
                     },
                     error: function () {
                         // Handle error (e.g., display an error message)
-                        console.log("fail " + param + "?");
+                        console.log("fail " + param);
 
                     }
                 });
@@ -296,9 +302,9 @@
 
         function deleteFile1551(param) {
 
-            var button = document.getElementById(param);
+            var shortName = getFileName(param)
 
-            var r = confirm("Are you sure you want to delete " + param + "?");
+            var r = confirm("Are you sure you want to delete " + shortName + "?");
             if (r) {
                 $.ajax({
                     url: '/Reports/Handyman',
@@ -306,7 +312,7 @@
                     type: 'post',
                     success: function (response) {
                         // Handle success (e.g., show a message)
-                       button.remove();
+                        location.reload();
                     },
                     error: function () {
                         // Handle error (e.g., display an error message)
